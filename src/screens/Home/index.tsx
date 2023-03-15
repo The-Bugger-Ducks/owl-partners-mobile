@@ -1,10 +1,11 @@
-import { Text } from "@components";
+import { Header } from "@components";
+import { Button } from "../../components/Button";
 import { Container } from "./styles";
 
 export function Home() {
   return (
     <Container>
-      <Text>Bem vindo ao Owl Partners!</Text>
+      <Header isHero={true} />
     </Container>
   );
 }

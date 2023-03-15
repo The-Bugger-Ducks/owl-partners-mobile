@@ -1,3 +1,4 @@
+import { Header } from "./Header";
 import { Loading } from "./Loading";
 import { Text } from "./Text";
 
@@ -8,6 +9,7 @@ import { CheckCircle } from "./Icons/CheckCircle";
 import { Logo } from "./Icons/Logo";
 
 export {
+  Header,
   Loading,
   Text,
   // icons
