@@ -1,10 +1,22 @@
-import { Text } from "@components";
-import { Container } from "./styles";
+import { Header, Button } from "@components";
+import { ButtonsContainer, Container } from "./styles";
 
 export function Home() {
   return (
     <Container>
-      <Text>Bem vindo ao Owl Partners!</Text>
+      <Header isHero={true} />
+
+      <ButtonsContainer>
+        <Button type="unfilled" onPress={() => alert("Reunião!")}>
+          Agendar reunião
+        </Button>
+        <Button
+          onPress={() => alert("Usuários!")}
+          style={{ marginVertical: 8 }}
+        >
+          Gerenciar usuários
+        </Button>
+      </ButtonsContainer>
     </Container>
   );
 }
