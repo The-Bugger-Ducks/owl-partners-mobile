@@ -7,6 +7,7 @@ import {
 } from "@expo-google-fonts/inter";
 
 import { Home } from "./src/screens/Home";
+import { CreatePartnership } from "./src/screens/CreatePartnership";
 
 export default function App() {
   const [isFontsLoaded] = useFonts({
@@ -21,6 +22,7 @@ export default function App() {
     <>
       <StatusBar style="dark" />
       <Home />
+      
     </>
   );
 }
