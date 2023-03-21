@@ -7,7 +7,23 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "prepare": "husky install",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\""
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --quiet --cache --fix"
+    ],
+    "*.{json,js,ts,jsx,tsx,html}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn run format && yarn run lint-staged",
+      "pre-push": "yarn run format && yarn run lint-staged"
+    }
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.3",
@@ -30,7 +46,16 @@
     "@typescript-eslint/parser": "^5.55.0",
     "babel-plugin-module-resolver": "^5.0.0",
     "eslint": "^8.36.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.6",
     "typescript": "^4.9.4"
   },
   "private": true
