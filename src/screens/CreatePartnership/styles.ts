@@ -11,21 +11,19 @@ export const Container = styled.SafeAreaView`
 `;
 
 export const ButtonView = styled.View`
-
   padding: 24px 24px;
-
 `;
 
 export const SearchView = styled.View`
   padding: 24px 24px;
-  gap:10px
-`
+  gap:10px;
+`;
 
 export const TextInput = styled.TextInput`
   background: #f4f5f7;
-  padding: 0px 16px
+  padding: 0px 16px;
   border-radius: 8px;
-  border: 1px solid #CCCCCC
+  border: 1px solid #CCCCCC;
   align-items: center;
   justify-content: center;
   width: 345px;

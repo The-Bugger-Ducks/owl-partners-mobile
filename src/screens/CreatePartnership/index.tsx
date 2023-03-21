@@ -4,20 +4,15 @@ import { useState } from "react";
 import { Container, ButtonView, SearchView } from "./styles";
 
 
-
-
-
 export function CreatePartnership() {
 
-
-
-    const [visibleModal, setvisibleModal] = useState(false);
+    const [visibleModal, setVisibleModal] = useState(false);
     return (
         <Container>
             <Header isHero={true} />
 
             <ButtonView>
-                <Button type="unfilled" onPress={() => setvisibleModal(true)}>
+                <Button type="unfilled" onPress={() => setVisibleModal(true)}>
                     Adicionar nova parceria
                 </Button>
             </ButtonView>
@@ -26,10 +21,8 @@ export function CreatePartnership() {
                 <Text>Parcerias encontradas</Text>
             </SearchView>
 
-
-                <PartnershipForm visible={visibleModal} onClose={() => setvisibleModal(false)}/>
-            
+            <PartnershipForm visible={visibleModal} onClose={() => setVisibleModal(false)}/>
         </Container>
 
-    )
+    );
 } 
