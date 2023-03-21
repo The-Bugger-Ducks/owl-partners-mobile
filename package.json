@@ -13,7 +13,7 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
-      "eslint --quiet --cache --fix"
+      "eslint --quiet --fix"
     ],
     "*.{json,js,ts,jsx,tsx,html}": [
       "prettier --write"
@@ -28,10 +28,12 @@
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.3",
     "expo": "~48.0.6",
+    "expo-cli": "^6.3.2",
     "expo-font": "~11.1.1",
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
-    "react-native": "0.71.3",
+    "react-hook-form": "^7.43.6",
+    "react-native": "0.71.4",
     "react-native-svg": "13.4.0",
     "styled-components": "^5.3.9"
   },
