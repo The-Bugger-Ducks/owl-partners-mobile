@@ -3,14 +3,12 @@ import { Header } from "./Header";
 import { Loading } from "./Loading";
 import { Text } from "./Text";
 
-
-
 // icons
-import { PlusCircle } from "./Icons/PlusCircle";
-import { Close } from "./Icons/Close";
 import { CheckCircle } from "./Icons/CheckCircle";
-import { Logo } from "./Icons/Logo";
+import { Close } from "./Icons/Close";
 import { Drop } from "./Icons/Drop";
+import { Logo } from "./Icons/Logo";
+import { PlusCircle } from "./Icons/PlusCircle";
 
 export {
   Button,
@@ -23,5 +21,4 @@ export {
   Close,
   CheckCircle,
   Logo,
-  
 };
