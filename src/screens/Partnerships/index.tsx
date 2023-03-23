@@ -8,7 +8,7 @@ export function Partnerships() {
 
   return (
     <Container>
-      <Header isHero={true} />
+      <Header isHero />
 
       <ButtonView>
         <Button type="unfilled" onPress={() => setVisibleModal(true)}>
