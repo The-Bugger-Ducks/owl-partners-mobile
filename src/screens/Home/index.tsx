@@ -1,10 +1,10 @@
-import { Header, Button } from "@components";
+import { Button, Header } from "@components";
 import { ButtonsContainer, Container } from "./styles";
 
 export function Home() {
   return (
     <Container>
-      <Header isHero={true} />
+      <Header isHero />
 
       <ButtonsContainer>
         <Button type="unfilled" onPress={() => alert("Reunião!")}>

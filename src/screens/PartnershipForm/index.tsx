@@ -1,4 +1,6 @@
 import { Button, Close, Drop, Text } from "@components";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
 import {
   AddPartnerView,
@@ -8,8 +10,6 @@ import {
   StatusView,
   TextInput,
 } from "./styles";
-import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
 
 type formDataProps = {
   partner: string;
@@ -206,7 +206,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                             <StatusTypeText
                               onPress={() => {
                                 handlerStatusPartenerSelected(status),
-                                onChange(status.description);
+                                  onChange(status.description);
                               }}
                             >
                               {status.description}
