@@ -1,43 +1,61 @@
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, {useState} from "react";
 
 import { View } from "react-native";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
-import { Button, Text } from "@components";
+import authRequest from "../../../shared/services/auth.request";
+import { IUserLogin } from "../../../shared/interfaces/user.interface";
+import { validEmailPattern } from "../../../shared/constants/validEmailPattern";
+
+import { Button, Text, Info, EyeHidden, Eye, Loading } from "@components";
 
 import {
   Container,
   Form,
   FormContainer,
+  IconButton,
+  InfoErrorContainer,
+  InputPassword,
+  LoadingContainer,
+  PasswordInputContainer,
   TextContainer,
   TextInput,
 } from "./styles";
 
-type formProps = {
-  email: string;
-  password: string;
-};
-
 export function SignIn() {
+  const [loading, setLoading] = useState(false);
+  const [visiblePassword, setVisiblePassword] = useState(false);
+
   const {
+    register,
     control,
     handleSubmit,
-    formState: { errors },
-  } = useForm<formProps>();
+    setError,
+    formState: {
+      errors,
+      isDirty,
+      isValid
+    },
+  } = useForm<IUserLogin>();
 
-  // async function onSubmit(data, error) {
 
-  //   try {
-  //     console.log(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
+  const onSubmit : SubmitHandler<IUserLogin> = async (data) => {
+    try {
+      setLoading(true)
+      await authRequest.authenticate(data)
+    } catch (error) {
+      if (error === "Unauthorized") {
+        setError("password", {message: "Senha incorreta. Tente novamente"});
+      }
+    } finally {
+      setLoading(false)
+    }
 
-  // }
+  };
 
   return (
     <Container>
-      <FormContainer behavior="padding">
+      <FormContainer>
         <Form>
           <TextContainer>
             <Text size={14} opacity={0.9}>
@@ -49,48 +67,71 @@ export function SignIn() {
             </Text>
           </TextContainer>
 
+          <LoadingContainer>
+            {loading && <Loading />}
+          </LoadingContainer>
+
           <Controller
             control={control}
             name="email"
             rules={{
-              required: "informe o nome do parceiro",
+              required: true,
             }}
+
             render={({ field: { onChange } }) => (
               <View>
                 <Text>Email</Text>
                 <TextInput
-                  placeholder="The Bugger Ducks"
+                  placeholder="Email"
                   onChangeText={onChange}
                   keyboardType="email-address"
+                  {...register("email", {pattern: validEmailPattern})}
                 />
-                {errors.partner && <Text>Este campo é obrigatório</Text>}
+                {errors.email && <Text>{errors.email.message}</Text>}
               </View>
             )}
           />
 
           <Controller
             control={control}
-            name="partner"
+            name="password"
             rules={{
-              required: "informe o nome do parceiro",
+              required: true,
             }}
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange }, fieldState: {error, isTouched} }) => (
               <View>
                 <Text>Senha</Text>
-                <TextInput
-                  placeholder="The Bugger Ducks"
-                  onChangeText={onChange}
-                  textContentType="password"
-                  secureTextEntry={true}
-                />
-                {errors.partner && <Text>Este campo é obrigatório</Text>}
+                <PasswordInputContainer
+                  borderColor={
+                    error ? "#EF4444" : isTouched ? "#666666" : undefined
+                  }
+                >
+                  <InputPassword
+                    placeholder="Senha"
+                    onChangeText={onChange}
+                    textContentType="password"
+                    secureTextEntry={!visiblePassword}
+                  />
+                  <IconButton onPress={() => setVisiblePassword(!visiblePassword)}>
+                    {visiblePassword ? <EyeHidden /> :  <Eye />}
+                  </IconButton>
+                </PasswordInputContainer>
+                {error && (
+                  <InfoErrorContainer>
+                    <Info fillColor="#EF4444" strokeColor="#EF4444"  size={20}/>
+                    <Text color="#EF4444" size={14}>
+                      {errors?.password?.message}
+                    </Text>
+                  </InfoErrorContainer>
+                )}
               </View>
             )}
           />
         </Form>
-        <Button type="filled" disabled>
+        <Button type="filled" disabled={!isDirty || !isValid} onPress={handleSubmit(onSubmit)}>
           Fazer Login
         </Button>
+
       </FormContainer>
     </Container>
   );

@@ -12,6 +12,9 @@ import { Close } from "./Icons/Close";
 import { Drop } from "./Icons/Drop";
 import { Logo } from "./Icons/Logo";
 import { PlusCircle } from "./Icons/PlusCircle";
+import { Info } from "./Icons/Info";
+import { Eye } from "./Icons/Eye";
+import { EyeHidden } from "./Icons/EyeHidden";
 
 export {
   Button,
@@ -27,4 +30,7 @@ export {
   Close,
   CheckCircle,
   Logo,
+  Info,
+  Eye,
+  EyeHidden
 };
