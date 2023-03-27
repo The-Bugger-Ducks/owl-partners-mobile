@@ -1,11 +1,16 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 import { View } from "react-native";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
+import {StackActions, useNavigation} from "@react-navigation/native";
+
 import authRequest from "../../../shared/services/auth.request";
 import { IUserLogin } from "../../../shared/interfaces/user.interface";
 import { validEmailPattern } from "../../../shared/constants/validEmailPattern";
+
+import StorageController from "../../../shared/utils/handlers/StorageController";
+import { PropsStack } from "../../../shared/types/rootStackParamList";
 
 import { Button, Text, Info, EyeHidden, Eye, Loading } from "@components";
 
@@ -38,20 +43,34 @@ export function SignIn() {
     },
   } = useForm<IUserLogin>();
 
+  const navigation = useNavigation<PropsStack>();
+
+  useEffect(() => {
+    (async () => {
+      const token = await StorageController.getToken();
+
+      if (token) goToApp();
+    })();
+  }, []);
+
 
   const onSubmit : SubmitHandler<IUserLogin> = async (data) => {
     try {
-      setLoading(true)
-      await authRequest.authenticate(data)
+      setLoading(true);
+      await authRequest.authenticate(data);
+      goToApp();
     } catch (error) {
       if (error === "Unauthorized") {
         setError("password", {message: "Senha incorreta. Tente novamente"});
       }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-
   };
+
+  function goToApp() {
+    navigation.dispatch(StackActions.replace("Home"));
+  }
 
   return (
     <Container>

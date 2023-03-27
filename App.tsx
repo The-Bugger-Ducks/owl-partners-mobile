@@ -5,9 +5,10 @@ import {
   Inter_700Bold,
   useFonts,
 } from "@expo-google-fonts/inter";
+
 import { StatusBar } from "expo-status-bar";
 
-import { Home } from "./src/screens/Home";
+import { AppRoutes } from "./src/routes";
 
 export default function App() {
   const [isFontsLoaded] = useFonts({
@@ -22,7 +23,7 @@ export default function App() {
   return (
     <>
       <StatusBar style="dark" />
-      <Home />
+      <AppRoutes />
     </>
   );
 }
