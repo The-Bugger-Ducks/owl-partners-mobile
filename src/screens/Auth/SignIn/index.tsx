@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import { View } from "react-native";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
-import {StackActions, useNavigation} from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 
 import authRequest from "../../../shared/services/auth.request";
 import { IUserLogin } from "../../../shared/interfaces/user.interface";
@@ -28,7 +28,7 @@ import {
 } from "./styles";
 
 export function SignIn() {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
 
   const {
@@ -36,11 +36,7 @@ export function SignIn() {
     control,
     handleSubmit,
     setError,
-    formState: {
-      errors,
-      isDirty,
-      isValid
-    },
+    formState: { errors, isDirty, isValid },
   } = useForm<IUserLogin>();
 
   const navigation = useNavigation<PropsStack>();
@@ -53,18 +49,17 @@ export function SignIn() {
     })();
   }, []);
 
-
-  const onSubmit : SubmitHandler<IUserLogin> = async (data) => {
+  const onSubmit: SubmitHandler<IUserLogin> = async data => {
     try {
-      setLoading(true);
+      setIsLoading(true);
       await authRequest.authenticate(data);
       goToApp();
     } catch (error) {
       if (error === "Unauthorized") {
-        setError("password", {message: "Senha incorreta. Tente novamente"});
+        setError("password", { message: "Senha incorreta. Tente novamente" });
       }
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -86,9 +81,7 @@ export function SignIn() {
             </Text>
           </TextContainer>
 
-          <LoadingContainer>
-            {loading && <Loading />}
-          </LoadingContainer>
+          <LoadingContainer>{isLoading && <Loading />}</LoadingContainer>
 
           <Controller
             control={control}
@@ -96,7 +89,6 @@ export function SignIn() {
             rules={{
               required: true,
             }}
-
             render={({ field: { onChange } }) => (
               <View>
                 <Text>Email</Text>
@@ -104,7 +96,7 @@ export function SignIn() {
                   placeholder="Email"
                   onChangeText={onChange}
                   keyboardType="email-address"
-                  {...register("email", {pattern: validEmailPattern})}
+                  {...register("email", { pattern: validEmailPattern })}
                 />
                 {errors.email && <Text>{errors.email.message}</Text>}
               </View>
@@ -117,7 +109,10 @@ export function SignIn() {
             rules={{
               required: true,
             }}
-            render={({ field: { onChange }, fieldState: {error, isTouched} }) => (
+            render={({
+              field: { onChange },
+              fieldState: { error, isTouched },
+            }) => (
               <View>
                 <Text>Senha</Text>
                 <PasswordInputContainer
@@ -131,13 +126,15 @@ export function SignIn() {
                     textContentType="password"
                     secureTextEntry={!visiblePassword}
                   />
-                  <IconButton onPress={() => setVisiblePassword(!visiblePassword)}>
-                    {visiblePassword ? <EyeHidden /> :  <Eye />}
+                  <IconButton
+                    onPress={() => setVisiblePassword(!visiblePassword)}
+                  >
+                    {visiblePassword ? <EyeHidden /> : <Eye />}
                   </IconButton>
                 </PasswordInputContainer>
                 {error && (
                   <InfoErrorContainer>
-                    <Info fillColor="#EF4444" strokeColor="#EF4444"  size={20}/>
+                    <Info fillColor="#EF4444" strokeColor="#EF4444" size={20} />
                     <Text color="#EF4444" size={14}>
                       {errors?.password?.message}
                     </Text>
@@ -147,10 +144,13 @@ export function SignIn() {
             )}
           />
         </Form>
-        <Button type="filled" disabled={!isDirty || !isValid} onPress={handleSubmit(onSubmit)}>
+        <Button
+          type="filled"
+          disabled={!isDirty || !isValid || isLoading}
+          onPress={handleSubmit(onSubmit)}
+        >
           Fazer Login
         </Button>
-
       </FormContainer>
     </Container>
   );
