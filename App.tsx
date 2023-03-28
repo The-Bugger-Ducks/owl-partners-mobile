@@ -24,7 +24,7 @@ export default function App() {
   return (
     <>
       <StatusBar style="dark" />
-      <PartnershipInformation />
+      <CreatePartnership />
     </>
   );
 }
