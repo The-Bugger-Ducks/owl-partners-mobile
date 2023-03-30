@@ -64,7 +64,7 @@ export function SignIn() {
   };
 
   function goToApp() {
-    navigation.dispatch(StackActions.replace("Home"));
+    navigation.dispatch(StackActions.replace("HomeStack"));
   }
 
   return (

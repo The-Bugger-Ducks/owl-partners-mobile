@@ -15,6 +15,9 @@ import { PlusCircle } from "./Icons/PlusCircle";
 import { Info } from "./Icons/Info";
 import { Eye } from "./Icons/Eye";
 import { EyeHidden } from "./Icons/EyeHidden";
+import { Home } from "./Icons/Home";
+import { Profile } from "./Icons/Profile";
+import { Order } from "./Icons/Order";
 
 export {
   Button,
@@ -32,5 +35,8 @@ export {
   Logo,
   Info,
   Eye,
-  EyeHidden
+  EyeHidden,
+  Home,
+  Profile,
+  Order,
 };

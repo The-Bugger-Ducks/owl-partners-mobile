@@ -1,21 +1,21 @@
 import { SvgXml } from "react-native-svg";
 
 interface IconProps {
-  strokeColor?: string
-  size?: number
-  height?: number
-  width?: number
+  strokeColor?: string;
+  size?: number;
+  height?: number;
+  width?: number;
 }
 
-export function EyeHidden(
-  {
-    strokeColor = "#666666",
-    size,
-    width = 24,
-    height = 24,
-  }: IconProps
-) {
-  const markup = `<svg width=${size || width} height=${size || height} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+export function EyeHidden({
+  strokeColor = "#666666",
+  size,
+  width = 24,
+  height = 24,
+}: IconProps) {
+  const markup = `<svg width=${size ?? width} height=${
+    size ?? height
+  } viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path d="M12.0001 19C11.1581 19 10.3151 18.822 9.49609 18.505" stroke=${strokeColor} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M20.882 12.468C18.99 15.967 15.495 19 12 19" stroke=${strokeColor} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M19.0791 8.92102C19.7701 9.73002 20.3841 10.612 20.8821 11.533C21.0391 11.824 21.0391 12.177 20.8821 12.468" stroke=${strokeColor} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
