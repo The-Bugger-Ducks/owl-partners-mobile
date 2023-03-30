@@ -13,41 +13,19 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "import"
-  ],
-  "ignorePatterns": [
-    "*.test.js",
-    "*.test.tsx"
-  ],
+  "plugins": ["react", "@typescript-eslint", "import"],
+  "ignorePatterns": ["*.test.js", "*.test.tsx"],
   "rules": {
     "no-var": 2,
     "no-console": 1,
-    "indent": [
-      "error",
-      2
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "double"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ],
+    "indent": ["error", 2],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [
-          ".js",
-          ".jsx"
-        ]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     ],
     "react/react-in-jsx-scope": "off"
@@ -55,9 +33,7 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "paths": [
-          "src"
-        ]
+        "paths": ["src"]
       },
       "babel-module": {}
     }
