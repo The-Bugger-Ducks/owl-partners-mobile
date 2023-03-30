@@ -42,11 +42,7 @@ export function SignIn() {
   const navigation = useNavigation<PropsStack>();
 
   useEffect(() => {
-    (async () => {
-      const token = await StorageController.getToken();
-
-      if (token) goToApp();
-    })();
+    handleUserAuthentication();
   }, []);
 
   const onSubmit: SubmitHandler<IUserLogin> = async data => {
@@ -62,6 +58,12 @@ export function SignIn() {
       setIsLoading(false);
     }
   };
+
+  async function handleUserAuthentication() {
+    const token = await StorageController.getToken();
+
+    if (token) goToApp();
+  }
 
   function goToApp() {
     navigation.dispatch(StackActions.replace("HomeStack"));
