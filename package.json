@@ -34,6 +34,7 @@
     "react": "18.2.0",
     "react-hook-form": "^7.43.6",
     "react-native": "0.71.4",
+    "react-native-select-dropdown": "^3.3.2",
     "react-native-svg": "13.4.0",
     "styled-components": "^5.3.9"
   },
