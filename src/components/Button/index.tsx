@@ -1,9 +1,10 @@
+import { ReactNode } from "react";
 import { TouchableOpacityProps } from "react-native";
 import { Text } from "../Text";
 import { Container } from "./styles";
 
 interface ButtonProps extends TouchableOpacityProps {
-  children: string;
+  children: ReactNode;
   disabled?: boolean;
   type?: "filled" | "unfilled";
 }
