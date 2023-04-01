@@ -1,8 +1,11 @@
 import { Button, Header, Text } from "@components";
 import { PartnershipEdit } from "@screens/PartnershipEdit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { ContactView, Container, InformationView } from "./styles";
+import partnerRequest from "src/shared/services/partner.request";
+import { SubmitHandler } from "react-hook-form";
+import { CreatePartnerProps } from "src/shared/interfaces/partner.interface";
 
 const partner = {
   partner: "USP",
@@ -15,27 +18,34 @@ const partner = {
   status: "Em prospecção",
 };
 
-export function PartnershipInformation() {
+export async function PartnershipInformation() {
   const [visibleModal, setVisibleModal] = useState(false);
+  const [data, setData] = useState<CreatePartnerProps>();
+
+  useEffect(() => {
+    fetch("https://owlpartners.onrender.com/partners/3f64eea9-38bb-48c5-a034-4e0f6c0a8870", {})
+    .then(response => response.json())
+    .then(setData);
+}, []);
+
   return (
     <Container>
       <Header />
       <View>
         <Text>Informação da parceria</Text>
       </View>
-
       <InformationView>
         <Text>
-          {partner.classification} | {partner.partner}
+          {data?.classification} | {data?.name}
         </Text>
-        <Text>Status: {partner.status} </Text>
-        <Text>Quantidade de menbros: {partner.membersQuantity}</Text>
-        <Text>Localização: {partner.location}</Text>
+        <Text>Status: {data?.status} </Text>
+        <Text>Quantidade de menbros: {data?.memberNumber}</Text>
+        <Text>Localização: {data?.state}</Text>
       </InformationView>
 
       <ContactView>
-        <Text>E-mail: {partner.email} </Text>
-        <Text>Telefone: {partner.phoneNumber}</Text>
+        <Text>E-mail: {data?.email} </Text>
+        <Text>Telefone: {data?.phoneNumber}</Text>
       </ContactView>
 
       <Button type="unfilled">Deletar parceria</Button>
@@ -45,6 +55,7 @@ export function PartnershipInformation() {
       <PartnershipEdit
         visible={visibleModal}
         onClose={() => setVisibleModal(false)}
+        partnerProps = {data}
       />
     </Container>
   );

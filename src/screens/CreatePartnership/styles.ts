@@ -28,5 +28,4 @@ export const TextInput = styled.TextInput`
   justify-content: center;
   width: 345px;
   height: 56px;
-
 `;

@@ -36,7 +36,7 @@ export const StatusView = styled.View`
   height: 56px;
 `;
 
-export const DropDowArea = styled.View`
+export const DropDownArea = styled.View`
   width: 100%;
   height: 450px;
   border-radius: 10px;

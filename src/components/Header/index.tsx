@@ -1,5 +1,5 @@
-import { Text } from "../Text";
 import { Logo } from "../Icons/Logo";
+import { Text } from "../Text";
 import { Container, TextContainer } from "./styles";
 
 interface HeaderProps {

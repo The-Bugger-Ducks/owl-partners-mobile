@@ -1,15 +1,14 @@
-import { StatusBar } from "expo-status-bar";
 import {
-  useFonts,
   Inter_400Regular,
+  Inter_500Medium,
   Inter_600SemiBold,
   Inter_700Bold,
-  Inter_500Medium,
+  useFonts,
 } from "@expo-google-fonts/inter";
 
-import { Home } from "./src/screens/Home";
-import { CreatePartnership } from "./src/screens/CreatePartnership";
-import { PartnershipInformation } from "@screens/PartnershipInformation";
+import { StatusBar } from "expo-status-bar";
+
+import { AppRoutes } from "./src/routes";
 
 export default function App() {
   const [isFontsLoaded] = useFonts({
@@ -24,7 +23,7 @@ export default function App() {
   return (
     <>
       <StatusBar style="dark" />
-      <PartnershipInformation />
+      <AppRoutes />
     </>
   );
 }

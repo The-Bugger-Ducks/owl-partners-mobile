@@ -3,75 +3,49 @@ import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
 import {
   AddPartnerView,
   Container,
-  DropDowArea,
+  DropDownArea,
   StatusTypeText,
   StatusView,
   TextInput,
 } from "./styles";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
+import { CreatePartnerProps } from "../../shared/interfaces/partner.interface";
+import { statesSelectOptions } from "@utils/statesSelectOptions";
+import { statusSelectOptions } from "@utils/statusSelectOptions";
+import partnerRequest from "src/shared/services/partner.request";
 
-type formDataProps = {
-  partner: string;
-  classification: string;
-  location: string;
-  address: string;
-  membersQuantity: string;
-  email: string;
-  phoneNumber: string;
-  status: string;
-};
 
 interface ModalProps {
   visible: boolean;
   onClose: () => void;
+  partnerProps?:CreatePartnerProps 
 }
 
-const statusSelectOptions = [
-  { id: 1, description: "Em prospecção" },
-  { id: 2, description: "Primeiro contato feito" },
-  { id: 3, description: "Primeira reunião marcada/realizada" },
-  { id: 4, description: "Documentação enviada/em análise (Parceiro)" },
-  { id: 5, description: "Documentação devolvida (Academy)" },
-  { id: 6, description: "Documentação devolvida (Legal)" },
-  { id: 7, description: "Documentação Analisada e devolvida (Parceiro)" },
-  { id: 8, description: "Preparação de Executive Sumary (Academy)" },
-  { id: 9, description: "ES em analise (Legal)" },
-  { id: 10, description: "ES em analise (Academy Global)" },
-  { id: 11, description: "Pronto para assinatura, Parceria Firmada" },
-];
 
-//MOCK
-const partner = {
-  partner: "USP",
-  classification: "Universidade",
-  location: "São Paulo, SP",
-  address: "Rua 10, 123",
-  membersQuantity: "100",
-  email: "usp@gmail.com",
-  phoneNumber: "(12)99464-4356",
-  status: "Em prospecção",
-};
 
-export function PartnershipEdit({ visible, onClose }: ModalProps) {
+export function PartnershipEdit({ visible, onClose, partnerProps }: ModalProps ) {
+
+ 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<formDataProps>({
+  } = useForm<CreatePartnerProps>({
     mode: "onChange",
-    defaultValues: partner,
+    defaultValues: partnerProps
   });
 
-  // const {fields} = useFieldArray<formDataProps>({
-  //   control,
-  //   name:"partner"
-  // })
-
   const [isStatusSelectOpen, setisStatusSelectOpen] = useState(false);
-  const [selectStatus, setSelecteStatus] = useState("");
+  const [isStatesSelectOpen, setisStatesSelectOpen] = useState(false);
+  const [isClassificationSelectOpen, setisClassificationSelectOpen] = useState(false);
 
-  function hendlerPartnershipForm(statusSelectOptions: formDataProps) {
+  const [selectStatus, setSelectedStatus] = useState("");
+  const [selectStates, setSelectedStates] = useState("");
+  const [selectClassification, setSelectClassification] = useState("");
+
+  function handlerPartnershipForm(statusSelectOptions: CreatePartnerProps) {
     console.log(statusSelectOptions);
     onClose();
   }
@@ -79,7 +53,14 @@ export function PartnershipEdit({ visible, onClose }: ModalProps) {
   function handlerStatusPartenerSelected(statusSelectOptions: {
     description: string;
   }) {
-    setSelecteStatus(statusSelectOptions.description);
+    setSelectedStatus(statusSelectOptions.description);
+    setisStatusSelectOpen(false);
+  }
+
+  function handlerStatesPartenerSelected(statesSelectOptions: {
+    UF: string;
+  }) {
+    setSelectedStates(statesSelectOptions.UF);
     setisStatusSelectOpen(false);
   }
 
@@ -106,7 +87,7 @@ export function PartnershipEdit({ visible, onClose }: ModalProps) {
 
             <Controller
               control={control}
-              name="partner"
+              name="name"
               render={({ field }) => (
                 <View>
                   <Text>Parceria</Text>
@@ -124,19 +105,100 @@ export function PartnershipEdit({ visible, onClose }: ModalProps) {
               name="classification"
               render={({ field }) => (
                 <View>
-                  <Text>Classificação </Text>
-                  <TextInput
-                    placeholder="Universidade"
-                    {...field}
-                    onChangeText={field.onChange}
-                  />
+                  <Text>Classificação</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setisClassificationSelectOpen(!isClassificationSelectOpen);
+                    }}
+                  >
+                    <StatusView
+                      style={{
+                        justifyContent: "space-between",
+                        flexDirection: "row",
+                        gap: 140.25,
+                      }}
+                    >
+                      <Text>{`${field.value}`}</Text>
+                      <Drop />
+                    </StatusView>
+                  </TouchableOpacity>
+                  {isClassificationSelectOpen ? (
+                    <DropDownArea>
+                      {Object.keys(ClassificationSelectOptions).map(classification => {
+                        return (
+                          <TouchableOpacity key={classification}>
+                            <StatusTypeText
+                              onPress={() => {
+                                setSelectClassification(classification)
+                                setisClassificationSelectOpen(false)
+                                
+                              }}
+                            >
+                              {classification}
+                            </StatusTypeText>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </DropDownArea>
+                  ) : null}
                 </View>
               )}
             />
 
             <Controller
               control={control}
-              name="location"
+              name="state"
+              render={({ field }) => (
+                <View>
+                  <Text>Localização</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setisStatesSelectOpen(!isStatesSelectOpen);
+                    }}
+                  >
+                    <StatusView
+                      style={{
+                        justifyContent: "space-between",
+                        flexDirection: "row",
+                        gap: 140.25,
+                      }}
+                    >
+                      <Text>{`${field.value}`}</Text>
+                      <Drop />
+                    </StatusView>
+                  </TouchableOpacity>
+
+                  {isStatesSelectOpen ? (
+                    <Modal
+                      onRequestClose={() =>
+                        setisStatesSelectOpen(!isStatesSelectOpen)
+                      }
+                    >
+                      <DropDownArea>
+                        {statesSelectOptions.map(states => {
+                          return (
+                            <TouchableOpacity key={states.UF}>
+                              <StatusTypeText
+                                onPress={() => {
+                                  handlerStatesPartenerSelected(states);
+                                  field.onChange(states.name);
+                                }}
+                              >
+                                {states.name}
+                              </StatusTypeText>
+                            </TouchableOpacity>
+                          );
+                        })}
+                      </DropDownArea>
+                    </Modal>
+                  ) : null}
+                </View>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="state"
               render={({ field }) => (
                 <View>
                   <Text>Localização</Text>
@@ -164,9 +226,9 @@ export function PartnershipEdit({ visible, onClose }: ModalProps) {
               )}
             />
 
-            <Controller
+            {/* <Controller
               control={control}
-              name="membersQuantity"
+              name="memberNumber"
               render={({ field }) => (
                 <View>
                   <Text>Número de membros</Text>
@@ -177,7 +239,7 @@ export function PartnershipEdit({ visible, onClose }: ModalProps) {
                   />
                 </View>
               )}
-            />
+            /> */}
 
             <Controller
               control={control}
@@ -236,7 +298,7 @@ export function PartnershipEdit({ visible, onClose }: ModalProps) {
                   </TouchableOpacity>
 
                   {isStatusSelectOpen ? (
-                    <DropDowArea>
+                    <DropDownArea>
                       {statusSelectOptions.map(status => {
                         return (
                           <TouchableOpacity key={status.id}>
@@ -251,10 +313,10 @@ export function PartnershipEdit({ visible, onClose }: ModalProps) {
                           </TouchableOpacity>
                         );
                       })}
-                    </DropDowArea>
+                    </DropDownArea>
                   ) : null}
 
-                  {errors.partner && <Text>Este campo é obrigatório</Text>}
+                  {errors.status && <Text>Este campo é obrigatório</Text>}
                 </View>
               )}
             />
@@ -262,7 +324,7 @@ export function PartnershipEdit({ visible, onClose }: ModalProps) {
         </ScrollView>
 
         <View style={{ padding: 20 }}>
-          <Button type="filled" onPress={handleSubmit(hendlerPartnershipForm)}>
+          <Button type="filled" onPress={handleSubmit(handlerPartnershipForm)}>
             Editar parceria
           </Button>
         </View>
