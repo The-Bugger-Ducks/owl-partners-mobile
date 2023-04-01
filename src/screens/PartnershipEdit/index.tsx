@@ -8,7 +8,7 @@ import {
   StatusView,
   TextInput,
 } from "./styles";
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
 import { CreatePartnerProps } from "../../shared/interfaces/partner.interface";
@@ -16,30 +16,30 @@ import { statesSelectOptions } from "@utils/statesSelectOptions";
 import { statusSelectOptions } from "@utils/statusSelectOptions";
 import partnerRequest from "src/shared/services/partner.request";
 
-
 interface ModalProps {
   visible: boolean;
   onClose: () => void;
-  partnerProps?:CreatePartnerProps 
+  partnerProps?: CreatePartnerProps;
 }
 
-
-
-export function PartnershipEdit({ visible, onClose, partnerProps }: ModalProps ) {
-
- 
+export function PartnershipEdit({
+  visible,
+  onClose,
+  partnerProps,
+}: ModalProps) {
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<CreatePartnerProps>({
     mode: "onChange",
-    defaultValues: partnerProps
+    defaultValues: partnerProps,
   });
 
   const [isStatusSelectOpen, setisStatusSelectOpen] = useState(false);
   const [isStatesSelectOpen, setisStatesSelectOpen] = useState(false);
-  const [isClassificationSelectOpen, setisClassificationSelectOpen] = useState(false);
+  const [isClassificationSelectOpen, setisClassificationSelectOpen] =
+    useState(false);
 
   const [selectStatus, setSelectedStatus] = useState("");
   const [selectStates, setSelectedStates] = useState("");
@@ -57,11 +57,14 @@ export function PartnershipEdit({ visible, onClose, partnerProps }: ModalProps )
     setisStatusSelectOpen(false);
   }
 
-  function handlerStatesPartenerSelected(statesSelectOptions: {
-    UF: string;
-  }) {
+  function handlerStatesPartenerSelected(statesSelectOptions: { UF: string }) {
     setSelectedStates(statesSelectOptions.UF);
     setisStatusSelectOpen(false);
+  }
+
+  function handlerStatesSelected(statesSelectOptions: { name: string }) {
+    setSelectedStates(statesSelectOptions.name);
+    setisStatesSelectOpen(false);
   }
 
   return (
@@ -108,7 +111,9 @@ export function PartnershipEdit({ visible, onClose, partnerProps }: ModalProps )
                   <Text>Classificação</Text>
                   <TouchableOpacity
                     onPress={() => {
-                      setisClassificationSelectOpen(!isClassificationSelectOpen);
+                      setisClassificationSelectOpen(
+                        !isClassificationSelectOpen,
+                      );
                     }}
                   >
                     <StatusView
@@ -124,21 +129,22 @@ export function PartnershipEdit({ visible, onClose, partnerProps }: ModalProps )
                   </TouchableOpacity>
                   {isClassificationSelectOpen ? (
                     <DropDownArea>
-                      {Object.keys(ClassificationSelectOptions).map(classification => {
-                        return (
-                          <TouchableOpacity key={classification}>
-                            <StatusTypeText
-                              onPress={() => {
-                                setSelectClassification(classification)
-                                setisClassificationSelectOpen(false)
-                                
-                              }}
-                            >
-                              {classification}
-                            </StatusTypeText>
-                          </TouchableOpacity>
-                        );
-                      })}
+                      {Object.keys(ClassificationSelectOptions).map(
+                        classification => {
+                          return (
+                            <TouchableOpacity key={classification}>
+                              <StatusTypeText
+                                onPress={() => {
+                                  setSelectClassification(classification);
+                                  setisClassificationSelectOpen(false);
+                                }}
+                              >
+                                {classification}
+                              </StatusTypeText>
+                            </TouchableOpacity>
+                          );
+                        },
+                      )}
                     </DropDownArea>
                   ) : null}
                 </View>
@@ -202,11 +208,47 @@ export function PartnershipEdit({ visible, onClose, partnerProps }: ModalProps )
               render={({ field }) => (
                 <View>
                   <Text>Localização</Text>
-                  <TextInput
-                    placeholder="São Paulo, Brasil"
-                    {...field}
-                    onChangeText={field.onChange}
-                  />
+                  <TouchableOpacity
+                    onPress={() => {
+                      setisStatesSelectOpen(!isStatesSelectOpen);
+                    }}
+                  >
+                    <StatusView
+                      style={{
+                        justifyContent: "space-between",
+                        flexDirection: "row",
+                        gap: 140.25,
+                      }}
+                    >
+                      <Text>{`${field.value}`}</Text>
+                      <Drop />
+                    </StatusView>
+                  </TouchableOpacity>
+
+                  {isStatesSelectOpen ? (
+                    <Modal
+                      onRequestClose={() =>
+                        setisStatesSelectOpen(!isStatesSelectOpen)
+                      }
+                    >
+                      <DropDownArea>
+                        {statesSelectOptions.map(states => {
+                          return (
+                            <TouchableOpacity key={states.UF}>
+                              <StatusTypeText
+                                onPress={() => {
+                                  handlerStatesSelected(states);
+                                  field.onChange(states.name);
+                                }}
+                              >
+                                {states.name}
+                              </StatusTypeText>
+                            </TouchableOpacity>
+                          );
+                        })}
+                      </DropDownArea>
+                    </Modal>
+                  ) : null}
                 </View>
               )}
             />
@@ -233,8 +275,9 @@ export function PartnershipEdit({ visible, onClose, partnerProps }: ModalProps )
                 <View>
                   <Text>Número de membros</Text>
                   <TextInput
+                    keyboardType="number-pad"
                     placeholder="100"
-                    {...field}
+                    value={`${field.value}`}
                     onChangeText={field.onChange}
                   />
                 </View>
@@ -263,6 +306,7 @@ export function PartnershipEdit({ visible, onClose, partnerProps }: ModalProps )
                 <View>
                   <Text>Telefone</Text>
                   <TextInput
+                    keyboardType="phone-pad"
                     placeholder="(12)99454-3275"
                     {...field}
                     onChangeText={field.onChange}
@@ -292,7 +336,7 @@ export function PartnershipEdit({ visible, onClose, partnerProps }: ModalProps )
                         gap: 140.25,
                       }}
                     >
-                      <Text {...field} />
+                      <Text>{`${field.value}`}</Text>
                       <Drop />
                     </StatusView>
                   </TouchableOpacity>
@@ -304,8 +348,8 @@ export function PartnershipEdit({ visible, onClose, partnerProps }: ModalProps )
                           <TouchableOpacity key={status.id}>
                             <StatusTypeText
                               onPress={() => {
-                                handlerStatusPartenerSelected(status),
-                                field.onChange;
+                                handlerStatusPartenerSelected(status);
+                                field.onChange(status.description);
                               }}
                             >
                               {status.description}

@@ -40,7 +40,8 @@ export const StatusView = styled.View`
 
 export const DropDowArea = styled.View`
   width: 100%;
-  height: 450px;
+  min-height: 100px;
+  max-height: 480px;
   border-radius: 10px;
   margin-top: 15px;
   background-color: #fff;

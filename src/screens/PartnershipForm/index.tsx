@@ -52,6 +52,11 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
     await partnerRequest.create(data);
   };
 
+  function handlerStatesSelected(statesSelectOptions: { name: string }) {
+    setSelectedStates(statesSelectOptions.name);
+    setisStatesSelectOpen(false);
+  }
+
   function handlerStatusPartenerSelected(statusSelectOptions: {
     value: string;
   }) {
@@ -301,7 +306,11 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
               render={({ field: { onChange } }) => (
                 <View>
                   <Text>Número de membros</Text>
-                  <TextInput placeholder="100" onChangeText={onChange} />
+                  <TextInput
+                    placeholder="100"
+                    keyboardType="number-pad"
+                    onChangeText={onChange}
+                  />
                 </View>
               )}
             />
@@ -327,6 +336,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                 <View>
                   <Text>Telefone</Text>
                   <TextInput
+                    keyboardType="phone-pad"
                     placeholder="(12)99454-3275"
                     onChangeText={onChange}
                   />
@@ -359,12 +369,12 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                       <Drop />
                     </StatusView>
                   </TouchableOpacity>
-
+                  {errors.status && <Text>Este campo é obrigatório</Text>}
                   {isStatusSelectOpen ? (
                     <DropDowArea>
                       {statusSelectOptions.map(status => {
                         return (
-                          <TouchableOpacity key={status.id} style={{}}>
+                          <TouchableOpacity key={status.id}>
                             <StatusTypeText
                               onPress={() => {
                                 handlerStatusPartenerSelected(status),
