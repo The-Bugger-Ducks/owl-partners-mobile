@@ -1,6 +1,11 @@
 import { Button, Close, Drop, Input, Text } from "@components";
 import { useState } from "react";
-import { Controller, SubmitHandler, useController, useForm } from "react-hook-form";
+import {
+  Controller,
+  SubmitHandler,
+  useController,
+  useForm,
+} from "react-hook-form";
 import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
 import {
   AddPartnerView,
@@ -17,13 +22,10 @@ import { CreatePartnerProps } from "../../shared/interfaces/partner.interface";
 import partnerRequest from "../../shared/services/partner.request";
 import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
 
-
-
 interface ModalProps {
   visible: boolean;
   onClose: () => void;
 }
-
 
 export function PartnershipForm({ visible, onClose }: ModalProps) {
   const {
@@ -38,17 +40,17 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
 
   const [isStatusSelectOpen, setisStatusSelectOpen] = useState(false);
   const [isStatesSelectOpen, setisStatesSelectOpen] = useState(false);
-  const [isClassificationSelectOpen, setisClassificationSelectOpen] = useState(false);
+  const [isClassificationSelectOpen, setisClassificationSelectOpen] =
+    useState(false);
 
   const onSubmit: SubmitHandler<CreatePartnerProps> = async payload => {
     const data = {
       ...payload,
-      memberNumber:Number(payload.memberNumber)   
-    }
+      memberNumber: Number(payload.memberNumber),
+    };
     console.log(data);
-     await partnerRequest.create(data)
+    await partnerRequest.create(data);
   };
-
 
   function handlerStatusPartenerSelected(statusSelectOptions: {
     value: string;
@@ -57,9 +59,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
     setisStatusSelectOpen(false);
   }
 
-  function handlerStatesPartenerSelected(statesSelectOptions: {
-    UF: string;
-  }) {
+  function handlerStatesPartenerSelected(statesSelectOptions: { UF: string }) {
     setSelectedStates(statesSelectOptions.UF);
     setisStatusSelectOpen(false);
   }
@@ -116,7 +116,9 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                   <Text>Classificação</Text>
                   <TouchableOpacity
                     onPress={() => {
-                      setisClassificationSelectOpen(!isClassificationSelectOpen);
+                      setisClassificationSelectOpen(
+                        !isClassificationSelectOpen,
+                      );
                     }}
                   >
                     <StatusView
@@ -132,21 +134,23 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                   </TouchableOpacity>
                   {isClassificationSelectOpen ? (
                     <DropDowArea>
-                      {Object.keys(ClassificationSelectOptions).map(classification => {
-                        return (
-                          <TouchableOpacity  key={classification}>
-                            <StatusTypeText
-                              onPress={() => {
-                                  setSelectClassification(classification)
-                                  setisClassificationSelectOpen(false)
+                      {Object.keys(ClassificationSelectOptions).map(
+                        classification => {
+                          return (
+                            <TouchableOpacity key={classification}>
+                              <StatusTypeText
+                                onPress={() => {
+                                  setSelectClassification(classification);
+                                  setisClassificationSelectOpen(false);
                                   onChange(classification);
-                              }}
-                            >
-                              {classification}
-                            </StatusTypeText>
-                          </TouchableOpacity>
-                        );
-                      })}
+                                }}
+                              >
+                                {classification}
+                              </StatusTypeText>
+                            </TouchableOpacity>
+                          );
+                        },
+                      )}
                     </DropDowArea>
                   ) : null}
                 </View>
@@ -187,7 +191,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                             <StatusTypeText
                               onPress={() => {
                                 handlerStatusPartenerSelected(status),
-                                  onChange(status.value);
+                                onChange(status.value);
                               }}
                             >
                               {status.description}
@@ -226,7 +230,9 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
 
                   {isStatesSelectOpen ? (
                     <Modal
-                      onRequestClose={() => setisStatesSelectOpen(!isStatesSelectOpen)}
+                      onRequestClose={() =>
+                        setisStatesSelectOpen(!isStatesSelectOpen)
+                      }
                     >
                       <StateDropDowArea>
                         {statesSelectOptions.map(states => {
@@ -270,10 +276,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
               render={({ field: { onChange } }) => (
                 <View>
                   <Text>CEP</Text>
-                  <TextInput
-                    placeholder="12654-356"
-                    onChangeText={onChange}
-                  />
+                  <TextInput placeholder="12654-356" onChangeText={onChange} />
                 </View>
               )}
             />
@@ -295,7 +298,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
             <Controller
               control={control}
               name="memberNumber"
-              render={({ field: {onChange} }) => (
+              render={({ field: { onChange } }) => (
                 <View>
                   <Text>Número de membros</Text>
                   <TextInput placeholder="100" onChangeText={onChange} />
