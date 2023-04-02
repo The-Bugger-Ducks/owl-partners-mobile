@@ -3,7 +3,7 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 import StorageController from "../utils/handlers/StorageController";
 
 export const api = axios.create({
-  baseURL: "https://owlpartners.onrender.com/",
+  baseURL: "https://owlpartners.onrender.com",
 });
 
 api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
