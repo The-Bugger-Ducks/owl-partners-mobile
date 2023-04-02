@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
 import { Button, Card, Header, Input, Tabs, Text } from "@components";
-import { SpecificCardProps } from "src/components/Card";
-import PartnershipController from "src/shared/utils/handlers/PartnershipController";
+import { IComment } from "@interfaces/annotation.interface";
+import AnnotationController from "@requests/AnnotationController";
+import { useEffect, useState } from "react";
 import { ButtonsContainer, Container, HistoryContainer } from "./styles";
-import AnnotationController from "src/shared/utils/handlers/AnnotationController";
-import { IComment } from "src/shared/interfaces/annotation.interface";
 
 export function Partnership() {
   const [tab, setTab] = useState(0);
@@ -14,7 +12,6 @@ export function Partnership() {
     const comments = await AnnotationController.getAnnotations(
       "d65d3f16-ead4-4b4b-a3ce-84b9ddf20a51",
     );
-
     setAnnotations(comments);
   }
 
@@ -23,7 +20,6 @@ export function Partnership() {
   }, []);
 
   function handleDeletePartnership() {
-    PartnershipController.deletePartnership("123");
     alert("Parceria excluída!");
   }
 
@@ -91,5 +87,5 @@ function History({ data }: HistoryProps) {
 }
 
 function MeetingList() {
-  return <Text>Meetings...</Text>;
+  return <Text>Em breve...</Text>;
 }

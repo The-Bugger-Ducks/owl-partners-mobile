@@ -1,5 +1,5 @@
-import { IComment } from "src/shared/interfaces/annotation.interface";
-import { api } from "src/shared/services/api";
+import { api } from "@api";
+import { IComment } from "@interfaces/annotation.interface";
 import { ANNOTATION_ENDPOINTS } from "../endpoints";
 
 class AnnotationController {

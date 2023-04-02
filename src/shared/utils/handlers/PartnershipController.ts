@@ -1,4 +1,4 @@
-import { api } from "src/shared/services/api";
+import { api } from "@api";
 import { PARTNERSHIP_ENDPOINTS } from "../endpoints";
 
 class PartnershipController {
@@ -23,6 +23,7 @@ class PartnershipController {
   async deletePartnership(id: string) {
     try {
       await api.delete(PARTNERSHIP_ENDPOINTS.DELETE + id);
+      alert("Parceria excluída!");
     } catch (error) {
       console.error(error);
     }
