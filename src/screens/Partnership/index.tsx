@@ -1,18 +1,27 @@
-import { Button, Card, Header, Input, Tabs, Text } from "@components";
+import { Button, Card, Header, Input, Loading, Tabs, Text } from "@components";
 import { IComment } from "@interfaces/annotation.interface";
 import AnnotationController from "@requests/AnnotationController";
+import { formatDate } from "@utils/formatDate";
+import { formatTime } from "@utils/formatTime";
 import { useEffect, useState } from "react";
-import { ButtonsContainer, Container, HistoryContainer } from "./styles";
+import {
+  ButtonsContainer,
+  Container,
+  HistoryContainer,
+  LoadingContainer,
+} from "./styles";
 
 export function Partnership() {
   const [tab, setTab] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [annotations, setAnnotations] = useState<IComment[]>();
 
   async function getData() {
     const comments = await AnnotationController.getAnnotations(
-      "d65d3f16-ead4-4b4b-a3ce-84b9ddf20a51",
+      "baadc558-2791-4f9a-8d1e-e01a0a92b432",
     );
     setAnnotations(comments);
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -44,7 +53,11 @@ export function Partnership() {
       <HistoryContainer>
         <Tabs onChangeTab={tab => setTab(tab)} />
 
-        {tab === 0 ? <History data={annotations} /> : <MeetingList />}
+        {tab === 0 ? (
+          <History data={annotations} isLoading={isLoading} />
+        ) : (
+          <MeetingList />
+        )}
       </HistoryContainer>
     </Container>
   );
@@ -52,9 +65,10 @@ export function Partnership() {
 
 interface HistoryProps {
   data?: IComment[];
+  isLoading: boolean;
 }
 
-function History({ data }: HistoryProps) {
+function History({ data, isLoading }: HistoryProps) {
   return (
     <>
       <Input
@@ -68,20 +82,26 @@ function History({ data }: HistoryProps) {
         Todas as atualizações e anotações
       </Text>
 
-      {data?.map(card => {
-        return (
-          <Card
-            key={card.id}
-            id={card.id}
-            type={card.title ? "annotation" : "update"}
-            date={formatDate(card.createdAt)}
-            time={formatTime(card.createdAt)}
-            description={card.comment}
-            author={card.userName}
-            title={card.title}
-          />
-        );
-      })}
+      {isLoading ? (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      ) : (
+        data?.map(card => {
+          return (
+            <Card
+              key={card.id}
+              id={card.id}
+              type={card.title ? "annotation" : "update"}
+              date={formatDate(card.createdAt)}
+              time={formatTime(card.createdAt)}
+              description={card.comment}
+              author={card.userName}
+              title={card.title}
+            />
+          );
+        })
+      )}
     </>
   );
 }

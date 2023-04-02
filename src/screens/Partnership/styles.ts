@@ -17,6 +17,10 @@ export const HistoryContainer = styled.View`
   padding: 24px 24px;
 `;
 
+export const LoadingContainer = styled.View`
+  margin-top: 24px;
+`;
+
 export const TextInput = styled.TextInput`
   background: #f4f5f7;
   padding: 0px 16px;
