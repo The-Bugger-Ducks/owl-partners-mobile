@@ -4,7 +4,7 @@ import { ButtonsContainer, Container } from "./styles";
 export function Home() {
   return (
     <Container>
-      <Header isHero />
+      <Header isHero={true} />
 
       <ButtonsContainer>
         <Button type="unfilled" onPress={() => alert("Reunião!")}>
