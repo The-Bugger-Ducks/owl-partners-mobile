@@ -3,6 +3,7 @@ import { Card } from "./Card";
 import { Header } from "./Header";
 import { Input } from "./Input";
 import { Loading } from "./Loading";
+import { Modal } from "./Modal";
 import { Tabs } from "./Tabs";
 import { Text } from "./Text";
 
@@ -10,14 +11,14 @@ import { Text } from "./Text";
 import { CheckCircle } from "./Icons/CheckCircle";
 import { Close } from "./Icons/Close";
 import { Drop } from "./Icons/Drop";
-import { Logo } from "./Icons/Logo";
-import { PlusCircle } from "./Icons/PlusCircle";
-import { Info } from "./Icons/Info";
 import { Eye } from "./Icons/Eye";
 import { EyeHidden } from "./Icons/EyeHidden";
 import { Home } from "./Icons/Home";
-import { Profile } from "./Icons/Profile";
+import { Info } from "./Icons/Info";
+import { Logo } from "./Icons/Logo";
 import { Order } from "./Icons/Order";
+import { PlusCircle } from "./Icons/PlusCircle";
+import { Profile } from "./Icons/Profile";
 
 export {
   Button,
@@ -25,6 +26,7 @@ export {
   Header,
   Input,
   Loading,
+  Modal,
   Tabs,
   Text,
   // icons

@@ -9,5 +9,5 @@ export interface IComment {
   comment: string;
   title?: string;
   createdAt: string;
-  updatedAt?: string;
+  updatedAt: string;
 }
