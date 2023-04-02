@@ -1,29 +1,28 @@
 import { Button, Header, Text } from "@components";
 import { PartnershipForm } from "@screens/PartnershipForm";
 import { useEffect, useState } from "react";
-import { Container, ButtonView, SearchView, PartnerView } from "./styles";
-import partnerRequest from "../../shared/services/partner.request";
 import { ScrollView } from "react-native";
-import { CreatePartnerProps } from "src/shared/interfaces/partner.interface";
+import partnerRequest from "../../shared/services/partner.request";
+import { ButtonView, Container, PartnerView, SearchView } from "./styles";
 
 export function Partnerships() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [data, setData] = useState([]);
 
-  const getPartner = async () => {
-    const resp = await partnerRequest.List();
-    return setData(resp);
-  };
+  async function getPartnerships() {
+    const partnerships = await partnerRequest.List();
+    return setData(partnerships);
+  }
 
   useEffect(() => {
-    getPartner();
+    getPartnerships();
   }, []);
 
   return (
     <Container>
       <Header isHero={true} />
       <ButtonView>
-        <Button type="unfilled" onPress={() => setVisibleModal}>
+        <Button type="unfilled" onPress={() => setVisibleModal(true)}>
           Adicionar nova parceria
         </Button>
       </ButtonView>
@@ -31,13 +30,21 @@ export function Partnerships() {
       <ScrollView>
         <SearchView>
           <Text>Parcerias encontradas</Text>
-          {data.map(({ name, classification, status, id }) => {
+          {data?.map(({ name, classification, status, id }) => {
             return (
               <PartnerView key={id}>
-                <Text>
-                  {classification} | {name}
+                <Text color="#EF4444" size={12} weight="500" numberOfLines={1}>
+                  {classification} |{" "}
+                  <Text size={12} weight="500">
+                    {name}
+                  </Text>
                 </Text>
-                <Text>Status: {status}</Text>
+                <Text color="#999999" size={14} weight="400" numberOfLines={1}>
+                  Status:{" "}
+                  <Text size={14} weight="400">
+                    {status}
+                  </Text>
+                </Text>
               </PartnerView>
             );
           })}
