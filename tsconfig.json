@@ -13,7 +13,8 @@
       "@utils/*": ["./src/utils/*"],
       "@interfaces/*": ["./src/utils/interfaces/*"],
       "@api": ["./src/services/api"],
-      "@requests/*": ["./src/utils/requests/*"]
+      "@requests/*": ["./src/utils/requests/*"],
+      "@routes/*": ["./src/routes/*"]
     }
   }
 }
