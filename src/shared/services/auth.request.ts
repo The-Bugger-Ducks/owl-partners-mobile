@@ -14,8 +14,8 @@ class AuthRequest {
 
       const user = response.data;
 
-      await StorageController.setToken(user.token)
-      await StorageController.setUserInfo(user)
+      await StorageController.setToken(user.token);
+      await StorageController.setUserInfo(user);
 
       return response;
     } catch (error) {
@@ -26,7 +26,7 @@ class AuthRequest {
           }
         }
       }
-      throw new Error("Algo inesperado aconteceu, tente novamente!")
+      throw new Error("Algo inesperado aconteceu, tente novamente!");
     }
   }
 

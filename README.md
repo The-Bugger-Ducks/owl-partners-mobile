@@ -33,11 +33,12 @@ Use um emulador ou leia o QRCode do terminal por um dispositivo físico <br>
 
 <div align="center">
 
-| Pasta                              | Definição                                                                      |
-| ---------------------------------- | ------------------------------------------------------------------------------ |
-| :open_file_folder: assets/         | Arquivos que representam o ícone e splash screen da aplicação                  |
-| :open_file_folder: src/            | Código fonte do projeto                                                        |
-| :open_file_folder: src/components  | Código fonte dos componentes do projeto (botões, rodapés, cabeçalhos, cards..) |
-| :open_file_folder: src/screens     | Código fonte das páginas do projeto                                            |
-| :open_file_folder: src/utils       | Arquivos utilitários (funções compartilhadas, interfaces, requests...)         |
+| Pasta                             | Definição                                                                      |
+| --------------------------------- | ------------------------------------------------------------------------------ |
+| :open_file_folder: assets/        | Arquivos que representam o ícone e splash screen da aplicação                  |
+| :open_file_folder: src/           | Código fonte do projeto                                                        |
+| :open_file_folder: src/components | Código fonte dos componentes do projeto (botões, rodapés, cabeçalhos, cards..) |
+| :open_file_folder: src/screens    | Código fonte das páginas do projeto                                            |
+| :open_file_folder: src/utils      | Arquivos utilitários (funções compartilhadas, interfaces, requests...)         |
+
 </div>

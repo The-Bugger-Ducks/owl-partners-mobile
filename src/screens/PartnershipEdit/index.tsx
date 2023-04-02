@@ -1,6 +1,4 @@
 import { Button, Close, Drop, Text } from "@components";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
 import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
 import {
   AddPartnerView,
@@ -10,13 +8,15 @@ import {
   StatusView,
   TextInput,
 } from "./styles";
+import { useForm, Controller } from "react-hook-form";
+import { useEffect, useState } from "react";
 
 type formDataProps = {
-  partner: string;
+  name: string;
   classification: string;
-  location: string;
+  state: string;
   address: string;
-  membersQuantity: string;
+  memberNumber: number;
   email: string;
   phoneNumber: string;
   status: string;
@@ -41,16 +41,30 @@ const statusSelectOptions = [
   { id: 11, description: "Pronto para assinatura, Parceria Firmada" },
 ];
 
-export function PartnershipForm({ visible, onClose }: ModalProps) {
+export function PartnershipEdit({ visible, onClose }: ModalProps) {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<formDataProps>();
-  const [selectStatus, setSelecteStatus] = useState("");
-  const [isStatusSelectOpen, setisStatusSelectOpen] = useState(false);
+  } = useForm<formDataProps>({
+    mode: "onChange",
+    defaultValues: async () => {
+      const result = await fetch(
+        "https://owlpartners.onrender.com/partners/d65d3f16-ead4-4b4b-a3ce-84b9ddf20a51"
+      ).then(res => res.json());
+      return result;
+    },
+  });
 
-  function hendlerPartnershipForm(statusSelectOptions: formDataProps) {
+  const [isStatusSelectOpen, setisStatusSelectOpen] = useState(false);
+  const [selectStatus, setSelecteStatus] = useState("");
+
+  // useEffect(() => {
+  //   console.log('requisição');
+  //   setSelecteStatus('Primeiro contato feito');
+  // }, [])
+
+  async function hendlerPartnershipForm(statusSelectOptions: formDataProps) {
     console.log(statusSelectOptions);
     onClose();
   }
@@ -71,14 +85,9 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
     >
       <Container>
         <AddPartnerView
-          style={{
-            justifyContent: "space-between",
-            flexDirection: "row",
-            gap: 140.25,
-            marginBottom: 24,
-          }}
+          style={{ justifyContent: "space-between", flexDirection: "row" }}
         >
-          <Text>Adicionar nova parceria</Text>
+          <Text>Editar parceria</Text>
 
           <TouchableOpacity onPress={onClose}>
             <Close color="#666666" />
@@ -90,18 +99,15 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
 
             <Controller
               control={control}
-              name="partner"
-              rules={{
-                required: "informe o nome do parceiro",
-              }}
-              render={({ field: { onChange } }) => (
+              name="name"
+              render={({ field }) => (
                 <View>
                   <Text>Parceria</Text>
                   <TextInput
+                    {...field}
+                    onChangeText={field.onChange}
                     placeholder="The Bugger Ducks"
-                    onChangeText={onChange}
                   />
-                  {errors.partner && <Text>Este campo é obrigatório</Text>}
                 </View>
               )}
             />
@@ -109,12 +115,13 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
             <Controller
               control={control}
               name="classification"
-              render={({ field: { onChange } }) => (
+              render={({ field }) => (
                 <View>
                   <Text>Classificação </Text>
                   <TextInput
                     placeholder="Universidade"
-                    onChangeText={onChange}
+                    {...field}
+                    onChangeText={field.onChange}
                   />
                 </View>
               )}
@@ -122,13 +129,14 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
 
             <Controller
               control={control}
-              name="location"
-              render={({ field: { onChange } }) => (
+              name="state"
+              render={({ field }) => (
                 <View>
                   <Text>Localização</Text>
                   <TextInput
                     placeholder="São Paulo, Brasil"
-                    onChangeText={onChange}
+                    {...field}
+                    onChangeText={field.onChange}
                   />
                 </View>
               )}
@@ -137,12 +145,13 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
             <Controller
               control={control}
               name="address"
-              render={({ field: { onChange } }) => (
+              render={({ field }) => (
                 <View>
                   <Text>Endereço</Text>
                   <TextInput
                     placeholder="Rua 21, 123"
-                    onChangeText={onChange}
+                    {...field}
+                    onChangeText={field.onChange}
                   />
                 </View>
               )}
@@ -150,11 +159,16 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
 
             <Controller
               control={control}
-              name="membersQuantity"
-              render={({ field: { onChange } }) => (
+              name="memberNumber"
+              render={({ field }) => (
                 <View>
                   <Text>Número de membros</Text>
-                  <TextInput placeholder="100" onChangeText={onChange} />
+                  <TextInput
+                    keyboardType="number-pad"
+                    placeholder="100"
+                    value={String({ ...field })}
+                    onChangeText={field.onChange}
+                  />
                 </View>
               )}
             />
@@ -162,12 +176,13 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
             <Controller
               control={control}
               name="email"
-              render={({ field: { onChange } }) => (
+              render={({ field }) => (
                 <View>
                   <Text>E-mail</Text>
                   <TextInput
                     placeholder="nome@gmail.com"
-                    onChangeText={onChange}
+                    {...field}
+                    onChangeText={field.onChange}
                   />
                 </View>
               )}
@@ -176,12 +191,13 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
             <Controller
               control={control}
               name="phoneNumber"
-              render={({ field: { onChange } }) => (
+              render={({ field }) => (
                 <View>
                   <Text>Telefone</Text>
                   <TextInput
                     placeholder="(12)99454-3275"
-                    onChangeText={onChange}
+                    {...field}
+                    onChangeText={field.onChange}
                   />
                 </View>
               )}
@@ -193,7 +209,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
               rules={{
                 required: "informe o status da parceria",
               }}
-              render={({ field: { onChange } }) => (
+              render={({ field }) => (
                 <View>
                   <Text>Status</Text>
                   <TouchableOpacity
@@ -217,11 +233,11 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                     <DropDowArea>
                       {statusSelectOptions.map(status => {
                         return (
-                          <TouchableOpacity key={status.id} style={{}}>
+                          <TouchableOpacity key={status.id}>
                             <StatusTypeText
                               onPress={() => {
-                                handlerStatusPartenerSelected(status),
-                                  onChange(status.description);
+                                handlerStatusPartenerSelected(status);
+                                field.onChange(status.description);
                               }}
                             >
                               {status.description}
@@ -232,7 +248,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                     </DropDowArea>
                   ) : null}
 
-                  {errors.partner && <Text>Este campo é obrigatório</Text>}
+                  {errors && <Text>Este campo é obrigatório</Text>}
                 </View>
               )}
             />
@@ -241,7 +257,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
 
         <View style={{ padding: 20 }}>
           <Button type="filled" onPress={handleSubmit(hendlerPartnershipForm)}>
-            Adicionar parceria
+            Editar parceria
           </Button>
         </View>
       </Container>
