@@ -8,6 +8,7 @@ import {
   ButtonsContainer,
   Container,
   HistoryContainer,
+  ListContainer,
   LoadingContainer,
 } from "./styles";
 
@@ -70,7 +71,7 @@ interface HistoryProps {
 
 function History({ data, isLoading }: HistoryProps) {
   return (
-    <>
+    <ListContainer scrollEnabled>
       <Input
         label={"Inserir atualização"}
         placeholder={"Nova atualização sobre a parceria..."}
@@ -96,13 +97,13 @@ function History({ data, isLoading }: HistoryProps) {
               date={formatDate(card.createdAt)}
               time={formatTime(card.createdAt)}
               description={card.comment}
-              author={card.userName}
+              author={`${card.User.name} ${card.User.lastName}`}
               title={card.title}
             />
           );
         })
       )}
-    </>
+    </ListContainer>
   );
 }
 
