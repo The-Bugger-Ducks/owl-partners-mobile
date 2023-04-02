@@ -268,7 +268,7 @@ export function PartnershipEdit({
               )}
             />
 
-            {/* <Controller
+            <Controller
               control={control}
               name="memberNumber"
               render={({ field }) => (
@@ -282,7 +282,7 @@ export function PartnershipEdit({
                   />
                 </View>
               )}
-            /> */}
+            />
 
             <Controller
               control={control}
