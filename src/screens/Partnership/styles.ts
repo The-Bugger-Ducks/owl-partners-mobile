@@ -15,6 +15,13 @@ export const ButtonsContainer = styled.View`
 
 export const HistoryContainer = styled.View`
   padding: 24px 24px;
+  flex: 1;
+`;
+
+export const ListContainer = styled.ScrollView``;
+
+export const LoadingContainer = styled.View`
+  margin-top: 24px;
 `;
 
 export const TextInput = styled.TextInput`

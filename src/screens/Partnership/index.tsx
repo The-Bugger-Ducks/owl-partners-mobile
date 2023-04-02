@@ -1,60 +1,77 @@
-import { Button, Card, Header, Input, Tabs, Text } from "@components";
-import { SpecificCardProps } from "src/components/Card";
-import { ButtonsContainer, Container, HistoryContainer } from "./styles";
+import { Button, Card, Header, Input, Loading, Tabs, Text } from "@components";
+import { IComment } from "@interfaces/annotation.interface";
+import AnnotationController from "@requests/AnnotationController";
+import { formatDate } from "@utils/formatDate";
+import { formatTime } from "@utils/formatTime";
+import { useEffect, useState } from "react";
+import {
+  ButtonsContainer,
+  Container,
+  HistoryContainer,
+  ListContainer,
+  LoadingContainer,
+} from "./styles";
 
 export function Partnership() {
-  const historyMock: HistoryProps["data"] = [
-    {
-      id: "1",
-      date: "21/07/2023",
-      time: "16:00",
-      description:
-        "Troquei mensagens com a reitora, que me permitiu planejar uma palestra para conversar com os alunos mês que vem. Pretendo entrefgar novas ideias dentro de 2 semanas.",
-      author: "Maria Gabriela",
-    },
-    {
-      id: "2",
-      date: "20/07/2023",
-      time: "15:00",
-      title: "Programa #ElesSabem",
-      description:
-        "Ficou decidido pelos participantes da reunião que o programa ficará ativo por um período inicial de 6 meses para adequação dos alunos à iniciativa",
-      author: "João Marcos",
-    },
-  ];
+  const [tab, setTab] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [annotations, setAnnotations] = useState<IComment[]>();
+
+  async function getData() {
+    const comments = await AnnotationController.getAnnotations(
+      "baadc558-2791-4f9a-8d1e-e01a0a92b432",
+    );
+    setAnnotations(comments);
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  function handleDeletePartnership() {
+    alert("Parceria excluída!");
+  }
+
+  function handleUpdatePartnership() {
+    // PartnershipController.updatePartnership();
+    alert("Parceria editada!");
+  }
 
   return (
     <Container>
       <Header />
 
       <ButtonsContainer>
-        <Button type="unfilled" onPress={() => alert("Deletar!")}>
+        <Button type="unfilled" onPress={handleDeletePartnership}>
           Deletar parceria
         </Button>
-        <Button
-          onPress={() => alert("informações!")}
-          style={{ marginVertical: 8 }}
-        >
+        <Button onPress={handleUpdatePartnership} style={{ marginVertical: 8 }}>
           Editar informações
         </Button>
       </ButtonsContainer>
 
       <HistoryContainer>
-        <Tabs onChangeTab={tab => alert(`mudou a tab! ${tab}`)} />
+        <Tabs onChangeTab={tab => setTab(tab)} />
 
-        <History data={historyMock} />
+        {tab === 0 ? (
+          <History data={annotations} isLoading={isLoading} />
+        ) : (
+          <MeetingList />
+        )}
       </HistoryContainer>
     </Container>
   );
 }
 
 interface HistoryProps {
-  data: SpecificCardProps["props"][];
+  data?: IComment[];
+  isLoading: boolean;
 }
 
-function History({ data }: HistoryProps) {
+function History({ data, isLoading }: HistoryProps) {
   return (
-    <>
+    <ListContainer scrollEnabled>
       <Input
         label={"Inserir atualização"}
         placeholder={"Nova atualização sobre a parceria..."}
@@ -66,20 +83,30 @@ function History({ data }: HistoryProps) {
         Todas as atualizações e anotações
       </Text>
 
-      {data.map(card => {
-        return (
-          <Card
-            key={card.id}
-            id={card.id}
-            type={card.title ? "annotation" : "update"}
-            date={card.date}
-            time={card.time}
-            description={card.description}
-            author={card.author}
-            title={card.title}
-          />
-        );
-      })}
-    </>
+      {isLoading ? (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      ) : (
+        data?.map(card => {
+          return (
+            <Card
+              key={card.id}
+              id={card.id}
+              type={card.title ? "annotation" : "update"}
+              date={formatDate(card.createdAt)}
+              time={formatTime(card.createdAt)}
+              description={card.comment}
+              author={`${card.User.name} ${card.User.lastName}`}
+              title={card.title}
+            />
+          );
+        })
+      )}
+    </ListContainer>
   );
+}
+
+function MeetingList() {
+  return <Text>Em breve...</Text>;
 }
