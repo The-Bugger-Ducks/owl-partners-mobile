@@ -14,20 +14,6 @@ import {
 
 export function Partnership() {
   const [tab, setTab] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [annotations, setAnnotations] = useState<IComment[]>();
-
-  async function getData() {
-    const comments = await AnnotationController.getAnnotations(
-      "baadc558-2791-4f9a-8d1e-e01a0a92b432",
-    );
-    setAnnotations(comments);
-    setIsLoading(false);
-  }
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   function handleDeletePartnership() {
     alert("Parceria excluída!");
@@ -54,29 +40,52 @@ export function Partnership() {
       <HistoryContainer>
         <Tabs onChangeTab={tab => setTab(tab)} />
 
-        {tab === 0 ? (
-          <History data={annotations} isLoading={isLoading} />
-        ) : (
-          <MeetingList />
-        )}
+        {tab === 0 ? <History /> : <MeetingList />}
       </HistoryContainer>
     </Container>
   );
 }
 
-interface HistoryProps {
-  data?: IComment[];
-  isLoading: boolean;
-}
+function History() {
+  const [newComment, setNewComment] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [annotations, setAnnotations] = useState<IComment[]>();
 
-function History({ data, isLoading }: HistoryProps) {
+  async function getData() {
+    const comments = await AnnotationController.getAnnotations(
+      "baadc558-2791-4f9a-8d1e-e01a0a92b432",
+    );
+    setAnnotations(comments);
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  async function handleAddComment() {
+    setIsLoading(true);
+    await AnnotationController.createAnnotation(
+      "baadc558-2791-4f9a-8d1e-e01a0a92b432",
+      newComment,
+    );
+    const updatedComments = await AnnotationController.getAnnotations(
+      "baadc558-2791-4f9a-8d1e-e01a0a92b432",
+    );
+    updatedComments && setAnnotations(updatedComments);
+    setNewComment("");
+    setIsLoading(false);
+  }
+
   return (
     <ListContainer scrollEnabled>
       <Input
         label={"Inserir atualização"}
         placeholder={"Nova atualização sobre a parceria..."}
-        onChangeText={text => console.log(text)}
+        value={newComment}
+        onChangeText={text => setNewComment(text)}
         hasOutIcon
+        onPressIcon={handleAddComment}
       />
 
       <Text size={14} color={"#666666"} style={{ marginVertical: 16 }}>
@@ -88,7 +97,7 @@ function History({ data, isLoading }: HistoryProps) {
           <Loading />
         </LoadingContainer>
       ) : (
-        data?.map(card => {
+        annotations?.map(card => {
           return (
             <Card
               key={card.id}

@@ -3,9 +3,12 @@ import { IComment } from "@interfaces/annotation.interface";
 import { ANNOTATION_ENDPOINTS } from "../endpoints";
 
 class AnnotationController {
-  async createAnnotation(annotation: IComment) {
+  async createAnnotation(partnerId: string, comment: string) {
     try {
-      await api.post(ANNOTATION_ENDPOINTS.CREATE, annotation);
+      await api.post(ANNOTATION_ENDPOINTS.CREATE, {
+        partnerId,
+        comment,
+      });
     } catch (error) {
       console.error(error);
     }

@@ -1,8 +1,8 @@
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 
 export const Container = styled.View``;
 
-export const TextInput = styled.TextInput`
+export const TextInput = styled.TextInput<{ hasOutIcon: boolean }>`
   background: #f4f5f7;
   padding: 0px 16px;
   border-radius: 8px;
@@ -11,6 +11,12 @@ export const TextInput = styled.TextInput`
   justify-content: center;
   height: 56px;
   min-width: 85%;
+
+  ${({ hasOutIcon }) =>
+    hasOutIcon &&
+    css`
+      width: 85%;
+    `}
 `;
 
 export const InputContainer = styled.View`
