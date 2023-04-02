@@ -23,9 +23,16 @@ class AnnotationController {
     }
   }
 
-  async updateAnnotation(id: string) {
+  async updateAnnotation(
+    commentId: string,
+    partnerId: string,
+    comment: string,
+  ) {
     try {
-      const { data } = await api.get(ANNOTATION_ENDPOINTS.EDIT + id);
+      const { data } = await api.put(ANNOTATION_ENDPOINTS.EDIT + commentId, {
+        partnerId,
+        comment,
+      });
       return data;
     } catch (error) {
       console.error(error);

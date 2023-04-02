@@ -10,7 +10,7 @@ export const TextInput = styled.TextInput<{ hasOutIcon: boolean }>`
   align-items: center;
   justify-content: center;
   height: 56px;
-  min-width: 85%;
+  width: 100%;
 
   ${({ hasOutIcon }) =>
     hasOutIcon &&
