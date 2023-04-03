@@ -18,6 +18,10 @@ export const AnnotationsListContainer = styled.View`
   flex: 1;
 `;
 
+export const ModalContent = styled.View`
+  gap: 8px;
+`;
+
 export const ListContainer = styled.ScrollView``;
 
 export const LoadingContainer = styled.View`

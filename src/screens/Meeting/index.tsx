@@ -12,12 +12,14 @@ import {
   Container,
   ListContainer,
   LoadingContainer,
+  ModalContent,
 } from "./styles";
 
 export function Meeting() {
   const [data, setData] = useState<IMeeting>();
   const [isLoading, setIsLoading] = useState(true);
   const [updatedMeeting, setUpdatedMeeting] = useState<IMeeting>();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const {
     params: { meetingId },
   } = useRoute<
@@ -44,7 +46,8 @@ export function Meeting() {
   }
 
   async function handleUpdateMeeting() {
-    await meetingRequest.updateMeeting(updatedMeeting!);
+    const updatedData = await meetingRequest.updateMeeting(updatedMeeting!);
+    setData(updatedData);
   }
 
   return (
@@ -62,6 +65,40 @@ export function Meeting() {
       <AnnotationsListContainer>
         <AnnotationsList data={data?.comments} />
       </AnnotationsListContainer>
+
+      <Modal
+        visible={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        title={"Editar reunião"}
+        buttonTitle="Editar reunião"
+        onPressButton={handleUpdateMeeting}
+        isLoading={isLoading}
+        content={
+          <ModalContent>
+            <Input
+              label="Data"
+              value={data?.date}
+              onChangeText={text =>
+                setUpdatedMeeting(prev => ({ ...prev, date: text }))
+              }
+            />
+            <Input
+              label="Hora"
+              value={data?.time}
+              onChangeText={text =>
+                setUpdatedMeeting(prev => ({ ...prev, time: text }))
+              }
+            />
+            <Input
+              label="Tema (opcional)"
+              value={data?.theme}
+              onChangeText={text =>
+                setUpdatedMeeting(prev => ({ ...prev, theme: text }))
+              }
+            />
+          </ModalContent>
+        }
+      />
     </Container>
   );
 }
