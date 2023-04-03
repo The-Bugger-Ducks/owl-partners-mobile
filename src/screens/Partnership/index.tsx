@@ -9,7 +9,9 @@ import {
   Text,
 } from "@components";
 import { IComment } from "@interfaces/annotation.interface";
+import { useRoute } from "@react-navigation/native";
 import AnnotationController from "@requests/AnnotationController";
+import PartnershipController from "@requests/PartnershipController";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
 import { useEffect, useState } from "react";
@@ -23,9 +25,18 @@ import {
 
 export function Partnership() {
   const [tab, setTab] = useState(0);
+  const {
+    params: { partnershipId },
+  } = useRoute<
+    Readonly<{
+      key: string;
+      name: string;
+      params: { partnershipId: string };
+    }>
+  >();
 
-  function handleDeletePartnership() {
-    alert("Parceria excluída!");
+  async function handleDeletePartnership() {
+    await PartnershipController.deletePartnership(partnershipId);
   }
 
   function handleUpdatePartnership() {
@@ -63,27 +74,29 @@ function History() {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [isEditCommentModalOpen, setIsEditCommentModalOpen] = useState(false);
   const [editedComment, setEditedComment] = useState("");
+  const {
+    params: { partnershipId },
+  } =
+    useRoute<
+      Readonly<{ key: string; name: string; params: { partnershipId: string } }>
+    >();
 
   async function getData() {
-    const comments = await AnnotationController.getAnnotations(
-      "baadc558-2791-4f9a-8d1e-e01a0a92b432",
-    );
+    setIsLoading(true);
+    const comments = await AnnotationController.getAnnotations(partnershipId);
     setAnnotations(comments);
     setIsLoading(false);
   }
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [partnershipId]);
 
   async function handleAddComment() {
     setIsLoading(true);
-    await AnnotationController.createAnnotation(
-      "baadc558-2791-4f9a-8d1e-e01a0a92b432",
-      newComment,
-    );
+    await AnnotationController.createAnnotation(partnershipId, newComment);
     const updatedComments = await AnnotationController.getAnnotations(
-      "baadc558-2791-4f9a-8d1e-e01a0a92b432",
+      partnershipId,
     );
     updatedComments && setAnnotations(updatedComments);
     setNewComment("");
@@ -94,11 +107,11 @@ function History() {
     setIsLoading(true);
     await AnnotationController.updateAnnotation(
       modalComment?.id ?? "",
-      "baadc558-2791-4f9a-8d1e-e01a0a92b432",
+      partnershipId,
       editedComment,
     );
     const updatedComments = await AnnotationController.getAnnotations(
-      "baadc558-2791-4f9a-8d1e-e01a0a92b432",
+      partnershipId,
     );
     updatedComments && setAnnotations(updatedComments);
     setEditedComment("");
@@ -125,6 +138,14 @@ function History() {
         <LoadingContainer>
           <Loading />
         </LoadingContainer>
+      ) : annotations?.length === 0 ? (
+        <Text
+          size={14}
+          color={"#999999"}
+          style={{ textAlign: "center", marginVertical: 24 }}
+        >
+          Sem atualizações ou anotações
+        </Text>
       ) : (
         annotations?.map(card => {
           const isEdited = card.createdAt != card.updatedAt;

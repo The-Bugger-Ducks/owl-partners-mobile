@@ -28,3 +28,17 @@ export const TextInput = styled.TextInput`
   width: 345px;
   height: 56px;
 `;
+
+export const LoadingContainer = styled.View`
+  padding-top: 24px;
+`;
+
+export const PartnerView = styled.TouchableOpacity`
+  width: 345px;
+  height: 94px;
+  background: #ffffff;
+  gap: 8px;
+  border-radius: 8px;
+  padding: 24px;
+  justify-content: center;
+`;
