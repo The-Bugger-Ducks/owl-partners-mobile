@@ -13,9 +13,13 @@ export const ButtonView = styled.View`
   padding: 24px 24px;
 `;
 
-export const SearchView = styled.View`
-  padding: 24px 24px;
-  gap: 10px;
+export const TabsContainer = styled.View`
+  padding: 16px 24px 0px;
+  flex: 1;
+`;
+
+export const PartnershipsList = styled.ScrollView`
+  margin: 16px 0px 32px;
 `;
 
 export const TextInput = styled.TextInput`
@@ -34,11 +38,10 @@ export const LoadingContainer = styled.View`
 `;
 
 export const PartnerView = styled.TouchableOpacity`
-  width: 345px;
-  height: 94px;
   background: #ffffff;
   gap: 8px;
   border-radius: 8px;
+  margin-bottom: 8px;
   padding: 24px;
   justify-content: center;
 `;

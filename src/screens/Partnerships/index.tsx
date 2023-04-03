@@ -1,33 +1,35 @@
-import { Button, Header, Loading, Text } from "@components";
+import { Button, Header, Loading, Tabs, Text } from "@components";
+import { IPartnership } from "@interfaces/partner.interface";
 import { useNavigation } from "@react-navigation/native";
 import { PartnershipForm } from "@screens/PartnershipForm";
 import { useEffect, useState } from "react";
-import { ScrollView } from "react-native";
 import partnerRequest from "../../shared/services/partner.request";
 import {
   ButtonView,
   Container,
   LoadingContainer,
   PartnerView,
-  SearchView,
+  PartnershipsList,
+  TabsContainer,
 } from "./styles";
 
 export function Partnerships() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<IPartnership[]>([]);
+  const [tab, setTab] = useState(0);
   const navigation = useNavigation();
 
   async function getPartnerships() {
     setIsLoading(true);
-    const partnerships = await partnerRequest.List();
+    const partnerships: IPartnership[] = await partnerRequest.List(tab === 1);
     setData(partnerships);
     setIsLoading(false);
   }
 
   useEffect(() => {
     getPartnerships();
-  }, []);
+  }, [tab]);
 
   return (
     <Container>
@@ -38,9 +40,15 @@ export function Partnerships() {
         </Button>
       </ButtonView>
 
-      <ScrollView>
-        <SearchView>
-          <Text>Parcerias encontradas</Text>
+      <TabsContainer>
+        <Tabs
+          tabHeaders={["Ativas", "Deletadas"]}
+          onChangeTab={tab => setTab(tab)}
+        />
+
+        <PartnershipsList>
+          <Text style={{ marginBottom: 16 }}>Parcerias encontradas</Text>
+
           {isLoading ? (
             <LoadingContainer>
               <Loading />
@@ -83,8 +91,9 @@ export function Partnerships() {
               );
             })
           )}
-        </SearchView>
-      </ScrollView>
+        </PartnershipsList>
+      </TabsContainer>
+
       <PartnershipForm
         visible={visibleModal}
         onClose={() => setVisibleModal(false)}
