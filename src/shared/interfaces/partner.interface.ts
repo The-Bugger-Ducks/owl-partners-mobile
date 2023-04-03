@@ -1,4 +1,5 @@
 export interface IPartnership {
+  id?: string;
   name: string;
   email: string;
   phoneNumber: string;
