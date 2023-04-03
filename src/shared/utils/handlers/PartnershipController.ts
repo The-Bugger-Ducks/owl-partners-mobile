@@ -1,4 +1,5 @@
 import { api } from "@api";
+import { Alert } from "react-native";
 import { PARTNERSHIP_ENDPOINTS } from "../endpoints";
 
 class PartnershipController {
@@ -23,7 +24,10 @@ class PartnershipController {
   async deletePartnership(id: string) {
     try {
       await api.delete(PARTNERSHIP_ENDPOINTS.DELETE + id);
-      alert("Parceria excluída!");
+      Alert.alert(
+        "Parceria excluída!",
+        "Esta parceria ainda vai aparecer na listagem, mas ações como editar ou adicionar anotação foram bloqueadas!",
+      );
     } catch (error) {
       console.error(error);
     }

@@ -53,6 +53,7 @@ export function Partnership() {
 
   async function handleDeletePartnership() {
     await PartnershipController.deletePartnership(partnershipId);
+    getData();
   }
 
   function handleUpdatePartnership() {
