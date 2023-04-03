@@ -1,29 +1,39 @@
-import { Button, Header, Text } from "@components";
+import { Button, Header, Loading, Text } from "@components";
+import { useNavigation } from "@react-navigation/native";
 import { PartnershipForm } from "@screens/PartnershipForm";
 import { useEffect, useState } from "react";
-import { Container, ButtonView, SearchView, PartnerView } from "./styles";
-import partnerRequest from "../../shared/services/partner.request";
 import { ScrollView } from "react-native";
-import { CreatePartnerProps } from "src/shared/interfaces/partner.interface";
+import partnerRequest from "../../shared/services/partner.request";
+import {
+  ButtonView,
+  Container,
+  LoadingContainer,
+  PartnerView,
+  SearchView,
+} from "./styles";
 
 export function Partnerships() {
   const [visibleModal, setVisibleModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
+  const navigation = useNavigation();
 
-  const getPartner = async () => {
-    const resp = await partnerRequest.List();
-    return setData(resp);
-  };
+  async function getPartnerships() {
+    setIsLoading(true);
+    const partnerships = await partnerRequest.List();
+    setData(partnerships);
+    setIsLoading(false);
+  }
 
   useEffect(() => {
-    getPartner();
+    getPartnerships();
   }, []);
 
   return (
     <Container>
       <Header isHero={true} />
       <ButtonView>
-        <Button type="unfilled" onPress={() => setVisibleModal}>
+        <Button type="unfilled" onPress={() => setVisibleModal(true)}>
           Adicionar nova parceria
         </Button>
       </ButtonView>
@@ -31,16 +41,48 @@ export function Partnerships() {
       <ScrollView>
         <SearchView>
           <Text>Parcerias encontradas</Text>
-          {data.map(({ name, classification, status, id }) => {
-            return (
-              <PartnerView key={id}>
-                <Text>
-                  {classification} | {name}
-                </Text>
-                <Text>Status: {status}</Text>
-              </PartnerView>
-            );
-          })}
+          {isLoading ? (
+            <LoadingContainer>
+              <Loading />
+            </LoadingContainer>
+          ) : (
+            data?.map(({ name, classification, status, id }) => {
+              return (
+                <PartnerView
+                  key={id}
+                  activeOpacity={0.7}
+                  onPress={() =>
+                    navigation.navigate("Partnership", {
+                      partnershipId: id,
+                    })
+                  }
+                >
+                  <Text
+                    color="#EF4444"
+                    size={12}
+                    weight="500"
+                    numberOfLines={1}
+                  >
+                    {classification} |{" "}
+                    <Text size={12} weight="500">
+                      {name}
+                    </Text>
+                  </Text>
+                  <Text
+                    color="#999999"
+                    size={14}
+                    weight="400"
+                    numberOfLines={1}
+                  >
+                    Status:{" "}
+                    <Text size={14} weight="400">
+                      {status}
+                    </Text>
+                  </Text>
+                </PartnerView>
+              );
+            })
+          )}
         </SearchView>
       </ScrollView>
       <PartnershipForm
