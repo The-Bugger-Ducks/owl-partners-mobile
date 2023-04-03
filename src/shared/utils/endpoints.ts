@@ -18,3 +18,14 @@ export enum ANNOTATION_ENDPOINTS {
   LIST = "/partners/comment/",
   EDIT = "/partners/comment/",
 }
+
+export enum MEETING_ENDPOINTS {
+  CREATE = "/meetings",
+  LIST = "/meetings",
+  DETAILS = "/meetings/",
+  EDIT = "/meetings/",
+  DELETE = "/meetings/",
+  COMMENTS = "/meetings/",
+  ADD_COMMENT = "/meetings/",
+  UPDATE_COMMENT = "/meetings/",
+}
