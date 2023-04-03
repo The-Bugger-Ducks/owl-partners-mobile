@@ -1,4 +1,6 @@
 import { Button, Close, Drop, Text } from "@components";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
 import {
   AddPartnerView,
@@ -8,8 +10,6 @@ import {
   StatusView,
   TextInput,
 } from "./styles";
-import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
 
 type formDataProps = {
   partner: string;
@@ -18,6 +18,7 @@ type formDataProps = {
   address: string;
   membersQuantity: string;
   email: string;
+  phoneNumber: string;
   status: string;
 };
 
@@ -174,6 +175,20 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
 
             <Controller
               control={control}
+              name="phoneNumber"
+              render={({ field: { onChange } }) => (
+                <View>
+                  <Text>Telefone</Text>
+                  <TextInput
+                    placeholder="(12)99454-3275"
+                    onChangeText={onChange}
+                  />
+                </View>
+              )}
+            />
+
+            <Controller
+              control={control}
               name="status"
               rules={{
                 required: "informe o status da parceria",
@@ -206,7 +221,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                             <StatusTypeText
                               onPress={() => {
                                 handlerStatusPartenerSelected(status),
-                                onChange(status.description);
+                                  onChange(status.description);
                               }}
                             >
                               {status.description}

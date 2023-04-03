@@ -11,9 +11,10 @@
       "@mocks/*": ["./src/mocks/*"],
       "@screens/*": ["./src/screens/*"],
       "@utils/*": ["./src/utils/*"],
-      "@interfaces/*": ["./src/utils/interfaces/*"],
-      "@api": ["./src/services/api"],
-      "@requests/*": ["./src/utils/requests/*"]
+      "@interfaces/*": ["./src/shared/interfaces/*"],
+      "@api": ["./src/shared/services/api"],
+      "@requests/*": ["./src/shared/utils/handlers/*"],
+      "@routes/*": ["./src/routes/*"]
     }
   }
 }
