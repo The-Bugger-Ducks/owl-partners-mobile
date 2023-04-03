@@ -11,6 +11,7 @@ import {
 import { IComment } from "@interfaces/annotation.interface";
 import { useRoute } from "@react-navigation/native";
 import AnnotationController from "@requests/AnnotationController";
+import PartnershipController from "@requests/PartnershipController";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
 import { useEffect, useState } from "react";
@@ -24,9 +25,18 @@ import {
 
 export function Partnership() {
   const [tab, setTab] = useState(0);
+  const {
+    params: { partnershipId },
+  } = useRoute<
+    Readonly<{
+      key: string;
+      name: string;
+      params: { partnershipId: string };
+    }>
+  >();
 
-  function handleDeletePartnership() {
-    alert("Parceria excluída!");
+  async function handleDeletePartnership() {
+    await PartnershipController.deletePartnership(partnershipId);
   }
 
   function handleUpdatePartnership() {
