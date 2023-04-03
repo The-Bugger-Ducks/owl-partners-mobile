@@ -1,17 +1,27 @@
-import { Button, Header, Text } from "@components";
+import { Button, Header, Loading, Text } from "@components";
+import { useNavigation } from "@react-navigation/native";
 import { PartnershipForm } from "@screens/PartnershipForm";
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import partnerRequest from "../../shared/services/partner.request";
-import { ButtonView, Container, PartnerView, SearchView } from "./styles";
+import {
+  ButtonView,
+  Container,
+  LoadingContainer,
+  PartnerView,
+  SearchView,
+} from "./styles";
 
 export function Partnerships() {
   const [visibleModal, setVisibleModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
+  const navigation = useNavigation();
 
   async function getPartnerships() {
     const partnerships = await partnerRequest.List();
-    return setData(partnerships);
+    setData(partnerships);
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -30,9 +40,22 @@ export function Partnerships() {
       <ScrollView>
         <SearchView>
           <Text>Parcerias encontradas</Text>
+          {isLoading && (
+            <LoadingContainer>
+              <Loading />
+            </LoadingContainer>
+          )}
           {data?.map(({ name, classification, status, id }) => {
             return (
-              <PartnerView key={id}>
+              <PartnerView
+                key={id}
+                activeOpacity={0.7}
+                onPress={() =>
+                  navigation.navigate("Partnership", {
+                    partnershipId: id,
+                  })
+                }
+              >
                 <Text color="#EF4444" size={12} weight="500" numberOfLines={1}>
                   {classification} |{" "}
                   <Text size={12} weight="500">

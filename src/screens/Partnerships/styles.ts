@@ -29,7 +29,11 @@ export const TextInput = styled.TextInput`
   height: 56px;
 `;
 
-export const PartnerView = styled.View`
+export const LoadingContainer = styled.View`
+  padding-top: 24px;
+`;
+
+export const PartnerView = styled.TouchableOpacity`
   width: 345px;
   height: 94px;
   background: #ffffff;
