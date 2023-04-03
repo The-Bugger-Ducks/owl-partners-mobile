@@ -9,6 +9,7 @@ import {
   Text,
 } from "@components";
 import { IComment } from "@interfaces/annotation.interface";
+import { IPartnership } from "@interfaces/partner.interface";
 import { useRoute } from "@react-navigation/native";
 import AnnotationController from "@requests/AnnotationController";
 import PartnershipController from "@requests/PartnershipController";
@@ -25,6 +26,8 @@ import {
 
 export function Partnership() {
   const [tab, setTab] = useState(0);
+  const [data, setData] = useState<IPartnership>();
+  const [isLoading, setIsLoading] = useState(true);
   const {
     params: { partnershipId },
   } = useRoute<
@@ -34,6 +37,19 @@ export function Partnership() {
       params: { partnershipId: string };
     }>
   >();
+
+  async function getData() {
+    setIsLoading(true);
+    const partnershipData = await PartnershipController.getPartnership(
+      partnershipId,
+    );
+    setData(partnershipData);
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    getData();
+  }, [partnershipId]);
 
   async function handleDeletePartnership() {
     await PartnershipController.deletePartnership(partnershipId);
@@ -48,25 +64,51 @@ export function Partnership() {
     <Container>
       <Header />
 
-      <ButtonsContainer>
-        <Button type="unfilled" onPress={handleDeletePartnership}>
-          Deletar parceria
-        </Button>
-        <Button onPress={handleUpdatePartnership} style={{ marginVertical: 8 }}>
-          Editar informações
-        </Button>
-      </ButtonsContainer>
+      {data?.disabled ? (
+        <Text
+          size={12}
+          weight="500"
+          style={{
+            padding: 24,
+            margin: 24,
+            backgroundColor: "#FFFFFF",
+            borderRadius: 8,
+          }}
+        >
+          Essa parceria foi deletada e, portanto, não pode ser atualizada.
+        </Text>
+      ) : (
+        <ButtonsContainer>
+          <Button type="unfilled" onPress={handleDeletePartnership}>
+            Deletar parceria
+          </Button>
+          <Button
+            onPress={handleUpdatePartnership}
+            style={{ marginVertical: 8 }}
+          >
+            Editar informações
+          </Button>
+        </ButtonsContainer>
+      )}
 
       <HistoryContainer>
         <Tabs onChangeTab={tab => setTab(tab)} />
 
-        {tab === 0 ? <History /> : <MeetingList />}
+        {tab === 0 ? (
+          <History isDisabled={isLoading || (data?.disabled ?? false)} />
+        ) : (
+          <MeetingList />
+        )}
       </HistoryContainer>
     </Container>
   );
 }
 
-function History() {
+interface HistoryProps {
+  isDisabled: boolean;
+}
+
+function History({ isDisabled }: HistoryProps) {
   const [newComment, setNewComment] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [annotations, setAnnotations] = useState<IComment[]>();
@@ -121,14 +163,16 @@ function History() {
 
   return (
     <ListContainer scrollEnabled>
-      <Input
-        label={"Inserir atualização"}
-        placeholder={"Nova atualização sobre a parceria..."}
-        value={newComment}
-        onChangeText={text => setNewComment(text)}
-        hasOutIcon
-        onPressIcon={handleAddComment}
-      />
+      {!isDisabled && (
+        <Input
+          label={"Inserir atualização"}
+          placeholder={"Nova atualização sobre a parceria..."}
+          value={newComment}
+          onChangeText={text => setNewComment(text)}
+          hasOutIcon
+          onPressIcon={handleAddComment}
+        />
+      )}
 
       <Text size={14} color={"#666666"} style={{ marginVertical: 16 }}>
         Todas as atualizações e anotações

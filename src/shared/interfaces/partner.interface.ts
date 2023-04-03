@@ -1,4 +1,4 @@
-export interface CreatePartnerProps {
+export interface IPartnership {
   name: string;
   email: string;
   phoneNumber: string;
@@ -10,4 +10,5 @@ export interface CreatePartnerProps {
   classification: string;
   status: string;
   memberNumber: number;
+  disabled: boolean;
 }

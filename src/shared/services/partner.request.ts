@@ -1,4 +1,3 @@
-import { CreatePartnerProps } from "../interfaces/partner.interface";
 import { PARTNERSHIP_ENDPOINTS } from "../utils/endpoints";
 import { api } from "./api";
 

@@ -19,6 +19,7 @@ export function Partnerships() {
   const navigation = useNavigation();
 
   async function getPartnerships() {
+    setIsLoading(true);
     const partnerships = await partnerRequest.List();
     setData(partnerships);
     setIsLoading(false);
@@ -40,37 +41,48 @@ export function Partnerships() {
       <ScrollView>
         <SearchView>
           <Text>Parcerias encontradas</Text>
-          {isLoading && (
+          {isLoading ? (
             <LoadingContainer>
               <Loading />
             </LoadingContainer>
+          ) : (
+            data?.map(({ name, classification, status, id }) => {
+              return (
+                <PartnerView
+                  key={id}
+                  activeOpacity={0.7}
+                  onPress={() =>
+                    navigation.navigate("Partnership", {
+                      partnershipId: id,
+                    })
+                  }
+                >
+                  <Text
+                    color="#EF4444"
+                    size={12}
+                    weight="500"
+                    numberOfLines={1}
+                  >
+                    {classification} |{" "}
+                    <Text size={12} weight="500">
+                      {name}
+                    </Text>
+                  </Text>
+                  <Text
+                    color="#999999"
+                    size={14}
+                    weight="400"
+                    numberOfLines={1}
+                  >
+                    Status:{" "}
+                    <Text size={14} weight="400">
+                      {status}
+                    </Text>
+                  </Text>
+                </PartnerView>
+              );
+            })
           )}
-          {data?.map(({ name, classification, status, id }) => {
-            return (
-              <PartnerView
-                key={id}
-                activeOpacity={0.7}
-                onPress={() =>
-                  navigation.navigate("Partnership", {
-                    partnershipId: id,
-                  })
-                }
-              >
-                <Text color="#EF4444" size={12} weight="500" numberOfLines={1}>
-                  {classification} |{" "}
-                  <Text size={12} weight="500">
-                    {name}
-                  </Text>
-                </Text>
-                <Text color="#999999" size={14} weight="400" numberOfLines={1}>
-                  Status:{" "}
-                  <Text size={14} weight="400">
-                    {status}
-                  </Text>
-                </Text>
-              </PartnerView>
-            );
-          })}
         </SearchView>
       </ScrollView>
       <PartnershipForm
