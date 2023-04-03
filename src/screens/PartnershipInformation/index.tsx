@@ -47,11 +47,6 @@ export async function PartnershipInformation() {
         <Text>E-mail: {data?.email} </Text>
         <Text>Telefone: {data?.phoneNumber}</Text>
       </ContactView>
-
-      <Button type="unfilled">Deletar parceria</Button>
-      <Button type="filled" onPress={() => setVisibleModal(true)}>
-        Editar parceria
-      </Button>
       <PartnershipEdit
         visible={visibleModal}
         onClose={() => setVisibleModal(false)}

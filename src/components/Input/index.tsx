@@ -35,6 +35,7 @@ export function Input({
           placeholder={placeholder}
           onChangeText={onChangeText}
           cursorColor={"#EF4444"}
+          hasOutIcon={hasOutIcon}
           {...rest}
         />
         {hasOutIcon && (

@@ -1,19 +1,19 @@
 import { api } from "./api";
-import { PARTNERSHIP } from "../utils/endpoints";
+import { PARTNERSHIP_ENDPOINTS } from "../utils/endpoints";
 import { CreatePartnerProps } from "../interfaces/partner.interface";
 
 class PartnerRequest {
 
   public async create(payload: CreatePartnerProps) {
-    await api.post(PARTNERSHIP.CREATE_PARTNERSHIP, payload);
+    await api.post(PARTNERSHIP_ENDPOINTS.CREATE, payload);
   }
 
   public async Edit(payload: CreatePartnerProps) {
-    await api.put(PARTNERSHIP.CREATE_PARTNERSHIP, payload);
+    await api.put(PARTNERSHIP_ENDPOINTS.EDIT, payload);
   }
 
-  public async get(id: string) {
-    await api.get(`${PARTNERSHIP.GET_PARTNER}/${id}`);
+  public async List(id: string) {
+    await api.get(PARTNERSHIP_ENDPOINTS.DETAILS + id);
   }
 }
 export default new PartnerRequest();

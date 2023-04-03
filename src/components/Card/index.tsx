@@ -13,6 +13,7 @@ interface CardProps {
   edit?: boolean;
   author?: string;
   onPress?: () => void;
+  onEdit?: () => void;
 }
 
 export function Card({
@@ -26,6 +27,7 @@ export function Card({
   edit = true,
   author,
   onPress,
+  onEdit,
 }: CardProps) {
   const props: SpecificCardProps["props"] = {
     id,
@@ -37,6 +39,7 @@ export function Card({
     edit,
     author,
     onPress,
+    onEdit,
   };
 
   if (type === "annotation") return <Anotation props={props} />;
@@ -55,17 +58,18 @@ export interface SpecificCardProps {
     edit?: boolean;
     author?: string;
     onPress?: () => void;
+    onEdit?: () => void;
   };
 }
 
 function Update({ props }: SpecificCardProps) {
   return (
-    <Container>
+    <Container onPress={props.onPress} activeOpacity={0.7}>
       <Title>
         <Text color="#000000" size={12} weight="500">
           Atualização | {props.date}, {props.time}
         </Text>
-        <EditIcon>
+        <EditIcon onPress={props.onEdit}>
           <Edit />
         </EditIcon>
       </Title>
@@ -83,12 +87,12 @@ function Update({ props }: SpecificCardProps) {
 
 function Anotation({ props }: SpecificCardProps) {
   return (
-    <Container>
+    <Container onPress={props.onPress} activeOpacity={0.7}>
       <Title>
         <Text color="#000000" size={12} weight="500">
           Anotação | {props.date}, {props.time}
         </Text>
-        <EditIcon>
+        <EditIcon onPress={props.onEdit}>
           <Edit />
         </EditIcon>
       </Title>
@@ -109,12 +113,12 @@ function Anotation({ props }: SpecificCardProps) {
 
 function Meeting({ props }: SpecificCardProps) {
   return (
-    <Container>
+    <Container onPress={props.onPress} activeOpacity={0.7}>
       <Title>
         <Text color="#000000" size={12} weight="500">
           {props.date} | {props.partner}
         </Text>
-        <EditIcon>
+        <EditIcon onPress={props.onEdit}>
           <Edit />
         </EditIcon>
       </Title>

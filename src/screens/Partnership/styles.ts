@@ -7,6 +7,8 @@ export const Container = styled.SafeAreaView`
   margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : "0"};
   flex: 1;
   background: #f4f5f7;
+  padding: 24px 24px;
+  gap: 10px;
 `;
 
 export const ButtonsContainer = styled.View`
@@ -15,6 +17,13 @@ export const ButtonsContainer = styled.View`
 
 export const HistoryContainer = styled.View`
   padding: 24px 24px;
+  flex: 1;
+`;
+
+export const ListContainer = styled.ScrollView``;
+
+export const LoadingContainer = styled.View`
+  margin-top: 24px;
 `;
 
 export const TextInput = styled.TextInput`
@@ -26,4 +35,23 @@ export const TextInput = styled.TextInput`
   justify-content: center;
   width: 345px;
   height: 56px;
+`;
+
+
+export const InformationView = styled.View`
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  gap: 8px;
+  width: 345px;
+  height: 152px;
+`;
+
+export const ContactView = styled.View`
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  gap: 8px;
+  width: 345px;
+  height: 123px;
 `;
