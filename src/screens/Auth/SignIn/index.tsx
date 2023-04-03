@@ -4,6 +4,7 @@ import { View } from "react-native";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
 import { StackActions, useNavigation } from "@react-navigation/native";
+import { isAxiosError } from "axios";
 
 import authRequest from "../../../shared/services/auth.request";
 import { IUserLogin } from "../../../shared/interfaces/user.interface";
@@ -30,6 +31,7 @@ import {
 export function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
     register,
@@ -47,13 +49,25 @@ export function SignIn() {
 
   const onSubmit: SubmitHandler<IUserLogin> = async data => {
     try {
+      setErrorMessage(null);
       setIsLoading(true);
       await authRequest.authenticate(data);
       goToApp();
     } catch (error) {
-      if (error === "Unauthorized") {
-        setError("password", { message: "Senha incorreta. Tente novamente" });
+      if (isAxiosError(error)) {
+        if (error.response) {
+          if (error.response.status === 401) {
+            setError("password", {
+              message: "Senha incorreta. Tente novamente",
+            });
+            throw new Error("Unauthorized");
+          }
+        }
       }
+      const genericMessageError = "Algo inesperado aconteceu, tente novamente!";
+
+      setErrorMessage(genericMessageError);
+      throw new Error(genericMessageError);
     } finally {
       setIsLoading(false);
     }
@@ -134,11 +148,11 @@ export function SignIn() {
                     {visiblePassword ? <EyeHidden /> : <Eye />}
                   </IconButton>
                 </PasswordInputContainer>
-                {error && (
+                {(error || errorMessage) && (
                   <InfoErrorContainer>
                     <Info fillColor="#EF4444" strokeColor="#EF4444" size={20} />
                     <Text color="#EF4444" size={14}>
-                      {errors?.password?.message}
+                      {errors?.password?.message ?? errorMessage}
                     </Text>
                   </InfoErrorContainer>
                 )}
