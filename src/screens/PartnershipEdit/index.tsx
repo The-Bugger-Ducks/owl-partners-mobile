@@ -4,22 +4,26 @@ import {
   AddPartnerView,
   Container,
   DropDownArea,
+  StateDropDowArea,
   StatusTypeText,
   StatusView,
   TextInput,
 } from "./styles";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
-import { CreatePartnerProps } from "../../shared/interfaces/partner.interface";
-import { statesSelectOptions } from "@utils/statesSelectOptions";
+import {
+  CreatePartnerProps,
+  IPartner,
+} from "../../shared/interfaces/partner.interface";
+import { stateSelecOptions } from "@utils/stateSelectOptions";
 import { statusSelectOptions } from "@utils/statusSelectOptions";
-import partnerRequest from "src/shared/services/partner.request";
+import PartnershipController from "@requests/PartnershipController";
 
 interface ModalProps {
   visible: boolean;
   onClose: () => void;
-  partnerProps?: CreatePartnerProps;
+  partnerProps?: IPartner;
 }
 
 export function PartnershipEdit({
@@ -31,7 +35,7 @@ export function PartnershipEdit({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreatePartnerProps>({
+  } = useForm<IPartner>({
     mode: "onChange",
     defaultValues: partnerProps,
   });
@@ -45,10 +49,15 @@ export function PartnershipEdit({
   const [selectStates, setSelectedStates] = useState("");
   const [selectClassification, setSelectClassification] = useState("");
 
-  function handlerPartnershipForm(statusSelectOptions: CreatePartnerProps) {
-    console.log(statusSelectOptions);
+  const onSubmit: SubmitHandler<IPartner> = async payload => {
+    const data = {
+      ...payload,
+      memberNumber: Number(payload.memberNumber),
+    };
+    console.log(data);
     onClose();
-  }
+    await PartnershipController.updatePartnership(data);
+  };
 
   function handlerStatusPartenerSelected(statusSelectOptions: {
     description: string;
@@ -57,12 +66,9 @@ export function PartnershipEdit({
     setisStatusSelectOpen(false);
   }
 
-  function handlerStatesPartenerSelected(statesSelectOptions: { UF: string }) {
-    setSelectedStates(statesSelectOptions.UF);
-    setisStatusSelectOpen(false);
-  }
-
-  function handlerStatesSelected(statesSelectOptions: { name: string }) {
+  function handlerStatesPartenerSelected(statesSelectOptions: {
+    name: string;
+  }) {
     setSelectedStates(statesSelectOptions.name);
     setisStatesSelectOpen(false);
   }
@@ -156,7 +162,7 @@ export function PartnershipEdit({
               name="state"
               render={({ field }) => (
                 <View>
-                  <Text>Localização</Text>
+                  <Text>Estado</Text>
                   <TouchableOpacity
                     onPress={() => {
                       setisStatesSelectOpen(!isStatesSelectOpen);
@@ -169,7 +175,7 @@ export function PartnershipEdit({
                         gap: 140.25,
                       }}
                     >
-                      <Text>{`${field.value}`}</Text>
+                      <View {...field} />
                       <Drop />
                     </StatusView>
                   </TouchableOpacity>
@@ -180,8 +186,8 @@ export function PartnershipEdit({
                         setisStatesSelectOpen(!isStatesSelectOpen)
                       }
                     >
-                      <DropDownArea>
-                        {statesSelectOptions.map(states => {
+                      <StateDropDowArea>
+                        {stateSelecOptions.map(states => {
                           return (
                             <TouchableOpacity key={states.UF}>
                               <StatusTypeText
@@ -195,58 +201,7 @@ export function PartnershipEdit({
                             </TouchableOpacity>
                           );
                         })}
-                      </DropDownArea>
-                    </Modal>
-                  ) : null}
-                </View>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="state"
-              render={({ field }) => (
-                <View>
-                  <Text>Localização</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setisStatesSelectOpen(!isStatesSelectOpen);
-                    }}
-                  >
-                    <StatusView
-                      style={{
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        gap: 140.25,
-                      }}
-                    >
-                      <Text>{`${field.value}`}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
-
-                  {isStatesSelectOpen ? (
-                    <Modal
-                      onRequestClose={() =>
-                        setisStatesSelectOpen(!isStatesSelectOpen)
-                      }
-                    >
-                      <DropDownArea>
-                        {statesSelectOptions.map(states => {
-                          return (
-                            <TouchableOpacity key={states.UF}>
-                              <StatusTypeText
-                                onPress={() => {
-                                  handlerStatesSelected(states);
-                                  field.onChange(states.name);
-                                }}
-                              >
-                                {states.name}
-                              </StatusTypeText>
-                            </TouchableOpacity>
-                          );
-                        })}
-                      </DropDownArea>
+                      </StateDropDowArea>
                     </Modal>
                   ) : null}
                 </View>
@@ -264,6 +219,32 @@ export function PartnershipEdit({
                     {...field}
                     onChangeText={field.onChange}
                   />
+                </View>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="city"
+              render={({ field }) => (
+                <View>
+                  <Text>Cidade</Text>
+                  <TextInput
+                    placeholder="São José dos campos"
+                    {...field}
+                    onChangeText={field.onChange}
+                  />
+                </View>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="zipCode"
+              render={({ field: { onChange } }) => (
+                <View>
+                  <Text>CEP</Text>
+                  <TextInput placeholder="12654-356" onChangeText={onChange} />
                 </View>
               )}
             />
@@ -368,7 +349,7 @@ export function PartnershipEdit({
         </ScrollView>
 
         <View style={{ padding: 20 }}>
-          <Button type="filled" onPress={handleSubmit(handlerPartnershipForm)}>
+          <Button type="filled" onPress={handleSubmit(onSubmit)}>
             Editar parceria
           </Button>
         </View>

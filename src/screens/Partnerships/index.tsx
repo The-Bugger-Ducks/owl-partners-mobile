@@ -11,15 +11,19 @@ import {
   PartnerView,
   SearchView,
 } from "./styles";
+import PartnershipController from "@requests/PartnershipController";
+import { PropsStack } from "../../shared/types/rootStackParamList";
+import { CreatePartnerProps, IPartner } from "@interfaces/partner.interface";
+import StorageController from "@requests/StorageController";
 
 export function Partnerships() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState([]);
-  const navigation = useNavigation();
+  const [data, setData] = useState<IPartner[]>([]);
+  const navigation = useNavigation<PropsStack>();
 
   async function getPartnerships() {
-    const partnerships = await partnerRequest.List();
+    const partnerships = await PartnershipController.getPartnerships();
     setData(partnerships);
     setIsLoading(false);
   }
@@ -50,11 +54,7 @@ export function Partnerships() {
               <PartnerView
                 key={id}
                 activeOpacity={0.7}
-                onPress={() =>
-                  navigation.navigate("Partnership", {
-                    partnershipId: id,
-                  })
-                }
+                onPress={() => navigation.navigate("Partnership", { id })}
               >
                 <Text color="#EF4444" size={12} weight="500" numberOfLines={1}>
                   {classification} |{" "}

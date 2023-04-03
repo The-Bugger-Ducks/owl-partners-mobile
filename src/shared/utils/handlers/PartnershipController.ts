@@ -1,5 +1,6 @@
 import { api } from "@api";
 import { PARTNERSHIP_ENDPOINTS } from "../endpoints";
+import { CreatePartnerProps, IPartner } from "@interfaces/partner.interface";
 
 class PartnershipController {
   async getPartnerships() {
@@ -14,7 +15,7 @@ class PartnershipController {
   async getPartnership(id: string) {
     try {
       const { data } = await api.get(PARTNERSHIP_ENDPOINTS.DETAILS + id);
-      return data;
+      return data as IPartner;
     } catch (error) {
       console.error(error);
     }
@@ -29,9 +30,9 @@ class PartnershipController {
     }
   }
 
-  async updatePartnership(id: string) {
+  async updatePartnership(payload: IPartner) {
     try {
-      await api.put(PARTNERSHIP_ENDPOINTS.EDIT + id);
+      await api.put(PARTNERSHIP_ENDPOINTS.EDIT + payload.id, payload);
     } catch (error) {
       console.error(error);
     }

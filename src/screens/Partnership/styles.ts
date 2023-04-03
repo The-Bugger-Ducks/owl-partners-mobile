@@ -7,7 +7,6 @@ export const Container = styled.SafeAreaView`
   margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : "0"};
   flex: 1;
   background: #f4f5f7;
-  padding: 24px 24px;
   gap: 10px;
 `;
 
@@ -37,14 +36,14 @@ export const TextInput = styled.TextInput`
   height: 56px;
 `;
 
-
 export const InformationView = styled.View`
   background: #ffffff;
   border-radius: 8px;
   padding: 24px;
   gap: 8px;
   width: 345px;
-  height: 152px;
+  height: 160px;
+  justify-content: center;
 `;
 
 export const ContactView = styled.View`
@@ -54,4 +53,10 @@ export const ContactView = styled.View`
   gap: 8px;
   width: 345px;
   height: 123px;
+  justify-content: center;
+`;
+
+export const PartnerInfoView = styled.View`
+  padding: 24px 24px;
+  gap: 10px;
 `;

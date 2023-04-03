@@ -58,3 +58,14 @@ export const StatusTypeText = styled.Text`
   align-self: center;
   padding: 3px;
 `;
+
+export const StateDropDowArea = styled.View`
+  width: 100%;
+  height: 450px;
+  border-radius: 10px;
+  margin-top: 15px;
+  background-color: #fff;
+  elevation: 3;
+  align-self: center;
+  margin-bottom: 10px;
+`;

@@ -16,7 +16,7 @@ import {
   StatusView,
   TextInput,
 } from "./styles";
-import { statesSelectOptions } from "@utils/statesSelectOptions";
+import { stateSelecOptions } from "@utils/stateSelectOptions";
 import { statusSelectOptions } from "@utils/statusSelectOptions";
 import { CreatePartnerProps } from "../../shared/interfaces/partner.interface";
 import partnerRequest from "../../shared/services/partner.request";
@@ -52,11 +52,6 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
     await partnerRequest.create(data);
   };
 
-  function handlerStatesSelected(statesSelectOptions: { name: string }) {
-    setSelectedStates(statesSelectOptions.name);
-    setisStatesSelectOpen(false);
-  }
-
   function handlerStatusPartenerSelected(statusSelectOptions: {
     value: string;
   }) {
@@ -64,9 +59,11 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
     setisStatusSelectOpen(false);
   }
 
-  function handlerStatesPartenerSelected(statesSelectOptions: { UF: string }) {
-    setSelectedStates(statesSelectOptions.UF);
-    setisStatusSelectOpen(false);
+  function handlerStatesPartenerSelected(statesSelectOptions: {
+    name: string;
+  }) {
+    setSelectedStates(statesSelectOptions.name);
+    setisStatesSelectOpen(false);
   }
 
   return (
@@ -109,6 +106,20 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                     onChangeText={onChange}
                   />
                   {errors.name && <Text>Este campo é obrigatório</Text>}
+                </View>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange } }) => (
+                <View>
+                  <Text>E-mail</Text>
+                  <TextInput
+                    placeholder="nome@gmail.com"
+                    onChangeText={onChange}
+                  />
                 </View>
               )}
             />
@@ -213,7 +224,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
             <Controller
               control={control}
               name="state"
-              render={({ field }) => (
+              render={({ field: { onChange } }) => (
                 <View>
                   <Text>Estado</Text>
                   <TouchableOpacity
@@ -240,13 +251,13 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                       }
                     >
                       <StateDropDowArea>
-                        {statesSelectOptions.map(states => {
+                        {stateSelecOptions.map(states => {
                           return (
                             <TouchableOpacity key={states.UF}>
                               <StatusTypeText
                                 onPress={() => {
                                   handlerStatesPartenerSelected(states);
-                                  field.onChange(states.name);
+                                  onChange(states.name);
                                 }}
                               >
                                 {states.name}
@@ -317,20 +328,6 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
 
             <Controller
               control={control}
-              name="email"
-              render={({ field: { onChange } }) => (
-                <View>
-                  <Text>E-mail</Text>
-                  <TextInput
-                    placeholder="nome@gmail.com"
-                    onChangeText={onChange}
-                  />
-                </View>
-              )}
-            />
-
-            <Controller
-              control={control}
               name="phoneNumber"
               render={({ field: { onChange } }) => (
                 <View>
@@ -340,56 +337,6 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                     placeholder="(12)99454-3275"
                     onChangeText={onChange}
                   />
-                </View>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="status"
-              rules={{
-                required: "informe o status da parceria",
-              }}
-              render={({ field: { onChange } }) => (
-                <View>
-                  <Text>Status</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setisStatusSelectOpen(!isStatusSelectOpen);
-                    }}
-                  >
-                    <StatusView
-                      style={{
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        gap: 140.25,
-                      }}
-                    >
-                      <Text>{selectStatus}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
-                  {errors.status && <Text>Este campo é obrigatório</Text>}
-                  {isStatusSelectOpen ? (
-                    <DropDowArea>
-                      {statusSelectOptions.map(status => {
-                        return (
-                          <TouchableOpacity key={status.id}>
-                            <StatusTypeText
-                              onPress={() => {
-                                handlerStatusPartenerSelected(status),
-                                onChange(status.description);
-                              }}
-                            >
-                              {status.description}
-                            </StatusTypeText>
-                          </TouchableOpacity>
-                        );
-                      })}
-                    </DropDowArea>
-                  ) : null}
-
-                  {errors.status && <Text>Este campo é obrigatório</Text>}
                 </View>
               )}
             />

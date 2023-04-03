@@ -50,7 +50,7 @@ export const DropDowArea = styled.View`
   margin-bottom: 10px;
 `;
 
-export const StateDropDowArea = styled.View`
+export const StateDropDowArea = styled.ScrollView`
   width: 100%;
   height: 450px;
   border-radius: 10px;
