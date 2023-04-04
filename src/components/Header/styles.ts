@@ -10,3 +10,8 @@ export const Container = styled.View`
 export const TextContainer = styled.View<{ textAlign: "center" | "left" }>`
   text-align: ${({ textAlign }) => textAlign};
 `;
+
+export const ImageLogo = styled.Image`
+  height: 56px;
+  width: 56px;
+`;

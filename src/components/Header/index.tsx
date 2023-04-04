@@ -1,6 +1,5 @@
-import { Logo } from "../Icons/Logo";
 import { Text } from "../Text";
-import { Container, TextContainer } from "./styles";
+import { Container, ImageLogo, TextContainer } from "./styles";
 
 interface HeaderProps {
   isHero?: boolean;
@@ -21,7 +20,12 @@ export function Header({ isHero = false, align = "left" }: HeaderProps) {
           <Text size={24}>PARTNERS</Text>
         </Text>
       </TextContainer>
-      {align !== "center" && <Logo />}
+      {align !== "center" && (
+        <ImageLogo
+          source={require("../../shared/assets/logo.png")}
+          resizeMode="cover"
+        />
+      )}
     </Container>
   );
 }

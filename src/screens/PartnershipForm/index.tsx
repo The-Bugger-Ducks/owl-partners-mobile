@@ -18,7 +18,7 @@ import {
 } from "./styles";
 import { stateSelecOptions } from "@utils/stateSelectOptions";
 import { statusSelectOptions } from "@utils/statusSelectOptions";
-import { CreatePartnerProps } from "../../shared/interfaces/partner.interface";
+import { IPartnership } from "../../shared/interfaces/partner.interface";
 import partnerRequest from "../../shared/services/partner.request";
 import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
 
@@ -32,7 +32,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreatePartnerProps>();
+  } = useForm<IPartnership>();
 
   const [selectStatus, setSelecteStatus] = useState("");
   const [selectStates, setSelectedStates] = useState("");
@@ -43,7 +43,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
   const [isClassificationSelectOpen, setisClassificationSelectOpen] =
     useState(false);
 
-  const onSubmit: SubmitHandler<CreatePartnerProps> = async payload => {
+  const onSubmit: SubmitHandler<IPartnership> = async payload => {
     const data = {
       ...payload,
       memberNumber: Number(payload.memberNumber),

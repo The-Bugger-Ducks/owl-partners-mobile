@@ -13,8 +13,8 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
 import {
-  CreatePartnerProps,
-  IPartner,
+  IPartnership,
+  IPartnershipEdit,
 } from "../../shared/interfaces/partner.interface";
 import { stateSelecOptions } from "@utils/stateSelectOptions";
 import { statusSelectOptions } from "@utils/statusSelectOptions";
@@ -23,7 +23,7 @@ import PartnershipController from "@requests/PartnershipController";
 interface ModalProps {
   visible: boolean;
   onClose: () => void;
-  partnerProps?: IPartner;
+  partnerProps: IPartnership;
 }
 
 export function PartnershipEdit({
@@ -33,9 +33,10 @@ export function PartnershipEdit({
 }: ModalProps) {
   const {
     control,
+    setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<IPartner>({
+  } = useForm<IPartnershipEdit>({
     mode: "onChange",
     defaultValues: partnerProps,
   });
@@ -49,15 +50,31 @@ export function PartnershipEdit({
   const [selectStates, setSelectedStates] = useState("");
   const [selectClassification, setSelectClassification] = useState("");
 
-  const onSubmit: SubmitHandler<IPartner> = async payload => {
+  const onSubmit: SubmitHandler<IPartnershipEdit> = async payload => {
     const data = {
       ...payload,
       memberNumber: Number(payload.memberNumber),
     };
     console.log(data);
     onClose();
-    await PartnershipController.updatePartnership(data);
+    await PartnershipController.updatePartnership(data, partnerProps.id);
   };
+
+  useEffect(() => {
+    if (partnerProps) {
+      setValue("name", partnerProps["name"]),
+      setValue("email", partnerProps["email"]),
+      setValue("phoneNumber", partnerProps["phoneNumber"]),
+      setValue("zipCode", partnerProps["zipCode"]),
+      setValue("state", partnerProps["state"]),
+      setValue("city", partnerProps["city"]),
+      setValue("neighborhood", partnerProps["neighborhood"]),
+      setValue("address", partnerProps["address"]),
+      setValue("classification", partnerProps["classification"]),
+      setValue("status", partnerProps["status"]),
+      setValue("memberNumber", partnerProps["memberNumber"]);
+    }
+  }, [partnerProps]);
 
   function handlerStatusPartenerSelected(statusSelectOptions: {
     description: string;
@@ -97,13 +114,32 @@ export function PartnershipEdit({
             <Controller
               control={control}
               name="name"
+              rules={{
+                required: "informe o nome do parceiro",
+              }}
               render={({ field }) => (
                 <View>
                   <Text>Parceria</Text>
                   <TextInput
                     {...field}
-                    onChangeText={field.onChange}
                     placeholder="The Bugger Ducks"
+                    onChangeText={field.onChange}
+                  />
+                  {errors.name && <Text>Este campo é obrigatório</Text>}
+                </View>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="email"
+              render={({ field }) => (
+                <View>
+                  <Text>E-mail</Text>
+                  <TextInput
+                    {...field}
+                    placeholder="nome@gmail.com"
+                    onChangeText={field.onChange}
                   />
                 </View>
               )}
@@ -129,7 +165,7 @@ export function PartnershipEdit({
                         gap: 140.25,
                       }}
                     >
-                      <Text>{`${field.value}`}</Text>
+                      <Text>{field.value}</Text>
                       <Drop />
                     </StatusView>
                   </TouchableOpacity>
@@ -143,6 +179,7 @@ export function PartnershipEdit({
                                 onPress={() => {
                                   setSelectClassification(classification);
                                   setisClassificationSelectOpen(false);
+                                  field.onChange(classification);
                                 }}
                               >
                                 {classification}
@@ -151,6 +188,54 @@ export function PartnershipEdit({
                           );
                         },
                       )}
+                    </DropDownArea>
+                  ) : null}
+                </View>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="status"
+              rules={{
+                required: "informe o status da parceria",
+              }}
+              render={({ field }) => (
+                <View>
+                  <Text>Status</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setisStatusSelectOpen(!isStatusSelectOpen);
+                    }}
+                  >
+                    <StatusView
+                      style={{
+                        justifyContent: "space-between",
+                        flexDirection: "row",
+                        gap: 140.25,
+                      }}
+                    >
+                      <Text>{field.value}</Text>
+                      <Drop />
+                    </StatusView>
+                  </TouchableOpacity>
+                  {errors.status && <Text>Este campo é obrigatório</Text>}
+                  {isStatusSelectOpen ? (
+                    <DropDownArea>
+                      {statusSelectOptions.map(status => {
+                        return (
+                          <TouchableOpacity key={status.id}>
+                            <StatusTypeText
+                              onPress={() => {
+                                handlerStatusPartenerSelected(status),
+                                field.onChange(status.value);
+                              }}
+                            >
+                              {status.description}
+                            </StatusTypeText>
+                          </TouchableOpacity>
+                        );
+                      })}
                     </DropDownArea>
                   ) : null}
                 </View>
@@ -175,7 +260,7 @@ export function PartnershipEdit({
                         gap: 140.25,
                       }}
                     >
-                      <View {...field} />
+                      <Text>{field.value}</Text>
                       <Drop />
                     </StatusView>
                   </TouchableOpacity>
@@ -210,28 +295,13 @@ export function PartnershipEdit({
 
             <Controller
               control={control}
-              name="address"
-              render={({ field }) => (
-                <View>
-                  <Text>Endereço</Text>
-                  <TextInput
-                    placeholder="Rua 21, 123"
-                    {...field}
-                    onChangeText={field.onChange}
-                  />
-                </View>
-              )}
-            />
-
-            <Controller
-              control={control}
               name="city"
               render={({ field }) => (
                 <View>
                   <Text>Cidade</Text>
                   <TextInput
-                    placeholder="São José dos campos"
                     {...field}
+                    placeholder="São José dos campos"
                     onChangeText={field.onChange}
                   />
                 </View>
@@ -241,10 +311,29 @@ export function PartnershipEdit({
             <Controller
               control={control}
               name="zipCode"
-              render={({ field: { onChange } }) => (
+              render={({ field }) => (
                 <View>
                   <Text>CEP</Text>
-                  <TextInput placeholder="12654-356" onChangeText={onChange} />
+                  <TextInput
+                    {...field}
+                    placeholder="12654-356"
+                    onChangeText={field.onChange}
+                  />
+                </View>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="address"
+              render={({ field }) => (
+                <View>
+                  <Text>Endereço</Text>
+                  <TextInput
+                    {...field}
+                    placeholder="Rua 21, 123"
+                    onChangeText={field.onChange}
+                  />
                 </View>
               )}
             />
@@ -256,24 +345,9 @@ export function PartnershipEdit({
                 <View>
                   <Text>Número de membros</Text>
                   <TextInput
-                    keyboardType="number-pad"
-                    placeholder="100"
                     value={`${field.value}`}
-                    onChangeText={field.onChange}
-                  />
-                </View>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="email"
-              render={({ field }) => (
-                <View>
-                  <Text>E-mail</Text>
-                  <TextInput
-                    placeholder="nome@gmail.com"
-                    {...field}
+                    placeholder="100"
+                    keyboardType="number-pad"
                     onChangeText={field.onChange}
                   />
                 </View>
@@ -287,61 +361,11 @@ export function PartnershipEdit({
                 <View>
                   <Text>Telefone</Text>
                   <TextInput
+                    {...field}
                     keyboardType="phone-pad"
                     placeholder="(12)99454-3275"
-                    {...field}
                     onChangeText={field.onChange}
                   />
-                </View>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="status"
-              rules={{
-                required: "informe o status da parceria",
-              }}
-              render={({ field }) => (
-                <View>
-                  <Text>Status</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setisStatusSelectOpen(!isStatusSelectOpen);
-                    }}
-                  >
-                    <StatusView
-                      style={{
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        gap: 140.25,
-                      }}
-                    >
-                      <Text>{`${field.value}`}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
-
-                  {isStatusSelectOpen ? (
-                    <DropDownArea>
-                      {statusSelectOptions.map(status => {
-                        return (
-                          <TouchableOpacity key={status.id}>
-                            <StatusTypeText
-                              onPress={() => {
-                                handlerStatusPartenerSelected(status);
-                                field.onChange(status.description);
-                              }}
-                            >
-                              {status.description}
-                            </StatusTypeText>
-                          </TouchableOpacity>
-                        );
-                      })}
-                    </DropDownArea>
-                  ) : null}
-
-                  {errors.status && <Text>Este campo é obrigatório</Text>}
                 </View>
               )}
             />

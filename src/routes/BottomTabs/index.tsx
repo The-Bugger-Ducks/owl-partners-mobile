@@ -3,6 +3,7 @@ import React from "react";
 import {
   NavigationHelpers,
   ParamListBase,
+  StackActions,
   TabNavigationState,
 } from "@react-navigation/native";
 
@@ -13,11 +14,12 @@ import {
   BottomTabNavigationEventMap,
 } from "@react-navigation/bottom-tabs/lib/typescript/src/types";
 
+import StorageController from "@requests/StorageController";
 import { RootStackParamList } from "../../shared/types/rootStackParamList";
 
 import { Home } from "@screens/Home";
-import { Partnership } from "@screens/Partnership";
 import { Partnerships } from "@screens/Partnerships";
+import { Partnership } from "@screens/Partnership";
 
 import { Container, Tab, TabIndicator } from "./styles";
 
@@ -51,7 +53,7 @@ export function BottomTabs() {
         options={{ tabBarLabel: "Parcerias" }}
       />
       <BottomTab.Screen
-        name="Partnership"
+        name="MyProfile"
         component={Partnership}
         options={{ tabBarLabel: "Meu Perfil" }}
       />
@@ -88,12 +90,17 @@ function CustomTabBar({ state, descriptors, navigation }: TabBarProps) {
 
         const isFocused = state.index === index;
 
-        function onPress() {
+        async function onPress() {
           const event = navigation.emit({
             type: "tabPress",
             target: route.key,
             canPreventDefault: true,
           });
+
+          if (route.name === "MyProfile") {
+            await StorageController.clearUserInfo();
+            navigation.dispatch(StackActions.replace("SignIn"));
+          }
 
           if (!isFocused && !event.defaultPrevented) {
             // The `merge: true` option makes sure that the params inside the tab screen are preserved

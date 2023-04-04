@@ -6,6 +6,7 @@ export type RootStackParamList = {
   Partnerships: undefined;
   Home: undefined;
   HomeStack: undefined;
+  MyProfile: undefined;
 };
 
 export type PropsStack = NativeStackNavigationProp<RootStackParamList>;

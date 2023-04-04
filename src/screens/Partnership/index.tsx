@@ -10,6 +10,7 @@ import {
 } from "@components";
 import { IComment } from "@interfaces/annotation.interface";
 import { RouteProp, useRoute } from "@react-navigation/native";
+import { IPartnership } from "@interfaces/partner.interface";
 import AnnotationController from "@requests/AnnotationController";
 import PartnershipController from "@requests/PartnershipController";
 import { formatDate } from "@utils/formatDate";
@@ -27,20 +28,20 @@ import {
 } from "./styles";
 import { ScrollView, View } from "react-native";
 import { PartnershipEdit } from "@screens/PartnershipEdit";
-import { CreatePartnerProps, IPartner } from "@interfaces/partner.interface";
 import { RootStackParamList } from "src/shared/types/rootStackParamList";
 
 export function Partnership() {
   const [tab, setTab] = useState(0);
   const [visibleModal, setVisibleModal] = useState(false);
-  const [data, setData] = useState<IPartner>();
+  const [data, setData] = useState<IPartnership>();
+  const [isLoading, setIsLoading] = useState(true);
   const route = useRoute<RouteProp<RootStackParamList, "Partnership">>();
 
   async function getPartnerships() {
     const { id } = route.params;
-
     const partnerships = await PartnershipController.getPartnership(id);
     setData(partnerships);
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -60,86 +61,106 @@ export function Partnership() {
     <Container>
       <Header />
 
-      <ScrollView>
-        <PartnerInfoView>
-          <View>
-            <Text>Informação da parceria</Text>
-          </View>
-          <InformationView>
-            <Text color="#EF4444" size={14} weight="500" numberOfLines={1}>
-              {data?.classification} |{" "}
-              <Text size={14} weight="500">
-                {data?.name}
+      {data?.disabled ? (
+        <Text
+          size={12}
+          weight="500"
+          style={{
+            padding: 24,
+            margin: 24,
+            backgroundColor: "#FFFFFF",
+            borderRadius: 8,
+          }}
+        >
+          Essa parceria foi deletada e, portanto, não pode ser atualizada.
+        </Text>
+      ) : (
+        <ScrollView>
+          <ButtonsContainer>
+            <Button type="unfilled" onPress={handleDeletePartnership}>
+              Deletar parceria
+            </Button>
+            <Button
+              onPress={handleUpdatePartnership}
+              style={{ marginVertical: 8 }}
+            >
+              Editar informações
+            </Button>
+          </ButtonsContainer>
+          <PartnerInfoView>
+            <View>
+              <Text>Informação da parceria</Text>
+            </View>
+            <InformationView>
+              <Text color="#EF4444" size={14} weight="500" numberOfLines={1}>
+                {data?.classification} |{" "}
+                <Text size={14} weight="500">
+                  {data?.name}
+                </Text>
               </Text>
-            </Text>
-            <Text color="#999999" size={16} weight="400" numberOfLines={1}>
-              Status:{" "}
-              <Text size={16} weight="400">
-                {data?.status}
+              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+                Status:{" "}
+                <Text size={16} weight="400">
+                  {data?.status}
+                </Text>
               </Text>
-            </Text>
-            <Text color="#999999" size={16} weight="400" numberOfLines={1}>
-              Quantidade de membros :{" "}
-              <Text size={16} weight="400">
-                {data?.memberNumber}
+              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+                Quantidade de membros :{" "}
+                <Text size={16} weight="400">
+                  {data?.memberNumber}
+                </Text>
               </Text>
-            </Text>
-            <Text color="#999999" size={16} weight="400" numberOfLines={1}>
-              Localização:{" "}
-              <Text size={16} weight="400">
-                {data?.state}
+              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+                Localização:{" "}
+                <Text size={16} weight="400">
+                  {data?.state}
+                </Text>
               </Text>
-            </Text>
-          </InformationView>
+            </InformationView>
+            <ContactView>
+              <Text color="#000000" weight="500">
+                Informações de contato
+              </Text>
 
-          <ContactView>
-            <Text color="#000000" weight="500">
-              Informações de contato
-            </Text>
-
-            <Text color="#999999" size={16} weight="400" numberOfLines={1}>
-              E-mail:{" "}
-              <Text size={16} weight="400">
-                {data?.email}{" "}
+              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+                E-mail:{" "}
+                <Text size={16} weight="400">
+                  {data?.email}{" "}
+                </Text>
               </Text>
-            </Text>
-            <Text color="#999999" size={16} weight="400" numberOfLines={1}>
-              Telefone:{" "}
-              <Text size={16} weight="400">
-                {data?.phoneNumber}
+              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+                Telefone:{" "}
+                <Text size={16} weight="400">
+                  {data?.phoneNumber}
+                </Text>
               </Text>
-            </Text>
-          </ContactView>
-          <PartnershipEdit
-            visible={visibleModal}
-            onClose={() => setVisibleModal(false)}
-            partnerProps={data}
-          />
-        </PartnerInfoView>
+            </ContactView>
+            <PartnershipEdit
+              visible={visibleModal}
+              onClose={() => setVisibleModal(false)}
+              partnerProps={data}
+            />
+          </PartnerInfoView>
 
-        <ButtonsContainer>
-          <Button type="unfilled" onPress={handleDeletePartnership}>
-            Deletar parceria
-          </Button>
-          <Button
-            onPress={handleUpdatePartnership}
-            style={{ marginVertical: 8 }}
-          >
-            Editar informações
-          </Button>
-        </ButtonsContainer>
-
-        <HistoryContainer>
-          <Tabs onChangeTab={tab => setTab(tab)} />
-
-          {tab === 0 ? <History /> : <MeetingList />}
-        </HistoryContainer>
-      </ScrollView>
+          <HistoryContainer>
+            <Tabs onChangeTab={tab => setTab(tab)} />
+            {tab === 0 ? (
+              <History isDisabled={isLoading || (data?.disabled ?? false)} />
+            ) : (
+              <MeetingList />
+            )}
+          </HistoryContainer>
+        </ScrollView>
+      )}
     </Container>
   );
 }
 
-function History() {
+interface HistoryProps {
+  isDisabled: boolean;
+}
+
+function History({ isDisabled }: HistoryProps) {
   const [newComment, setNewComment] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [annotations, setAnnotations] = useState<IComment[]>();
@@ -194,14 +215,16 @@ function History() {
 
   return (
     <ListContainer scrollEnabled>
-      <Input
-        label={"Inserir atualização"}
-        placeholder={"Nova atualização sobre a parceria..."}
-        value={newComment}
-        onChangeText={text => setNewComment(text)}
-        hasOutIcon
-        onPressIcon={handleAddComment}
-      />
+      {!isDisabled && (
+        <Input
+          label={"Inserir atualização"}
+          placeholder={"Nova atualização sobre a parceria..."}
+          value={newComment}
+          onChangeText={text => setNewComment(text)}
+          hasOutIcon
+          onPressIcon={handleAddComment}
+        />
+      )}
 
       <Text size={14} color={"#666666"} style={{ marginVertical: 16 }}>
         Todas as atualizações e anotações
