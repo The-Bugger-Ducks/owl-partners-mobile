@@ -10,7 +10,7 @@ import {
 } from "@components";
 import { IComment } from "@interfaces/annotation.interface";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { IPartnership } from "@interfaces/partner.interface";
+import { IPartnership, IPartnershipEdit } from "@interfaces/partner.interface";
 import AnnotationController from "@requests/AnnotationController";
 import PartnershipController from "@requests/PartnershipController";
 import { formatDate } from "@utils/formatDate";
@@ -39,6 +39,7 @@ export function Partnership() {
 
   async function getPartnerships() {
     const { id } = route.params;
+    setIsLoading(true);
     const partnerships = await PartnershipController.getPartnership(id);
     setData(partnerships);
     setIsLoading(false);
@@ -47,6 +48,11 @@ export function Partnership() {
   useEffect(() => {
     getPartnerships();
   }, []);
+
+  function handleCloseEditModal() {
+    getPartnerships();
+    setVisibleModal(false);
+  }
 
   async function handleDeletePartnership() {
     const { id } = route.params;
@@ -135,11 +141,15 @@ export function Partnership() {
                 </Text>
               </Text>
             </ContactView>
-            <PartnershipEdit
-              visible={visibleModal}
-              onClose={() => setVisibleModal(false)}
-              partnerProps={data}
-            />
+
+            {data && (
+              <PartnershipEdit
+                visible={visibleModal}
+                onClose={() => setVisibleModal(false)}
+                closeAfterUpdate={() => handleCloseEditModal()}
+                partnerProps={data}
+              />
+            )}
           </PartnerInfoView>
 
           <HistoryContainer>

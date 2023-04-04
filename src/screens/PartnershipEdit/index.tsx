@@ -23,12 +23,14 @@ import PartnershipController from "@requests/PartnershipController";
 interface ModalProps {
   visible: boolean;
   onClose: () => void;
+  closeAfterUpdate: () => void;
   partnerProps: IPartnership;
 }
 
 export function PartnershipEdit({
   visible,
   onClose,
+  closeAfterUpdate,
   partnerProps,
 }: ModalProps) {
   const {
@@ -52,12 +54,22 @@ export function PartnershipEdit({
 
   const onSubmit: SubmitHandler<IPartnershipEdit> = async payload => {
     const data = {
-      ...payload,
       memberNumber: Number(payload.memberNumber),
+
+      address: payload.address,
+      city: payload.city,
+      classification: payload.classification,
+      email: payload.email,
+      name: payload.name,
+      neighborhood: payload.neighborhood,
+      phoneNumber: payload.phoneNumber,
+      state: payload.state,
+      status: payload.status,
+      zipCode: payload.zipCode,
     };
     console.log(data);
-    onClose();
     await PartnershipController.updatePartnership(data, partnerProps.id);
+    closeAfterUpdate();
   };
 
   useEffect(() => {
