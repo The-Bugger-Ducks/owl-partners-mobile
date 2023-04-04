@@ -14,6 +14,7 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
 import {
+  IModalPropsEdit,
   IPartnership,
   IPartnershipEdit,
 } from "../../shared/interfaces/partner.interface";
@@ -21,19 +22,12 @@ import { stateSelecOptions } from "@utils/stateSelectOptions";
 import { statusSelectOptions } from "@utils/statusSelectOptions";
 import PartnershipController from "@requests/PartnershipController";
 
-interface ModalProps {
-  visible: boolean;
-  onClose: () => void;
-  closeAfterUpdate: () => void;
-  partnerProps: IPartnership;
-}
-
 export function PartnershipEdit({
   visible,
   onClose,
   closeAfterUpdate,
   partnerProps,
-}: ModalProps) {
+}: IModalPropsEdit) {
   const {
     control,
     setValue,
@@ -46,6 +40,7 @@ export function PartnershipEdit({
 
   const [isStatusSelectOpen, setisStatusSelectOpen] = useState(false);
   const [isStatesSelectOpen, setisStatesSelectOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isClassificationSelectOpen, setisClassificationSelectOpen] =
     useState(false);
 
@@ -69,7 +64,13 @@ export function PartnershipEdit({
       zipCode: payload.zipCode,
     };
     console.log(data);
-    await PartnershipController.updatePartnership(data, partnerProps.id);
+    try {
+      setIsLoading(true);
+      await PartnershipController.updatePartnership(data, partnerProps.id);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
     closeAfterUpdate();
   };
 

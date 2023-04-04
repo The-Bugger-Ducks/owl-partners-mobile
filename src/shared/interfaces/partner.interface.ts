@@ -27,3 +27,16 @@ export interface IPartnershipEdit {
   status: string;
   memberNumber: number;
 }
+
+export interface IModalPropsEdit {
+  visible: boolean;
+  onClose: () => void;
+  closeAfterUpdate: () => void;
+  partnerProps: IPartnership;
+}
+
+export interface IModalPropsForm {
+  visible: boolean;
+  onClose: () => void;
+  closeAfterUpdate: () => void;
+}

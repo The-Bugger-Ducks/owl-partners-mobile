@@ -19,16 +19,18 @@ import {
 } from "./styles";
 import { stateSelecOptions } from "@utils/stateSelectOptions";
 import { statusSelectOptions } from "@utils/statusSelectOptions";
-import { IPartnership } from "../../shared/interfaces/partner.interface";
+import {
+  IModalPropsForm,
+  IPartnership,
+} from "../../shared/interfaces/partner.interface";
 import partnerRequest from "../../shared/services/partner.request";
 import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
 
-interface ModalProps {
-  visible: boolean;
-  onClose: () => void;
-}
-
-export function PartnershipForm({ visible, onClose }: ModalProps) {
+export function PartnershipForm({
+  visible,
+  onClose,
+  closeAfterUpdate,
+}: IModalPropsForm) {
   const {
     control,
     handleSubmit,
@@ -41,6 +43,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
 
   const [isStatusSelectOpen, setisStatusSelectOpen] = useState(false);
   const [isStatesSelectOpen, setisStatesSelectOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isClassificationSelectOpen, setisClassificationSelectOpen] =
     useState(false);
 
@@ -49,8 +52,14 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
       ...payload,
       memberNumber: Number(payload.memberNumber),
     };
-    console.log(data);
-    await partnerRequest.create(data);
+    try {
+      setIsLoading(true);
+      await partnerRequest.create(data);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
+    closeAfterUpdate();
   };
 
   function handlerStatusPartenerSelected(statusSelectOptions: {

@@ -32,6 +32,11 @@ export function Partnerships() {
     getPartnerships();
   }, [tab]);
 
+  function handleCloseEditModal() {
+    getPartnerships();
+    setVisibleModal(false);
+  }
+
   return (
     <Container>
       <Header isHero={true} />
@@ -94,6 +99,7 @@ export function Partnerships() {
       <PartnershipForm
         visible={visibleModal}
         onClose={() => setVisibleModal(false)}
+        closeAfterUpdate={() => handleCloseEditModal()}
       />
     </Container>
   );
