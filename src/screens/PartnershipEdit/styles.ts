@@ -50,6 +50,20 @@ export const DropDownArea = styled.View`
   padding: 10px;
 `;
 
+export const ClassicationDropDownArea = styled.View`
+  width: 100%;
+  height: 180px;
+  border-radius: 10px;
+  margin-top: 15px;
+  background-color: #fff
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  align-self: center;
+  margin-bottom: 10px;
+  line-height: 1.5px;
+  padding: 10px;
+`;
+
 export const StatusTypeText = styled.Text`
   width: 85%;
   height: 40px;

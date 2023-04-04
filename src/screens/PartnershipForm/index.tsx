@@ -9,6 +9,7 @@ import {
 import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
 import {
   AddPartnerView,
+  ClassicationDropDownArea,
   Container,
   DropDowArea,
   StateDropDowArea,
@@ -149,7 +150,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                     </StatusView>
                   </TouchableOpacity>
                   {isClassificationSelectOpen ? (
-                    <DropDowArea>
+                    <ClassicationDropDownArea>
                       {Object.keys(ClassificationSelectOptions).map(
                         classification => {
                           return (
@@ -167,7 +168,7 @@ export function PartnershipForm({ visible, onClose }: ModalProps) {
                           );
                         },
                       )}
-                    </DropDowArea>
+                    </ClassicationDropDownArea>
                   ) : null}
                 </View>
               )}
