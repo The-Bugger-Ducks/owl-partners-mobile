@@ -2,12 +2,21 @@ import { api } from "@api";
 import { IComment } from "@interfaces/annotation.interface";
 import { ANNOTATION_ENDPOINTS } from "../endpoints";
 
+import StorageController from "./StorageController";
+
 class AnnotationController {
   async createAnnotation(partnerId: string, comment: string) {
     try {
+      const user = await StorageController.getUserInfo();
+
+      if (!user || user?.id == null) {
+        throw new Error("User is empty");
+      }
+
       await api.post(ANNOTATION_ENDPOINTS.CREATE, {
         partnerId,
         comment,
+        userId: user.id,
       });
     } catch (error) {
       console.error(error);
