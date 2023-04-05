@@ -57,6 +57,7 @@ export function Partnership() {
 
   async function handleDeletePartnership() {
     await PartnershipController.deletePartnership(id);
+    getPartnerships();
   }
 
   async function handleUpdatePartnership() {
@@ -191,7 +192,7 @@ function History({ isDisabled }: HistoryProps) {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [id]);
 
   async function handleAddComment() {
     setIsLoading(true);
