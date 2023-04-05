@@ -37,8 +37,9 @@ export function Partnership() {
   const [isLoading, setIsLoading] = useState(true);
   const route = useRoute<RouteProp<RootStackParamList, "Partnership">>();
 
+  const { id } = route.params;
+
   async function getPartnerships() {
-    const { id } = route.params;
     setIsLoading(true);
     const partnerships = await PartnershipController.getPartnership(id);
     setData(partnerships);
@@ -55,7 +56,6 @@ export function Partnership() {
   }
 
   async function handleDeletePartnership() {
-    const { id } = route.params;
     await PartnershipController.deletePartnership(id);
   }
 
@@ -179,16 +179,11 @@ function History({ isDisabled }: HistoryProps) {
   const [isEditCommentModalOpen, setIsEditCommentModalOpen] = useState(false);
   const [editedComment, setEditedComment] = useState("");
   const route = useRoute<RouteProp<RootStackParamList, "Partnership">>();
-  // const {
-  //   params: { partnershipId },
-  // } =
-  //   useRoute<
-  //     Readonly<{ key: string; name: string; params: { partnershipId: string } }>
-  //   >();
+
+  const { id } = route.params;
 
   async function getData() {
     setIsLoading(true);
-    const { id } = route.params;
     const comments = await AnnotationController.getAnnotations(id);
     setAnnotations(comments);
     setIsLoading(false);
@@ -200,7 +195,6 @@ function History({ isDisabled }: HistoryProps) {
 
   async function handleAddComment() {
     setIsLoading(true);
-    const { id } = route.params;
     await AnnotationController.createAnnotation(id, newComment);
     const updatedComments = await AnnotationController.getAnnotations(id);
     updatedComments && setAnnotations(updatedComments);
@@ -210,7 +204,6 @@ function History({ isDisabled }: HistoryProps) {
 
   async function handleEditComment() {
     setIsLoading(true);
-    const { id } = route.params;
     await AnnotationController.updateAnnotation(
       modalComment?.id ?? "",
       id,
