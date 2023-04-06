@@ -1,10 +1,9 @@
 ---
 name: Feature request
 about: New feature to be developed
-title: ''
+title: ""
 labels: feature request
-assignees: ''
-
+assignees: ""
 ---
 
 ## 📄 Descrição da atividade
@@ -20,7 +19,7 @@ Em desenvolvimento...
 ### DoR: Definition of Ready
 
 - [ ] **Cabe em uma sprint:** De preferência, não deve ser maior que 8 story points
-- [ ] **Prototipado:** O protótipo já está disponível no [Figma](https://www.figma.com/file/OfE7DUkKkBgC7O3fmDoulH/Owl-Partners-(Oracle)?node-id=11-195&t=txTFGhY0EvM3VWcn-0)
+- [ ] **Prototipado:** O protótipo já está disponível no [Figma](<https://www.figma.com/file/OfE7DUkKkBgC7O3fmDoulH/Owl-Partners-(Oracle)?node-id=11-195&t=txTFGhY0EvM3VWcn-0>)
 - [ ] **Validado com o cliente:** As informações da atividade foram validadas pelo cliente
 
 ### Critérios de aceite

@@ -11,10 +11,10 @@ class AuthRequest {
       payload,
     );
 
-    const user = response.data;
+    const data = response.data;
 
-    await StorageController.setToken(user.token);
-    await StorageController.setUserInfo(user);
+    await StorageController.setToken(data.token);
+    await StorageController.setUserInfo(data.user);
 
     return response;
   }
