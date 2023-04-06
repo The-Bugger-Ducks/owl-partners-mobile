@@ -1,9 +1,10 @@
 import { Button, Header, Loading, Tabs, Text } from "@components";
+import { PropsStack } from "@custom-types/rootStackParamList";
 import { IPartnership } from "@interfaces/partner.interface";
 import { useNavigation } from "@react-navigation/native";
+import partnerRequest from "@requests/partner.request";
 import { PartnershipForm } from "@screens/PartnershipForm";
 import { useEffect, useState } from "react";
-import partnerRequest from "../../shared/services/partner.request";
 import {
   ButtonView,
   Container,
@@ -12,7 +13,6 @@ import {
   PartnershipsList,
   TabsContainer,
 } from "./styles";
-import { PropsStack } from "src/shared/types/rootStackParamList";
 
 export function Partnerships() {
   const [visibleModal, setVisibleModal] = useState(false);

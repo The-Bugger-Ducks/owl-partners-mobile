@@ -1,7 +1,8 @@
 import { api } from "@api";
-import { Alert } from "react-native";
-import { PARTNERSHIP_ENDPOINTS } from "../endpoints";
+
 import { IPartnership, IPartnershipEdit } from "@interfaces/partner.interface";
+import { Alert } from "react-native";
+import { PARTNERSHIP_ENDPOINTS } from "../../constants/endpoints";
 
 class PartnershipController {
   async getPartnerships() {

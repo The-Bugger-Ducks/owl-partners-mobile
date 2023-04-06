@@ -5,16 +5,16 @@
 
     "baseUrl": "./",
     "paths": {
-      "@assets/*": ["./src/assets/*"],
       "@components": ["./src/components"],
-      "@global/*": ["./src/global/*"],
-      "@mocks/*": ["./src/mocks/*"],
+      "@routes/*": ["./src/routes/*"],
       "@screens/*": ["./src/screens/*"],
-      "@utils/*": ["./src/utils/*"],
+      "@assets/*": ["./src/shared/assets/*"],
+      "@constants": ["./src/shared/constants"],
       "@interfaces/*": ["./src/shared/interfaces/*"],
       "@api": ["./src/shared/services/api"],
-      "@requests/*": ["./src/shared/utils/handlers/*"],
-      "@routes/*": ["./src/routes/*"]
+      "@requests/*": ["./src/shared/services/*"],
+      "@custom-types/*": ["./src/shared/types/*"],
+      "@utils/*": ["./src/shared/utils/*"]
     }
   }
 }

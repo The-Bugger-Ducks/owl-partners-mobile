@@ -8,14 +8,17 @@ import {
   Tabs,
   Text,
 } from "@components";
+import { RootStackParamList } from "@custom-types/rootStackParamList";
 import { IComment } from "@interfaces/annotation.interface";
+import { IPartnership } from "@interfaces/partner.interface";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { IPartnership, IPartnershipEdit } from "@interfaces/partner.interface";
-import AnnotationController from "@requests/AnnotationController";
-import PartnershipController from "@requests/PartnershipController";
+import { PartnershipEdit } from "@screens/PartnershipEdit";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
+import AnnotationController from "@utils/handlers/AnnotationController";
+import PartnershipController from "@utils/handlers/PartnershipController";
 import { useEffect, useState } from "react";
+import { ScrollView, View } from "react-native";
 import {
   ButtonsContainer,
   ContactView,
@@ -26,9 +29,6 @@ import {
   LoadingContainer,
   PartnerInfoView,
 } from "./styles";
-import { ScrollView, View } from "react-native";
-import { PartnershipEdit } from "@screens/PartnershipEdit";
-import { RootStackParamList } from "src/shared/types/rootStackParamList";
 
 export function Partnership() {
   const [tab, setTab] = useState(0);

@@ -1,11 +1,13 @@
-import { Button, Close, Drop, Input, Text } from "@components";
-import { useState } from "react";
+import { Button, Close, Drop, Text } from "@components";
 import {
-  Controller,
-  SubmitHandler,
-  useController,
-  useForm,
-} from "react-hook-form";
+  ClassificationSelectOptions,
+  stateSelecOptions,
+  statusSelectOptions,
+} from "@constants";
+import { IModalPropsForm, IPartnership } from "@interfaces/partner.interface";
+import partnerRequest from "@requests/partner.request";
+import { useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
 import {
   AddPartnerView,
@@ -17,14 +19,6 @@ import {
   StatusView,
   TextInput,
 } from "./styles";
-import { stateSelecOptions } from "@utils/stateSelectOptions";
-import { statusSelectOptions } from "@utils/statusSelectOptions";
-import {
-  IModalPropsForm,
-  IPartnership,
-} from "../../shared/interfaces/partner.interface";
-import partnerRequest from "../../shared/services/partner.request";
-import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
 
 export function PartnershipForm({
   visible,

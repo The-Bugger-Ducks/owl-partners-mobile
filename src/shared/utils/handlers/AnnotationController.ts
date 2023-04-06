@@ -1,6 +1,7 @@
 import { api } from "@api";
+
 import { IComment } from "@interfaces/annotation.interface";
-import { ANNOTATION_ENDPOINTS } from "../endpoints";
+import { ANNOTATION_ENDPOINTS } from "../../constants/endpoints";
 
 class AnnotationController {
   async createAnnotation(partnerId: string, comment: string) {

@@ -1,4 +1,4 @@
-import { isAndroid } from "@utils/checkPlatform";
+import { isAndroid } from "@constants";
 import { ReactNode } from "react";
 import { Modal as ReactNativeModal, TouchableOpacity } from "react-native";
 import { Button } from "../Button";

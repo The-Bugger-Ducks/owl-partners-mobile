@@ -1,6 +1,7 @@
-import { IPartnership } from "@interfaces/partner.interface";
-import { PARTNERSHIP_ENDPOINTS } from "../utils/endpoints";
 import { api } from "./api";
+
+import { IPartnership } from "@interfaces/partner.interface";
+import { PARTNERSHIP_ENDPOINTS } from "../constants/endpoints";
 
 class PartnerRequest {
   public async create(payload: IPartnership) {

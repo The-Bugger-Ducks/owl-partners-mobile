@@ -1,8 +1,8 @@
 import { api } from "./api";
 
-import { IUserAuthenticated, IUserLogin } from "../interfaces/user.interface";
-import { USER_ENDPOINTS } from "../utils/endpoints";
-import StorageController from "../utils/handlers/StorageController";
+import { IUserAuthenticated, IUserLogin } from "@interfaces/user.interface";
+import StorageController from "@utils/handlers/StorageController";
+import { USER_ENDPOINTS } from "../constants/endpoints";
 
 class AuthRequest {
   public async authenticate(payload: IUserLogin) {
