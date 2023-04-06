@@ -12,11 +12,11 @@ import { RootStackParamList } from "@custom-types/rootStackParamList";
 import { IComment } from "@interfaces/annotation.interface";
 import { IPartnership } from "@interfaces/partner.interface";
 import { RouteProp, useRoute } from "@react-navigation/native";
+import annotationRequests from "@requests/annotation.requests";
+import partnershipRequests from "@requests/partnership.requests";
 import { PartnershipEdit } from "@screens/PartnershipEdit";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
-import AnnotationController from "@utils/handlers/AnnotationController";
-import PartnershipController from "@utils/handlers/PartnershipController";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import {
@@ -41,7 +41,7 @@ export function Partnership() {
 
   async function getPartnerships() {
     setIsLoading(true);
-    const partnerships = await PartnershipController.getPartnership(id);
+    const partnerships = await partnershipRequests.getPartnership(id);
     setData(partnerships);
     setIsLoading(false);
   }
@@ -56,7 +56,7 @@ export function Partnership() {
   }
 
   async function handleDeletePartnership() {
-    await PartnershipController.deletePartnership(id);
+    await partnershipRequests.deletePartnership(id);
     getPartnerships();
   }
 
@@ -185,7 +185,7 @@ function History({ isDisabled }: HistoryProps) {
 
   async function getData() {
     setIsLoading(true);
-    const comments = await AnnotationController.getAnnotations(id);
+    const comments = await annotationRequests.getAnnotations(id);
     setAnnotations(comments);
     setIsLoading(false);
   }
@@ -196,8 +196,8 @@ function History({ isDisabled }: HistoryProps) {
 
   async function handleAddComment() {
     setIsLoading(true);
-    await AnnotationController.createAnnotation(id, newComment);
-    const updatedComments = await AnnotationController.getAnnotations(id);
+    await annotationRequests.createAnnotation(id, newComment);
+    const updatedComments = await annotationRequests.getAnnotations(id);
     updatedComments && setAnnotations(updatedComments);
     setNewComment("");
     setIsLoading(false);
@@ -205,12 +205,12 @@ function History({ isDisabled }: HistoryProps) {
 
   async function handleEditComment() {
     setIsLoading(true);
-    await AnnotationController.updateAnnotation(
+    await annotationRequests.updateAnnotation(
       modalComment?.id ?? "",
       id,
       editedComment,
     );
-    const updatedComments = await AnnotationController.getAnnotations(id);
+    const updatedComments = await annotationRequests.getAnnotations(id);
     updatedComments && setAnnotations(updatedComments);
     setEditedComment("");
     setIsLoading(false);

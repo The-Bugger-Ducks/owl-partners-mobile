@@ -2,7 +2,7 @@ import { Button, Header, Loading, Tabs, Text } from "@components";
 import { PropsStack } from "@custom-types/rootStackParamList";
 import { IPartnership } from "@interfaces/partner.interface";
 import { useNavigation } from "@react-navigation/native";
-import partnerRequest from "@requests/partner.request";
+import partnershipRequests from "@requests/partnership.requests";
 import { PartnershipForm } from "@screens/PartnershipForm";
 import { useEffect, useState } from "react";
 import {
@@ -23,7 +23,8 @@ export function Partnerships() {
 
   async function getPartnerships() {
     setIsLoading(true);
-    const partnerships: IPartnership[] = await partnerRequest.List(tab === 1);
+    const partnerships: IPartnership[] =
+      await partnershipRequests.getPartnerships(tab === 1);
     setData(partnerships);
     setIsLoading(false);
   }

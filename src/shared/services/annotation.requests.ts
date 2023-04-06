@@ -1,17 +1,19 @@
 import { api } from "@api";
 
 import { IComment } from "@interfaces/annotation.interface";
-import { ANNOTATION_ENDPOINTS } from "../../constants/endpoints";
+import { alertError } from "@utils/alertError";
+import { ANNOTATION_ENDPOINTS } from "../constants/endpoints";
 
-class AnnotationController {
+class AnnotationRequests {
   async createAnnotation(partnerId: string, comment: string) {
     try {
-      await api.post(ANNOTATION_ENDPOINTS.CREATE, {
+      const { data } = await api.post(ANNOTATION_ENDPOINTS.CREATE, {
         partnerId,
         comment,
       });
+      return data;
     } catch (error) {
-      console.error(error);
+      alertError(error, "Não foi possível cadastrar a anotação :(");
     }
   }
 
@@ -20,7 +22,7 @@ class AnnotationController {
       const { data } = await api.get(ANNOTATION_ENDPOINTS.LIST + id);
       return data as IComment[];
     } catch (error) {
-      console.error(error);
+      alertError(error, "Não foi possível carregar a lista de anotações :(");
     }
   }
 
@@ -36,9 +38,9 @@ class AnnotationController {
       });
       return data;
     } catch (error) {
-      console.error(error);
+      alertError(error, "Não foi possível atualizar o comentário :(");
     }
   }
 }
 
-export default new AnnotationController();
+export default new AnnotationRequests();

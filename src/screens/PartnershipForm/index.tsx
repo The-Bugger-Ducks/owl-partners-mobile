@@ -5,7 +5,7 @@ import {
   statusSelectOptions,
 } from "@constants";
 import { IModalPropsForm, IPartnership } from "@interfaces/partner.interface";
-import partnerRequest from "@requests/partner.request";
+import partnershipRequests from "@requests/partnership.requests";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
@@ -46,12 +46,9 @@ export function PartnershipForm({
       ...payload,
       memberNumber: Number(payload.memberNumber),
     };
-    try {
-      setIsLoading(true);
-      await partnerRequest.create(data);
-    } catch (error) {
-      console.error(error);
-    }
+
+    setIsLoading(true);
+    await partnershipRequests.createPartnership(data);
     setIsLoading(false);
     closeAfterUpdate();
   };

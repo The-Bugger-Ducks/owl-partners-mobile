@@ -8,7 +8,7 @@ import {
   IModalPropsEdit,
   IPartnershipEdit,
 } from "@interfaces/partner.interface";
-import PartnershipController from "@utils/handlers/PartnershipController";
+import partnershipRequests from "@requests/partnership.requests";
 import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
@@ -64,13 +64,9 @@ export function PartnershipEdit({
       status: payload.status,
       zipCode: payload.zipCode,
     };
-    console.log(data);
-    try {
-      setIsLoading(true);
-      await PartnershipController.updatePartnership(data, partnerProps.id);
-    } catch (error) {
-      console.error(error);
-    }
+
+    setIsLoading(true);
+    await partnershipRequests.updatePartnership(data, partnerProps.id);
     setIsLoading(false);
     closeAfterUpdate();
   };
