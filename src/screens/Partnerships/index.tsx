@@ -12,13 +12,14 @@ import {
   PartnershipsList,
   TabsContainer,
 } from "./styles";
+import { PropsStack } from "src/shared/types/rootStackParamList";
 
 export function Partnerships() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<IPartnership[]>([]);
   const [tab, setTab] = useState(0);
-  const navigation = useNavigation();
+  const navigation = useNavigation<PropsStack>();
 
   async function getPartnerships() {
     setIsLoading(true);
@@ -30,6 +31,11 @@ export function Partnerships() {
   useEffect(() => {
     getPartnerships();
   }, [tab]);
+
+  function handleCloseEditModal() {
+    getPartnerships();
+    setVisibleModal(false);
+  }
 
   return (
     <Container>
@@ -59,11 +65,7 @@ export function Partnerships() {
                 <PartnerView
                   key={id}
                   activeOpacity={0.7}
-                  onPress={() =>
-                    navigation.navigate("Partnership", {
-                      partnershipId: id,
-                    })
-                  }
+                  onPress={() => navigation.navigate("Partnership", { id })}
                 >
                   <Text
                     color="#EF4444"
@@ -97,6 +99,7 @@ export function Partnerships() {
       <PartnershipForm
         visible={visibleModal}
         onClose={() => setVisibleModal(false)}
+        closeAfterUpdate={() => handleCloseEditModal()}
       />
     </Container>
   );

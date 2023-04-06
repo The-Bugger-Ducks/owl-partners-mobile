@@ -36,15 +36,32 @@ export const StatusView = styled.View`
   height: 56px;
 `;
 
-export const DropDowArea = styled.View`
+export const DropDownArea = styled.View`
   width: 100%;
-  height: 450px;
+  height: 480px;
   border-radius: 10px;
   margin-top: 15px;
-  background-color: #fff;
-  elevation: 3;
+  background-color: #fff
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
   align-self: center;
   margin-bottom: 10px;
+  line-height: 1.5px;
+  padding: 10px;
+`;
+
+export const ClassicationDropDownArea = styled.View`
+  width: 100%;
+  height: 180px;
+  border-radius: 10px;
+  margin-top: 15px;
+  background-color: #fff
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  align-self: center;
+  margin-bottom: 10px;
+  line-height: 1.5px;
+  padding: 10px;
 `;
 
 export const StatusTypeText = styled.Text`
@@ -53,5 +70,16 @@ export const StatusTypeText = styled.Text`
   border-bottom-width: 0.2px;
   border-bottom-color: #8e8e8e;
   align-self: center;
-  justify-content: center;
+  padding: 3px;
+`;
+
+export const StateDropDowArea = styled.View`
+  width: 100%;
+  height: 450px;
+  border-radius: 10px;
+  margin-top: 15px;
+  background-color: #fff;
+  elevation: 3;
+  align-self: center;
+  margin-bottom: 10px;
 `;

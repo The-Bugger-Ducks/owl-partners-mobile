@@ -38,7 +38,33 @@ export const StatusView = styled.View`
   height: 56px;
 `;
 
+export const ClassicationDropDownArea = styled.View`
+  width: 100%;
+  height: 180px;
+  border-radius: 10px;
+  margin-top: 15px;
+  background-color: #fff
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  align-self: center;
+  margin-bottom: 10px;
+  line-height: 1.5px;
+  padding: 10px;
+`;
+
 export const DropDowArea = styled.View`
+  width: 100%;
+  min-height: 100px;
+  max-height: 480px;
+  border-radius: 10px;
+  margin-top: 15px;
+  background-color: #fff;
+  elevation: 3;
+  align-self: center;
+  margin-bottom: 10px;
+`;
+
+export const StateDropDowArea = styled.ScrollView`
   width: 100%;
   height: 450px;
   border-radius: 10px;

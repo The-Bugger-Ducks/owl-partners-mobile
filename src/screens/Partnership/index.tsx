@@ -9,8 +9,8 @@ import {
   Text,
 } from "@components";
 import { IComment } from "@interfaces/annotation.interface";
-import { IPartnership } from "@interfaces/partner.interface";
-import { useRoute } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { IPartnership, IPartnershipEdit } from "@interfaces/partner.interface";
 import AnnotationController from "@requests/AnnotationController";
 import PartnershipController from "@requests/PartnershipController";
 import { formatDate } from "@utils/formatDate";
@@ -18,47 +18,50 @@ import { formatTime } from "@utils/formatTime";
 import { useEffect, useState } from "react";
 import {
   ButtonsContainer,
+  ContactView,
   Container,
   HistoryContainer,
+  InformationView,
   ListContainer,
   LoadingContainer,
+  PartnerInfoView,
 } from "./styles";
+import { ScrollView, View } from "react-native";
+import { PartnershipEdit } from "@screens/PartnershipEdit";
+import { RootStackParamList } from "src/shared/types/rootStackParamList";
 
 export function Partnership() {
   const [tab, setTab] = useState(0);
+  const [visibleModal, setVisibleModal] = useState(false);
   const [data, setData] = useState<IPartnership>();
   const [isLoading, setIsLoading] = useState(true);
-  const {
-    params: { partnershipId },
-  } = useRoute<
-    Readonly<{
-      key: string;
-      name: string;
-      params: { partnershipId: string };
-    }>
-  >();
+  const route = useRoute<RouteProp<RootStackParamList, "Partnership">>();
 
-  async function getData() {
+  const { id } = route.params;
+
+  async function getPartnerships() {
     setIsLoading(true);
-    const partnershipData = await PartnershipController.getPartnership(
-      partnershipId,
-    );
-    setData(partnershipData);
+    const partnerships = await PartnershipController.getPartnership(id);
+    setData(partnerships);
     setIsLoading(false);
   }
 
   useEffect(() => {
-    getData();
-  }, [partnershipId]);
+    getPartnerships();
+  }, []);
 
-  async function handleDeletePartnership() {
-    await PartnershipController.deletePartnership(partnershipId);
-    getData();
+  function handleCloseEditModal() {
+    getPartnerships();
+    setVisibleModal(false);
   }
 
-  function handleUpdatePartnership() {
-    // PartnershipController.updatePartnership();
-    alert("Parceria editada!");
+  async function handleDeletePartnership() {
+    await PartnershipController.deletePartnership(id);
+    getPartnerships();
+  }
+
+  async function handleUpdatePartnership() {
+    setVisibleModal(true);
   }
 
   return (
@@ -79,28 +82,87 @@ export function Partnership() {
           Essa parceria foi deletada e, portanto, não pode ser atualizada.
         </Text>
       ) : (
-        <ButtonsContainer>
-          <Button type="unfilled" onPress={handleDeletePartnership}>
-            Deletar parceria
-          </Button>
-          <Button
-            onPress={handleUpdatePartnership}
-            style={{ marginVertical: 8 }}
-          >
-            Editar informações
-          </Button>
-        </ButtonsContainer>
+        <ScrollView>
+          <ButtonsContainer>
+            <Button type="unfilled" onPress={handleDeletePartnership}>
+              Deletar parceria
+            </Button>
+            <Button
+              onPress={handleUpdatePartnership}
+              style={{ marginVertical: 8 }}
+            >
+              Editar informações
+            </Button>
+          </ButtonsContainer>
+          <PartnerInfoView>
+            <View>
+              <Text>Informação da parceria</Text>
+            </View>
+            <InformationView>
+              <Text color="#EF4444" size={14} weight="500" numberOfLines={1}>
+                {data?.classification} |{" "}
+                <Text size={14} weight="500">
+                  {data?.name}
+                </Text>
+              </Text>
+              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+                Status:{" "}
+                <Text size={16} weight="400">
+                  {data?.status}
+                </Text>
+              </Text>
+              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+                Quantidade de membros :{" "}
+                <Text size={16} weight="400">
+                  {data?.memberNumber}
+                </Text>
+              </Text>
+              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+                Localização:{" "}
+                <Text size={16} weight="400">
+                  {data?.state}
+                </Text>
+              </Text>
+            </InformationView>
+            <ContactView>
+              <Text color="#000000" weight="500">
+                Informações de contato
+              </Text>
+
+              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+                E-mail:{" "}
+                <Text size={16} weight="400">
+                  {data?.email}{" "}
+                </Text>
+              </Text>
+              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+                Telefone:{" "}
+                <Text size={16} weight="400">
+                  {data?.phoneNumber}
+                </Text>
+              </Text>
+            </ContactView>
+
+            {data && (
+              <PartnershipEdit
+                visible={visibleModal}
+                onClose={() => setVisibleModal(false)}
+                closeAfterUpdate={() => handleCloseEditModal()}
+                partnerProps={data}
+              />
+            )}
+          </PartnerInfoView>
+
+          <HistoryContainer>
+            <Tabs onChangeTab={tab => setTab(tab)} />
+            {tab === 0 ? (
+              <History isDisabled={isLoading || (data?.disabled ?? false)} />
+            ) : (
+              <MeetingList />
+            )}
+          </HistoryContainer>
+        </ScrollView>
       )}
-
-      <HistoryContainer>
-        <Tabs onChangeTab={tab => setTab(tab)} />
-
-        {tab === 0 ? (
-          <History isDisabled={isLoading || (data?.disabled ?? false)} />
-        ) : (
-          <MeetingList />
-        )}
-      </HistoryContainer>
     </Container>
   );
 }
@@ -117,30 +179,25 @@ function History({ isDisabled }: HistoryProps) {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [isEditCommentModalOpen, setIsEditCommentModalOpen] = useState(false);
   const [editedComment, setEditedComment] = useState("");
-  const {
-    params: { partnershipId },
-  } =
-    useRoute<
-      Readonly<{ key: string; name: string; params: { partnershipId: string } }>
-    >();
+  const route = useRoute<RouteProp<RootStackParamList, "Partnership">>();
+
+  const { id } = route.params;
 
   async function getData() {
     setIsLoading(true);
-    const comments = await AnnotationController.getAnnotations(partnershipId);
+    const comments = await AnnotationController.getAnnotations(id);
     setAnnotations(comments);
     setIsLoading(false);
   }
 
   useEffect(() => {
     getData();
-  }, [partnershipId]);
+  }, [id]);
 
   async function handleAddComment() {
     setIsLoading(true);
-    await AnnotationController.createAnnotation(partnershipId, newComment);
-    const updatedComments = await AnnotationController.getAnnotations(
-      partnershipId,
-    );
+    await AnnotationController.createAnnotation(id, newComment);
+    const updatedComments = await AnnotationController.getAnnotations(id);
     updatedComments && setAnnotations(updatedComments);
     setNewComment("");
     setIsLoading(false);
@@ -150,12 +207,10 @@ function History({ isDisabled }: HistoryProps) {
     setIsLoading(true);
     await AnnotationController.updateAnnotation(
       modalComment?.id ?? "",
-      partnershipId,
+      id,
       editedComment,
     );
-    const updatedComments = await AnnotationController.getAnnotations(
-      partnershipId,
-    );
+    const updatedComments = await AnnotationController.getAnnotations(id);
     updatedComments && setAnnotations(updatedComments);
     setEditedComment("");
     setIsLoading(false);
