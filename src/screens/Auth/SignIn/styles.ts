@@ -17,12 +17,6 @@ export const FormContainer = styled.KeyboardAvoidingView.attrs({
   justify-content: space-between;
 `;
 
-export const TextContainer = styled.View`
-  align-items: center;
-
-  height: 54px;
-`;
-
 export const Form = styled.View`
   flex: 1;
   justify-content: center;

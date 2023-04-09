@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Eye, EyeHidden, Info, Loading, Text } from "@components";
+import {
+  Button,
+  Eye,
+  EyeHidden,
+  Header,
+  Info,
+  Loading,
+  Text,
+} from "@components";
 import { validEmailPattern } from "@constants";
 import { PropsStack } from "@custom-types/rootStackParamList";
 import { IUserLogin } from "@interfaces/user.interface";
@@ -19,7 +27,6 @@ import {
   InputPassword,
   LoadingContainer,
   PasswordInputContainer,
-  TextContainer,
   TextInput,
 } from "./styles";
 
@@ -82,15 +89,7 @@ export function SignIn() {
     <Container>
       <FormContainer>
         <Form>
-          <TextContainer>
-            <Text size={14} opacity={0.9}>
-              Bem vindo(a) ao
-            </Text>
-            <Text size={24} weight="700">
-              OWL
-              <Text size={24}>PARTNERS</Text>
-            </Text>
-          </TextContainer>
+          <Header align="center" />
 
           <LoadingContainer>{isLoading && <Loading />}</LoadingContainer>
 
