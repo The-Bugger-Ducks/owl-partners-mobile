@@ -88,23 +88,14 @@ export function Partnership() {
                   {data?.name}
                 </Text>
               </Text>
-              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
-                Status:{" "}
-                <Text size={16} weight="400">
-                  {data?.status}
-                </Text>
+              <Text color="#999999" numberOfLines={1}>
+                Status: <Text>{data?.status}</Text>
               </Text>
-              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
-                Quantidade de membros :{" "}
-                <Text size={16} weight="400">
-                  {data?.memberNumber}
-                </Text>
+              <Text color="#999999" numberOfLines={1}>
+                Quantidade de membros : <Text>{data?.memberNumber}</Text>
               </Text>
-              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
-                Localização:{" "}
-                <Text size={16} weight="400">
-                  {data?.state}
-                </Text>
+              <Text color="#999999" numberOfLines={1}>
+                Localização: <Text>{data?.state}</Text>
               </Text>
             </InformationView>
             <ContactView>
@@ -112,17 +103,11 @@ export function Partnership() {
                 Informações de contato
               </Text>
 
-              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
-                E-mail:{" "}
-                <Text size={16} weight="400">
-                  {data?.email}{" "}
-                </Text>
+              <Text color="#999999" numberOfLines={1}>
+                E-mail: <Text>{data?.email} </Text>
               </Text>
-              <Text color="#999999" size={16} weight="400" numberOfLines={1}>
-                Telefone:{" "}
-                <Text size={16} weight="400">
-                  {data?.phoneNumber}
-                </Text>
+              <Text color="#999999" numberOfLines={1}>
+                Telefone: <Text>{data?.phoneNumber}</Text>
               </Text>
             </ContactView>
 

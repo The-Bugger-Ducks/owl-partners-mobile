@@ -83,16 +83,8 @@ export function Partnerships() {
                       {name}
                     </Text>
                   </Text>
-                  <Text
-                    color="#999999"
-                    size={14}
-                    weight="400"
-                    numberOfLines={1}
-                  >
-                    Status:{" "}
-                    <Text size={14} weight="400">
-                      {status}
-                    </Text>
+                  <Text color="#999999" size={14} numberOfLines={1}>
+                    Status: <Text>{status}</Text>
                   </Text>
                 </PartnerView>
               );
