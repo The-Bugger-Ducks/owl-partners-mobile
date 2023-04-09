@@ -41,15 +41,13 @@ export function PartnershipForm({
   const [selectClassification, setSelectClassification] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
-  const [pickerFocused, setPickerFocused] = useState(false)
-
+  const [pickerFocused, setPickerFocused] = useState(false);
 
   const onSubmit: SubmitHandler<IPartnership> = async payload => {
     const data = {
       ...payload,
-      memberNumber: Number(payload.memberNumber)
+      memberNumber: Number(payload.memberNumber),
     };
-    console.log(data);
 
     try {
       setIsLoading(true);
@@ -60,7 +58,6 @@ export function PartnershipForm({
     setIsLoading(false);
     closeAfterUpdate();
   };
-
 
   return (
     <Modal
@@ -120,7 +117,6 @@ export function PartnershipForm({
               )}
             />
 
-
             <Controller
               control={control}
               name="classification"
@@ -129,20 +125,33 @@ export function PartnershipForm({
                   <Text>Classificação</Text>
                   <ClassicationDropDownArea>
                     <Picker
+                      placeholder="Universidade"
                       selectedValue={selectClassification}
-                      onValueChange={(itemValue) => { setSelectClassification(itemValue), onChange(itemValue) }}
+                      onValueChange={itemValue => {
+                        setSelectClassification(itemValue), onChange(itemValue);
+                      }}
                       onFocus={() => setPickerFocused(true)}
                       onBlur={() => setPickerFocused(false)}
                     >
+                      <Picker.Item
+                        color="#9A9A9A"
+                        label="Universidades"
+                        value=""
+                        enabled={!pickerFocused}
+                      />
 
                       {Object.keys(ClassificationSelectOptions).map(
                         classification => {
-                          return <Picker.Item key={classification} label={classification} value={classification}></Picker.Item>
+                          return (
+                            <Picker.Item
+                              key={classification}
+                              label={classification}
+                              value={classification}
+                            ></Picker.Item>
+                          );
                         },
                       )}
-
                     </Picker>
-
                   </ClassicationDropDownArea>
                 </View>
               )}
@@ -154,29 +163,40 @@ export function PartnershipForm({
               rules={{
                 required: "informe o status da parceria",
               }}
-              render={({ field: {onChange} }) => (
+              render={({ field: { onChange } }) => (
                 <View>
                   <Text>Status</Text>
                   <StatusDropDowArea>
-
                     <Picker
                       placeholder="status"
                       selectedValue={selectStatus}
-                      onValueChange={(itemValue) =>  {setSelectStatus(itemValue), onChange(itemValue)}
-                      }>
+                      onValueChange={itemValue => {
+                        setSelectStatus(itemValue), onChange(itemValue);
+                      }}
+                    >
+                      <Picker.Item
+                        color="#9A9A9A"
+                        label="Em prospecção"
+                        value=""
+                        enabled={!pickerFocused}
+                      />
 
                       {statusSelectOptions.map(status => {
-                        return <Picker.Item key={status.id} label={status.description} value={status.value}></Picker.Item>
+                        return (
+                          <Picker.Item
+                            key={status.id}
+                            label={status.description}
+                            value={status.value}
+                          ></Picker.Item>
+                        );
                       })}
                     </Picker>
                   </StatusDropDowArea>
                   {errors.status && <Text>Este campo é obrigatório</Text>}
-                  
-                  
                 </View>
               )}
             />
-      
+
             <Controller
               control={control}
               name="state"
@@ -186,10 +206,25 @@ export function PartnershipForm({
                   <StateDropDowArea>
                     <Picker
                       selectedValue={selectStates}
-                      onValueChange={(itemValue) => {setSelectStates(itemValue), onChange(itemValue)}
-                      }>
+                      onValueChange={itemValue => {
+                        setSelectStates(itemValue), onChange(itemValue);
+                      }}
+                    >
+                      <Picker.Item
+                        color="#9A9A9A"
+                        label="São Paulo"
+                        value=""
+                        enabled={!pickerFocused}
+                      />
+
                       {stateSelectOptions.map(state => {
-                        return <Picker.Item  key={state.UF} label={state.name} value={state.name}></Picker.Item>
+                        return (
+                          <Picker.Item
+                            key={state.UF}
+                            label={state.name}
+                            value={state.name}
+                          />
+                        );
                       })}
                     </Picker>
                   </StateDropDowArea>
