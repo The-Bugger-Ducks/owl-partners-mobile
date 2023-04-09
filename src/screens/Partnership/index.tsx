@@ -14,11 +14,11 @@ import { IPartnership } from "@interfaces/partner.interface";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import annotationRequests from "@requests/annotation.requests";
 import partnershipRequests from "@requests/partnership.requests";
-import { PartnershipEdit } from "@screens/PartnershipEdit";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
+import { EditPartnershipModal } from "./EditPartnershipModal";
 import {
   ButtonsContainer,
   ContactView,
@@ -32,7 +32,7 @@ import {
 
 export function Partnership() {
   const [tab, setTab] = useState(0);
-  const [visibleModal, setVisibleModal] = useState(false);
+  const [visibleEditModal, setVisibleEditModal] = useState(false);
   const [data, setData] = useState<IPartnership>();
   const [isLoading, setIsLoading] = useState(true);
   const route = useRoute<RouteProp<RootStackParamList, "Partnership">>();
@@ -52,7 +52,7 @@ export function Partnership() {
 
   function handleCloseEditModal() {
     getPartnerships();
-    setVisibleModal(false);
+    setVisibleEditModal(false);
   }
 
   async function handleDeletePartnership() {
@@ -61,7 +61,7 @@ export function Partnership() {
   }
 
   async function handleUpdatePartnership() {
-    setVisibleModal(true);
+    setVisibleEditModal(true);
   }
 
   return (
@@ -144,9 +144,9 @@ export function Partnership() {
             </ContactView>
 
             {data && (
-              <PartnershipEdit
-                visible={visibleModal}
-                onClose={() => setVisibleModal(false)}
+              <EditPartnershipModal
+                visible={visibleEditModal}
+                onClose={() => setVisibleEditModal(false)}
                 closeAfterUpdate={() => handleCloseEditModal()}
                 partnerProps={data}
               />

@@ -3,8 +3,8 @@ import { PropsStack } from "@custom-types/rootStackParamList";
 import { IPartnership } from "@interfaces/partner.interface";
 import { useNavigation } from "@react-navigation/native";
 import partnershipRequests from "@requests/partnership.requests";
-import { PartnershipForm } from "@screens/PartnershipForm";
 import { useEffect, useState } from "react";
+import { AddPartnershipModal } from "./AddPartnershipModal";
 import {
   ButtonView,
   Container,
@@ -15,7 +15,8 @@ import {
 } from "./styles";
 
 export function Partnerships() {
-  const [visibleModal, setVisibleModal] = useState(false);
+  const [visibleAddPartnershipModal, setVisibleAddPartnershipModal] =
+    useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<IPartnership[]>([]);
   const [tab, setTab] = useState(0);
@@ -35,14 +36,17 @@ export function Partnerships() {
 
   function handleCloseEditModal() {
     getPartnerships();
-    setVisibleModal(false);
+    setVisibleAddPartnershipModal(false);
   }
 
   return (
     <Container>
       <Header isHero={true} />
       <ButtonView>
-        <Button type="unfilled" onPress={() => setVisibleModal(true)}>
+        <Button
+          type="unfilled"
+          onPress={() => setVisibleAddPartnershipModal(true)}
+        >
           Adicionar nova parceria
         </Button>
       </ButtonView>
@@ -97,9 +101,9 @@ export function Partnerships() {
         </PartnershipsList>
       </TabsContainer>
 
-      <PartnershipForm
-        visible={visibleModal}
-        onClose={() => setVisibleModal(false)}
+      <AddPartnershipModal
+        visible={visibleAddPartnershipModal}
+        onClose={() => setVisibleAddPartnershipModal(false)}
         closeAfterUpdate={() => handleCloseEditModal()}
       />
     </Container>

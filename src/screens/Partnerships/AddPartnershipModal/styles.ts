@@ -22,6 +22,8 @@ export const TextInput = styled.TextInput`
 `;
 
 export const AddPartnerView = styled.View`
+  justify-content: "space-between";
+  flex-direction: "row";
   gap: 140.25px;
   margin-bottom: 24px;
 `;
@@ -34,20 +36,10 @@ export const StatusView = styled.View`
   align-items: center;
   width: 345px;
   height: 56px;
-`;
 
-export const DropDownArea = styled.View`
-  width: 100%;
-  height: 480px;
-  border-radius: 10px;
-  margin-top: 15px;
-  background-color: #fff
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ccc;
-  align-self: center;
-  margin-bottom: 10px;
-  line-height: 1.5px;
-  padding: 10px;
+  justify-content: "space-between";
+  flex-direction: "row";
+  gap: 140.25;
 `;
 
 export const ClassicationDropDownArea = styled.View`
@@ -64,16 +56,19 @@ export const ClassicationDropDownArea = styled.View`
   padding: 10px;
 `;
 
-export const StatusTypeText = styled.Text`
-  width: 85%;
-  height: 40px;
-  border-bottom-width: 0.2px;
-  border-bottom-color: #8e8e8e;
+export const DropDowArea = styled.View`
+  width: 100%;
+  min-height: 100px;
+  max-height: 480px;
+  border-radius: 10px;
+  margin-top: 15px;
+  background-color: #fff;
+  elevation: 3;
   align-self: center;
-  padding: 3px;
+  margin-bottom: 10px;
 `;
 
-export const StateDropDowArea = styled.View`
+export const StateDropDowArea = styled.ScrollView`
   width: 100%;
   height: 450px;
   border-radius: 10px;
@@ -82,4 +77,13 @@ export const StateDropDowArea = styled.View`
   elevation: 3;
   align-self: center;
   margin-bottom: 10px;
+`;
+
+export const StatusTypeText = styled.Text`
+  width: 85%;
+  height: 40px;
+  border-bottom-width: 0.2px;
+  border-bottom-color: #8e8e8e;
+  align-self: center;
+  justify-content: center;
 `;
