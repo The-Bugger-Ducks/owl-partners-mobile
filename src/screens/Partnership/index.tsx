@@ -271,6 +271,7 @@ function History({ isDisabled }: HistoryProps) {
                 setEditedComment(card.comment);
                 setIsEditCommentModalOpen(true);
               }}
+              isDisabled={isDisabled}
             />
           );
         })

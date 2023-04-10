@@ -14,6 +14,7 @@ interface CardProps {
   author?: string;
   onPress?: () => void;
   onEdit?: () => void;
+  isDisabled: boolean;
 }
 
 export function Card({
@@ -28,6 +29,7 @@ export function Card({
   author,
   onPress,
   onEdit,
+  isDisabled,
 }: CardProps) {
   const props: SpecificCardProps["props"] = {
     id,
@@ -40,6 +42,7 @@ export function Card({
     author,
     onPress,
     onEdit,
+    isDisabled,
   };
 
   if (type === "annotation") return <Anotation props={props} />;
@@ -59,6 +62,7 @@ export interface SpecificCardProps {
     author?: string;
     onPress?: () => void;
     onEdit?: () => void;
+    isDisabled: boolean;
   };
 }
 
@@ -69,9 +73,11 @@ function Update({ props }: SpecificCardProps) {
         <Text color="#000000" size={12} weight="500">
           Atualização | {props.date}, {props.time}
         </Text>
-        <EditIcon onPress={props.onEdit}>
-          <Edit />
-        </EditIcon>
+        {!props.isDisabled ? (
+          <EditIcon onPress={props.onEdit}>
+            <Edit />
+          </EditIcon>
+        ) : null}
       </Title>
       <Text color="#999999" size={12} numberOfLines={1}>
         {props.description}
