@@ -1,11 +1,6 @@
 import { Button, Close, Drop, Text } from "@components";
 import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
-import {
-  AddPartnerView,
-  Container,
-  SelectArea,
-  TextInput,
-} from "./styles";
+import { AddPartnerView, Container, SelectArea, TextInput } from "./styles";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
@@ -34,7 +29,6 @@ export function PartnershipEdit({
     mode: "onChange",
     defaultValues: partnerProps,
   });
-
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -71,16 +65,16 @@ export function PartnershipEdit({
   useEffect(() => {
     if (partnerProps) {
       setValue("name", partnerProps["name"]),
-        setValue("email", partnerProps["email"]),
-        setValue("phoneNumber", partnerProps["phoneNumber"]),
-        setValue("zipCode", partnerProps["zipCode"]),
-        setValue("state", partnerProps["state"]),
-        setValue("city", partnerProps["city"]),
-        setValue("neighborhood", partnerProps["neighborhood"]),
-        setValue("address", partnerProps["address"]),
-        setValue("classification", partnerProps["classification"]),
-        setValue("status", partnerProps["status"]),
-        setValue("memberNumber", partnerProps["memberNumber"]);
+      setValue("email", partnerProps["email"]),
+      setValue("phoneNumber", partnerProps["phoneNumber"]),
+      setValue("zipCode", partnerProps["zipCode"]),
+      setValue("state", partnerProps["state"]),
+      setValue("city", partnerProps["city"]),
+      setValue("neighborhood", partnerProps["neighborhood"]),
+      setValue("address", partnerProps["address"]),
+      setValue("classification", partnerProps["classification"]),
+      setValue("status", partnerProps["status"]),
+      setValue("memberNumber", partnerProps["memberNumber"]);
     }
   }, [partnerProps]);
 
@@ -148,17 +142,23 @@ export function PartnershipEdit({
                   <SelectArea>
                     <Picker
                       selectedValue={field.value}
-                      onValueChange={(itemValue) => { setSelectClassification(itemValue), field.onChange(itemValue) }}
+                      onValueChange={itemValue => {
+                        setSelectClassification(itemValue),
+                        field.onChange(itemValue);
+                      }}
                     >
-
                       {Object.keys(ClassificationSelectOptions).map(
                         classification => {
-                          return <Picker.Item key={classification} label={classification} value={classification}></Picker.Item>
+                          return (
+                            <Picker.Item
+                              key={classification}
+                              label={classification}
+                              value={classification}
+                            ></Picker.Item>
+                          );
                         },
                       )}
-
                     </Picker>
-
                   </SelectArea>
                 </View>
               )}
@@ -174,21 +174,25 @@ export function PartnershipEdit({
                 <View>
                   <Text>Status</Text>
                   <SelectArea>
-
                     <Picker
                       placeholder="status"
                       selectedValue={field.value}
-                      onValueChange={(itemValue) => { setSelectStatus(itemValue), field.onChange(itemValue) }
-                      }>
-
+                      onValueChange={itemValue => {
+                        setSelectStatus(itemValue), field.onChange(itemValue);
+                      }}
+                    >
                       {statusSelectOptions.map(status => {
-                        return <Picker.Item key={status.id} label={status.description} value={status.value}></Picker.Item>
+                        return (
+                          <Picker.Item
+                            key={status.id}
+                            label={status.description}
+                            value={status.value}
+                          ></Picker.Item>
+                        );
                       })}
                     </Picker>
                   </SelectArea>
                   {errors.status && <Text>Este campo é obrigatório</Text>}
-
-
                 </View>
               )}
             />
@@ -202,10 +206,18 @@ export function PartnershipEdit({
                   <SelectArea>
                     <Picker
                       selectedValue={field.value}
-                      onValueChange={(itemValue) => { setSelectStates(itemValue), field.onChange(itemValue) }
-                      }>
+                      onValueChange={itemValue => {
+                        setSelectStates(itemValue), field.onChange(itemValue);
+                      }}
+                    >
                       {stateSelectOptions.map(state => {
-                        return <Picker.Item key={state.UF} label={state.name} value={state.name}></Picker.Item>
+                        return (
+                          <Picker.Item
+                            key={state.UF}
+                            label={state.name}
+                            value={state.name}
+                          ></Picker.Item>
+                        );
                       })}
                     </Picker>
                   </SelectArea>
