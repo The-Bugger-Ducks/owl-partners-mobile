@@ -3,7 +3,7 @@ type States = {
   name: string;
 };
 
-export const stateSelecOptions: States[] = [
+export const stateSelectOptions: States[] = [
   {
     UF: "AC",
     name: "Acre",

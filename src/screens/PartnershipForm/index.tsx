@@ -1,4 +1,4 @@
-import { Button, Close, Drop, Input, Text } from "@components";
+import { Button, Close, Drop, Text } from "@components";
 import { useState } from "react";
 import {
   Controller,
@@ -7,17 +7,16 @@ import {
   useForm,
 } from "react-hook-form";
 import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import {
   AddPartnerView,
   ClassicationDropDownArea,
   Container,
-  DropDowArea,
   StateDropDowArea,
-  StatusTypeText,
-  StatusView,
+  StatusDropDowArea,
   TextInput,
 } from "./styles";
-import { stateSelecOptions } from "@utils/stateSelectOptions";
+import { stateSelectOptions } from "@utils/stateSelectOptions";
 import { statusSelectOptions } from "@utils/statusSelectOptions";
 import {
   IModalPropsForm,
@@ -37,21 +36,19 @@ export function PartnershipForm({
     formState: { errors },
   } = useForm<IPartnership>();
 
-  const [selectStatus, setSelecteStatus] = useState("");
-  const [selectStates, setSelectedStates] = useState("");
+  const [selectStatus, setSelectStatus] = useState("");
+  const [selectStates, setSelectStates] = useState("");
   const [selectClassification, setSelectClassification] = useState("");
 
-  const [isStatusSelectOpen, setisStatusSelectOpen] = useState(false);
-  const [isStatesSelectOpen, setisStatesSelectOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isClassificationSelectOpen, setisClassificationSelectOpen] =
-    useState(false);
+  const [pickerFocused, setPickerFocused] = useState(false);
 
   const onSubmit: SubmitHandler<IPartnership> = async payload => {
     const data = {
       ...payload,
       memberNumber: Number(payload.memberNumber),
     };
+
     try {
       setIsLoading(true);
       await partnerRequest.create(data);
@@ -61,20 +58,6 @@ export function PartnershipForm({
     setIsLoading(false);
     closeAfterUpdate();
   };
-
-  function handlerStatusPartenerSelected(statusSelectOptions: {
-    value: string;
-  }) {
-    setSelecteStatus(statusSelectOptions.value);
-    setisStatusSelectOpen(false);
-  }
-
-  function handlerStatesPartenerSelected(statesSelectOptions: {
-    name: string;
-  }) {
-    setSelectedStates(statesSelectOptions.name);
-    setisStatesSelectOpen(false);
-  }
 
   return (
     <Modal
@@ -140,45 +123,36 @@ export function PartnershipForm({
               render={({ field: { onChange } }) => (
                 <View>
                   <Text>Classificação</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setisClassificationSelectOpen(
-                        !isClassificationSelectOpen,
-                      );
-                    }}
-                  >
-                    <StatusView
-                      style={{
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        gap: 140.25,
+                  <ClassicationDropDownArea>
+                    <Picker
+                      placeholder="Universidade"
+                      selectedValue={selectClassification}
+                      onValueChange={itemValue => {
+                        setSelectClassification(itemValue), onChange(itemValue);
                       }}
+                      onFocus={() => setPickerFocused(true)}
+                      onBlur={() => setPickerFocused(false)}
                     >
-                      <Text>{selectClassification}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
-                  {isClassificationSelectOpen ? (
-                    <ClassicationDropDownArea>
+                      <Picker.Item
+                        color="#9A9A9A"
+                        label="Universidades"
+                        value=""
+                        enabled={!pickerFocused}
+                      />
+
                       {Object.keys(ClassificationSelectOptions).map(
                         classification => {
                           return (
-                            <TouchableOpacity key={classification}>
-                              <StatusTypeText
-                                onPress={() => {
-                                  setSelectClassification(classification);
-                                  setisClassificationSelectOpen(false);
-                                  onChange(classification);
-                                }}
-                              >
-                                {classification}
-                              </StatusTypeText>
-                            </TouchableOpacity>
+                            <Picker.Item
+                              key={classification}
+                              label={classification}
+                              value={classification}
+                            ></Picker.Item>
                           );
                         },
                       )}
-                    </ClassicationDropDownArea>
-                  ) : null}
+                    </Picker>
+                  </ClassicationDropDownArea>
                 </View>
               )}
             />
@@ -192,41 +166,33 @@ export function PartnershipForm({
               render={({ field: { onChange } }) => (
                 <View>
                   <Text>Status</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setisStatusSelectOpen(!isStatusSelectOpen);
-                    }}
-                  >
-                    <StatusView
-                      style={{
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        gap: 140.25,
+                  <StatusDropDowArea>
+                    <Picker
+                      placeholder="status"
+                      selectedValue={selectStatus}
+                      onValueChange={itemValue => {
+                        setSelectStatus(itemValue), onChange(itemValue);
                       }}
                     >
-                      <Text>{selectStatus}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
-                  {errors.status && <Text>Este campo é obrigatório</Text>}
-                  {isStatusSelectOpen ? (
-                    <DropDowArea>
+                      <Picker.Item
+                        color="#9A9A9A"
+                        label="Em prospecção"
+                        value=""
+                        enabled={!pickerFocused}
+                      />
+
                       {statusSelectOptions.map(status => {
                         return (
-                          <TouchableOpacity key={status.id}>
-                            <StatusTypeText
-                              onPress={() => {
-                                handlerStatusPartenerSelected(status),
-                                onChange(status.value);
-                              }}
-                            >
-                              {status.description}
-                            </StatusTypeText>
-                          </TouchableOpacity>
+                          <Picker.Item
+                            key={status.id}
+                            label={status.description}
+                            value={status.value}
+                          ></Picker.Item>
                         );
                       })}
-                    </DropDowArea>
-                  ) : null}
+                    </Picker>
+                  </StatusDropDowArea>
+                  {errors.status && <Text>Este campo é obrigatório</Text>}
                 </View>
               )}
             />
@@ -237,47 +203,31 @@ export function PartnershipForm({
               render={({ field: { onChange } }) => (
                 <View>
                   <Text>Estado</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setisStatesSelectOpen(!isStatesSelectOpen);
-                    }}
-                  >
-                    <StatusView
-                      style={{
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        gap: 140.25,
+                  <StateDropDowArea>
+                    <Picker
+                      selectedValue={selectStates}
+                      onValueChange={itemValue => {
+                        setSelectStates(itemValue), onChange(itemValue);
                       }}
                     >
-                      <Text>{selectStates}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
+                      <Picker.Item
+                        color="#9A9A9A"
+                        label="São Paulo"
+                        value=""
+                        enabled={!pickerFocused}
+                      />
 
-                  {isStatesSelectOpen ? (
-                    <Modal
-                      onRequestClose={() =>
-                        setisStatesSelectOpen(!isStatesSelectOpen)
-                      }
-                    >
-                      <StateDropDowArea>
-                        {stateSelecOptions.map(states => {
-                          return (
-                            <TouchableOpacity key={states.UF}>
-                              <StatusTypeText
-                                onPress={() => {
-                                  handlerStatesPartenerSelected(states);
-                                  onChange(states.name);
-                                }}
-                              >
-                                {states.name}
-                              </StatusTypeText>
-                            </TouchableOpacity>
-                          );
-                        })}
-                      </StateDropDowArea>
-                    </Modal>
-                  ) : null}
+                      {stateSelectOptions.map(state => {
+                        return (
+                          <Picker.Item
+                            key={state.UF}
+                            label={state.name}
+                            value={state.name}
+                          />
+                        );
+                      })}
+                    </Picker>
+                  </StateDropDowArea>
                 </View>
               )}
             />

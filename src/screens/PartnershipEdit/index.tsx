@@ -1,15 +1,6 @@
 import { Button, Close, Drop, Text } from "@components";
 import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
-import {
-  AddPartnerView,
-  ClassicationDropDownArea,
-  Container,
-  DropDownArea,
-  StateDropDowArea,
-  StatusTypeText,
-  StatusView,
-  TextInput,
-} from "./styles";
+import { AddPartnerView, Container, SelectArea, TextInput } from "./styles";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
@@ -18,9 +9,10 @@ import {
   IPartnership,
   IPartnershipEdit,
 } from "../../shared/interfaces/partner.interface";
-import { stateSelecOptions } from "@utils/stateSelectOptions";
+import { stateSelectOptions } from "@utils/stateSelectOptions";
 import { statusSelectOptions } from "@utils/statusSelectOptions";
 import PartnershipController from "@requests/PartnershipController";
+import { Picker } from "@react-native-picker/picker";
 
 export function PartnershipEdit({
   visible,
@@ -38,14 +30,10 @@ export function PartnershipEdit({
     defaultValues: partnerProps,
   });
 
-  const [isStatusSelectOpen, setisStatusSelectOpen] = useState(false);
-  const [isStatesSelectOpen, setisStatesSelectOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isClassificationSelectOpen, setisClassificationSelectOpen] =
-    useState(false);
 
-  const [selectStatus, setSelectedStatus] = useState("");
-  const [selectStates, setSelectedStates] = useState("");
+  const [selectStatus, setSelectStatus] = useState("");
+  const [selectStates, setSelectStates] = useState("");
   const [selectClassification, setSelectClassification] = useState("");
 
   const onSubmit: SubmitHandler<IPartnershipEdit> = async payload => {
@@ -89,20 +77,6 @@ export function PartnershipEdit({
       setValue("memberNumber", partnerProps["memberNumber"]);
     }
   }, [partnerProps]);
-
-  function handlerStatusPartenerSelected(statusSelectOptions: {
-    description: string;
-  }) {
-    setSelectedStatus(statusSelectOptions.description);
-    setisStatusSelectOpen(false);
-  }
-
-  function handlerStatesPartenerSelected(statesSelectOptions: {
-    name: string;
-  }) {
-    setSelectedStates(statesSelectOptions.name);
-    setisStatesSelectOpen(false);
-  }
 
   return (
     <Modal
@@ -165,45 +139,27 @@ export function PartnershipEdit({
               render={({ field }) => (
                 <View>
                   <Text>Classificação</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setisClassificationSelectOpen(
-                        !isClassificationSelectOpen,
-                      );
-                    }}
-                  >
-                    <StatusView
-                      style={{
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        gap: 140.25,
+                  <SelectArea>
+                    <Picker
+                      selectedValue={field.value}
+                      onValueChange={itemValue => {
+                        setSelectClassification(itemValue),
+                        field.onChange(itemValue);
                       }}
                     >
-                      <Text>{field.value}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
-                  {isClassificationSelectOpen ? (
-                    <ClassicationDropDownArea>
                       {Object.keys(ClassificationSelectOptions).map(
                         classification => {
                           return (
-                            <TouchableOpacity key={classification}>
-                              <StatusTypeText
-                                onPress={() => {
-                                  setSelectClassification(classification);
-                                  setisClassificationSelectOpen(false);
-                                  field.onChange(classification);
-                                }}
-                              >
-                                {classification}
-                              </StatusTypeText>
-                            </TouchableOpacity>
+                            <Picker.Item
+                              key={classification}
+                              label={classification}
+                              value={classification}
+                            ></Picker.Item>
                           );
                         },
                       )}
-                    </ClassicationDropDownArea>
-                  ) : null}
+                    </Picker>
+                  </SelectArea>
                 </View>
               )}
             />
@@ -217,41 +173,26 @@ export function PartnershipEdit({
               render={({ field }) => (
                 <View>
                   <Text>Status</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setisStatusSelectOpen(!isStatusSelectOpen);
-                    }}
-                  >
-                    <StatusView
-                      style={{
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        gap: 140.25,
+                  <SelectArea>
+                    <Picker
+                      placeholder="status"
+                      selectedValue={field.value}
+                      onValueChange={itemValue => {
+                        setSelectStatus(itemValue), field.onChange(itemValue);
                       }}
                     >
-                      <Text>{field.value}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
-                  {errors.status && <Text>Este campo é obrigatório</Text>}
-                  {isStatusSelectOpen ? (
-                    <DropDownArea>
                       {statusSelectOptions.map(status => {
                         return (
-                          <TouchableOpacity key={status.id}>
-                            <StatusTypeText
-                              onPress={() => {
-                                handlerStatusPartenerSelected(status),
-                                field.onChange(status.value);
-                              }}
-                            >
-                              {status.description}
-                            </StatusTypeText>
-                          </TouchableOpacity>
+                          <Picker.Item
+                            key={status.id}
+                            label={status.description}
+                            value={status.value}
+                          ></Picker.Item>
                         );
                       })}
-                    </DropDownArea>
-                  ) : null}
+                    </Picker>
+                  </SelectArea>
+                  {errors.status && <Text>Este campo é obrigatório</Text>}
                 </View>
               )}
             />
@@ -262,47 +203,24 @@ export function PartnershipEdit({
               render={({ field }) => (
                 <View>
                   <Text>Estado</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setisStatesSelectOpen(!isStatesSelectOpen);
-                    }}
-                  >
-                    <StatusView
-                      style={{
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        gap: 140.25,
+                  <SelectArea>
+                    <Picker
+                      selectedValue={field.value}
+                      onValueChange={itemValue => {
+                        setSelectStates(itemValue), field.onChange(itemValue);
                       }}
                     >
-                      <Text>{field.value}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
-
-                  {isStatesSelectOpen ? (
-                    <Modal
-                      onRequestClose={() =>
-                        setisStatesSelectOpen(!isStatesSelectOpen)
-                      }
-                    >
-                      <StateDropDowArea>
-                        {stateSelecOptions.map(states => {
-                          return (
-                            <TouchableOpacity key={states.UF}>
-                              <StatusTypeText
-                                onPress={() => {
-                                  handlerStatesPartenerSelected(states);
-                                  field.onChange(states.name);
-                                }}
-                              >
-                                {states.name}
-                              </StatusTypeText>
-                            </TouchableOpacity>
-                          );
-                        })}
-                      </StateDropDowArea>
-                    </Modal>
-                  ) : null}
+                      {stateSelectOptions.map(state => {
+                        return (
+                          <Picker.Item
+                            key={state.UF}
+                            label={state.name}
+                            value={state.name}
+                          ></Picker.Item>
+                        );
+                      })}
+                    </Picker>
+                  </SelectArea>
                 </View>
               )}
             />
