@@ -10,4 +10,5 @@ export interface IComment {
   title?: string;
   createdAt: string;
   updatedAt: string;
+  disabled: boolean;
 }
