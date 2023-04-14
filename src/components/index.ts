@@ -8,6 +8,7 @@ import { Tabs } from "./Tabs";
 import { Text } from "./Text";
 
 // icons
+import { Icon } from "./Icon";
 import { CheckCircle } from "./Icons/CheckCircle";
 import { Close } from "./Icons/Close";
 import { Drop } from "./Icons/Drop";
@@ -30,6 +31,7 @@ export {
   Tabs,
   Text,
   // icons
+  Icon,
   Drop,
   PlusCircle,
   Close,
