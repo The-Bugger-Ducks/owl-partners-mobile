@@ -1,27 +1,24 @@
 import { Drop, Modal, Text } from "@components";
 import {
   ClassificationSelectOptions,
-  stateSelecOptions,
+  stateSelectOptions,
   statusSelectOptions,
 } from "@constants";
 import { IModalPropsForm, IPartnership } from "@interfaces/partner.interface";
 import partnershipRequests from "@requests/partnership.requests";
-import { useState } from "react";
+import { Key, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import {
-  Modal as ReactNativeModal,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, View } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import {
   ClassicationDropDownArea,
-  DropDowArea,
+  Container,
   StateDropDowArea,
-  StatusTypeText,
-  StatusView,
+  StatusDropDowArea,
   TextInput,
 } from "./styles";
+
+
 
 export function AddPartnershipModal({
   visible,
@@ -34,15 +31,12 @@ export function AddPartnershipModal({
     formState: { errors },
   } = useForm<IPartnership>();
 
-  const [selectStatus, setSelecteStatus] = useState("");
-  const [selectStates, setSelectedStates] = useState("");
+  const [selectStatus, setSelectStatus] = useState("");
+  const [selectStates, setSelectStates] = useState("");
   const [selectClassification, setSelectClassification] = useState("");
 
-  const [isStatusSelectOpen, setIsStatusSelectOpen] = useState(false);
-  const [isStatesSelectOpen, setIsStatesSelectOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isClassificationSelectOpen, setisClassificationSelectOpen] =
-    useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pickerFocused, setPickerFocused] = useState(false);
 
   const onSubmit: SubmitHandler<IPartnership> = async payload => {
     const data = {
@@ -50,21 +44,15 @@ export function AddPartnershipModal({
       memberNumber: Number(payload.memberNumber),
     };
 
-    setIsLoading(true);
-    await partnershipRequests.createPartnership(data);
+    try {
+      setIsLoading(true);
+      await partnershipRequests.createPartnership(data)
+    } catch (error) {
+      console.error(error);
+    }
     setIsLoading(false);
     closeAfterUpdate();
   };
-
-  function handleSelectStatus(status: string) {
-    setSelecteStatus(status);
-    setIsStatusSelectOpen(false);
-  }
-
-  function handleSelectState(state: string) {
-    setSelectedStates(state);
-    setIsStatesSelectOpen(false);
-  }
 
   return (
     <Modal
@@ -72,7 +60,7 @@ export function AddPartnershipModal({
       visible={visible}
       isLoading={isLoading}
       onClose={onClose}
-      buttonTitle=" Adicionar parceria"
+      buttonTitle= "Adicionar parceria"
       onPressButton={handleSubmit(onSubmit)}
       content={
         <ScrollView>
@@ -115,37 +103,37 @@ export function AddPartnershipModal({
               render={({ field: { onChange } }) => (
                 <>
                   <Text>Classificação</Text>
-                  <TouchableOpacity
-                    onPress={() =>
-                      setisClassificationSelectOpen(!isClassificationSelectOpen)
-                    }
-                  >
-                    <StatusView>
-                      <Text>{selectClassification}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
-                  {isClassificationSelectOpen && (
-                    <ClassicationDropDownArea>
+                  <ClassicationDropDownArea>
+                    <Picker
+                      placeholder="Universidade"
+                      selectedValue={selectClassification}
+                      onValueChange={itemValue => {
+                        setSelectClassification(itemValue), onChange(itemValue);
+                      }}
+                      onFocus={() => setPickerFocused(true)}
+                      onBlur={() => setPickerFocused(false)}
+                    >
+                      <Picker.Item
+                        color="#9A9A9A"
+                        label="Universidades"
+                        value=""
+                        enabled={!pickerFocused}
+                      />
+
                       {Object.keys(ClassificationSelectOptions).map(
                         classification => {
                           return (
-                            <TouchableOpacity key={classification}>
-                              <StatusTypeText
-                                onPress={() => {
-                                  setSelectClassification(classification);
-                                  setisClassificationSelectOpen(false);
-                                  onChange(classification);
-                                }}
-                              >
-                                {classification}
-                              </StatusTypeText>
-                            </TouchableOpacity>
+                            <Picker.Item
+                              key={classification}
+                              label={classification}
+                              value={classification}
+                            ></Picker.Item>
                           );
                         },
                       )}
-                    </ClassicationDropDownArea>
-                  )}
+                    </Picker>
+                  </ClassicationDropDownArea>
+
                 </>
               )}
             />
@@ -157,33 +145,33 @@ export function AddPartnershipModal({
               render={({ field: { onChange } }) => (
                 <>
                   <Text>Status</Text>
-                  <TouchableOpacity
-                    onPress={() => setIsStatusSelectOpen(!isStatusSelectOpen)}
-                  >
-                    <StatusView>
-                      <Text>{selectStatus}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
-                  {errors.status && <Text>Este campo é obrigatório</Text>}
-                  {isStatusSelectOpen && (
-                    <DropDowArea>
+                  <StatusDropDowArea>
+                    <Picker
+                      placeholder="status"
+                      selectedValue={selectStatus}
+                      onValueChange={itemValue => {
+                        setSelectStatus(itemValue), onChange(itemValue);
+                      }}
+                    >
+                      <Picker.Item
+                        color="#9A9A9A"
+                        label="Em prospecção"
+                        value=""
+                        enabled={!pickerFocused}
+                      />
+
                       {statusSelectOptions.map(status => {
                         return (
-                          <TouchableOpacity key={status.id}>
-                            <StatusTypeText
-                              onPress={() => {
-                                handleSelectStatus(status.value);
-                                onChange(status.value);
-                              }}
-                            >
-                              {status.description}
-                            </StatusTypeText>
-                          </TouchableOpacity>
+                          <Picker.Item
+                            key={status.id}
+                            label={status.description}
+                            value={status.value}
+                          ></Picker.Item>
                         );
                       })}
-                    </DropDowArea>
-                  )}
+                    </Picker>
+                  </StatusDropDowArea>
+                  {errors.status && <Text>Este campo é obrigatório</Text>}
                 </>
               )}
             />
@@ -194,39 +182,31 @@ export function AddPartnershipModal({
               render={({ field: { onChange } }) => (
                 <View>
                   <Text>Estado</Text>
-                  <TouchableOpacity
-                    onPress={() => setIsStatesSelectOpen(!isStatesSelectOpen)}
-                  >
-                    <StatusView>
-                      <Text>{selectStates}</Text>
-                      <Drop />
-                    </StatusView>
-                  </TouchableOpacity>
-
-                  {isStatesSelectOpen && (
-                    <ReactNativeModal
-                      onRequestClose={() =>
-                        setIsStatesSelectOpen(!isStatesSelectOpen)
-                      }
+                  <StateDropDowArea>
+                    <Picker
+                      selectedValue={selectStates}
+                      onValueChange={itemValue => {
+                        setSelectStates(itemValue), onChange(itemValue);
+                      }}
                     >
-                      <StateDropDowArea>
-                        {stateSelecOptions.map(state => {
-                          return (
-                            <TouchableOpacity key={state.UF}>
-                              <StatusTypeText
-                                onPress={() => {
-                                  handleSelectState(state.name);
-                                  onChange(state.name);
-                                }}
-                              >
-                                {state.name}
-                              </StatusTypeText>
-                            </TouchableOpacity>
-                          );
-                        })}
-                      </StateDropDowArea>
-                    </ReactNativeModal>
-                  )}
+                      <Picker.Item
+                        color="#9A9A9A"
+                        label="São Paulo"
+                        value=""
+                        enabled={!pickerFocused}
+                      />
+
+                      {stateSelectOptions.map(state => {
+                        return (
+                          <Picker.Item
+                            key={state.UF}
+                            label={state.name}
+                            value={state.name}
+                          />
+                        );
+                      })}
+                    </Picker>
+                  </StateDropDowArea>
                 </View>
               )}
             />
