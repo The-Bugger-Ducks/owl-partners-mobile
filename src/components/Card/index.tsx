@@ -14,6 +14,7 @@ interface CardProps {
   author?: string;
   onPress?: () => void;
   onEdit?: () => void;
+  isDisabled: boolean;
 }
 
 export function Card({
@@ -28,6 +29,7 @@ export function Card({
   author,
   onPress,
   onEdit,
+  isDisabled,
 }: CardProps) {
   const props: SpecificCardProps["props"] = {
     id,
@@ -40,6 +42,7 @@ export function Card({
     author,
     onPress,
     onEdit,
+    isDisabled,
   };
 
   if (type === "annotation") return <Anotation props={props} />;
@@ -59,6 +62,7 @@ export interface SpecificCardProps {
     author?: string;
     onPress?: () => void;
     onEdit?: () => void;
+    isDisabled: boolean;
   };
 }
 
@@ -69,17 +73,17 @@ function Update({ props }: SpecificCardProps) {
         <Text color="#000000" size={12} weight="500">
           Atualização | {props.date}, {props.time}
         </Text>
-        <EditIcon onPress={props.onEdit}>
-          <Edit />
-        </EditIcon>
+        {!props.isDisabled ? (
+          <EditIcon onPress={props.onEdit}>
+            <Edit />
+          </EditIcon>
+        ) : null}
       </Title>
       <Text color="#999999" size={12} numberOfLines={1}>
         {props.description}
       </Text>
       <Comment>
-        <Text color="#333333" size={12}>
-          Comentado por {props.author}
-        </Text>
+        <Text size={12}>Comentado por {props.author}</Text>
       </Comment>
     </Container>
   );
@@ -96,16 +100,12 @@ function Anotation({ props }: SpecificCardProps) {
           <Edit />
         </EditIcon>
       </Title>
-      <Text color="#333333" size={14}>
-        {props.title}
-      </Text>
+      <Text size={14}>{props.title}</Text>
       <Text color="#999999" size={12} numberOfLines={1}>
         {props.description}
       </Text>
       <Comment>
-        <Text color="#333333" size={12}>
-          Criado por {props.author}
-        </Text>
+        <Text size={12}>Criado por {props.author}</Text>
       </Comment>
     </Container>
   );
@@ -126,7 +126,7 @@ function Meeting({ props }: SpecificCardProps) {
         <Text color="#999999" size={14}>
           {props.time}
         </Text>
-        <Text color="#333333" size={14} numberOfLines={1}>
+        <Text size={14} numberOfLines={1}>
           {props.title}
         </Text>
       </MeetingDetails>
