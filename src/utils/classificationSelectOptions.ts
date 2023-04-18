@@ -1,6 +1,0 @@
-export enum ClassificationSelectOptions {
-  COLEGIOS = 'COLEGIOS',
-  UNIVERSIDADES = 'UNIVERSIDADES',
-  SECRETARIAS = 'SECRETARIAS',
-  GOVERNOS = 'GOVERNOS',
-}

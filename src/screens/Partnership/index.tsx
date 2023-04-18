@@ -1,38 +1,25 @@
-import {
-  Button,
-  Card,
-  Header,
-  Input,
-  Loading,
-  Modal,
-  Tabs,
-  Text,
-} from "@components";
-import { IComment } from "@interfaces/annotation.interface";
+import { Button, Header, Tabs, Text } from "@components";
+import { RootStackParamList } from "@custom-types/rootStackParamList";
+import { IPartnership } from "@interfaces/partner.interface";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { IPartnership, IPartnershipEdit } from "@interfaces/partner.interface";
-import AnnotationController from "@requests/AnnotationController";
-import PartnershipController from "@requests/PartnershipController";
-import { formatDate } from "@utils/formatDate";
-import { formatTime } from "@utils/formatTime";
+import partnershipRequests from "@requests/partnership.requests";
 import { useEffect, useState } from "react";
+import { ScrollView, View } from "react-native";
+import { AnnotationsList } from "./AnnotationsList";
+import { EditPartnershipModal } from "./EditPartnershipModal";
+import { MeetingsList } from "./MeetingsList";
 import {
   ButtonsContainer,
   ContactView,
   Container,
   HistoryContainer,
   InformationView,
-  ListContainer,
-  LoadingContainer,
   PartnerInfoView,
 } from "./styles";
-import { ScrollView, View } from "react-native";
-import { PartnershipEdit } from "@screens/PartnershipEdit";
-import { RootStackParamList } from "src/shared/types/rootStackParamList";
 
 export function Partnership() {
   const [tab, setTab] = useState(0);
-  const [visibleModal, setVisibleModal] = useState(false);
+  const [visibleEditModal, setVisibleEditModal] = useState(false);
   const [data, setData] = useState<IPartnership>();
   const [isLoading, setIsLoading] = useState(true);
   const [isPartnerDisable, setIsPartnerDisable] = useState(false);
@@ -43,7 +30,7 @@ export function Partnership() {
 
   async function getPartnerships() {
     setIsLoading(true);
-    const partnerships = await PartnershipController.getPartnership(id);
+    const partnerships = await partnershipRequests.getPartnership(id);
     setData(partnerships);
     setIsLoading(false);
   }
@@ -54,16 +41,12 @@ export function Partnership() {
 
   function handleCloseEditModal() {
     getPartnerships();
-    setVisibleModal(false);
+    setVisibleEditModal(false);
   }
 
   async function handleDeletePartnership() {
-    await PartnershipController.deletePartnership(id);
+    await partnershipRequests.deletePartnership(id);
     getPartnerships();
-  }
-
-  async function handleUpdatePartnership() {
-    setVisibleModal(true);
   }
 
   return (
@@ -76,7 +59,7 @@ export function Partnership() {
               Deletar parceria
             </Button>
             <Button
-              onPress={handleUpdatePartnership}
+              onPress={() => setVisibleEditModal(true)}
               style={{ marginVertical: 8 }}
             >
               Editar informações
@@ -147,9 +130,9 @@ export function Partnership() {
           ) : null}
 
           {data && (
-            <PartnershipEdit
-              visible={visibleModal}
-              onClose={() => setVisibleModal(false)}
+            <EditPartnershipModal
+              visible={visibleEditModal}
+              onClose={() => setVisibleEditModal(false)}
               closeAfterUpdate={() => handleCloseEditModal()}
               partnerProps={data}
             />
@@ -159,149 +142,14 @@ export function Partnership() {
         <HistoryContainer>
           <Tabs onChangeTab={tab => setTab(tab)} />
           {tab === 0 ? (
-            <History isDisabled={isLoading || (data?.disabled ?? false)} />
+            <AnnotationsList
+              isPartnershipDisabled={isLoading || (data?.disabled ?? false)}
+            />
           ) : (
-            <MeetingList />
+            <MeetingsList />
           )}
         </HistoryContainer>
       </ScrollView>
     </Container>
   );
-}
-
-interface HistoryProps {
-  isDisabled: boolean;
-}
-
-function History({ isDisabled }: HistoryProps) {
-  const [newComment, setNewComment] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [annotations, setAnnotations] = useState<IComment[]>();
-  const [modalComment, setModalComment] = useState<IComment>();
-  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
-  const [isEditCommentModalOpen, setIsEditCommentModalOpen] = useState(false);
-  const [editedComment, setEditedComment] = useState("");
-  const route = useRoute<RouteProp<RootStackParamList, "Partnership">>();
-
-  const { id } = route.params;
-
-  async function getData() {
-    setIsLoading(true);
-    const comments = await AnnotationController.getAnnotations(id);
-    setAnnotations(comments);
-    setIsLoading(false);
-  }
-
-  useEffect(() => {
-    getData();
-  }, [id]);
-
-  async function handleAddComment() {
-    setIsLoading(true);
-    await AnnotationController.createAnnotation(id, newComment);
-    const updatedComments = await AnnotationController.getAnnotations(id);
-    updatedComments && setAnnotations(updatedComments);
-    setNewComment("");
-    setIsLoading(false);
-  }
-
-  async function handleEditComment() {
-    setIsLoading(true);
-    await AnnotationController.updateAnnotation(
-      modalComment?.id ?? "",
-      id,
-      editedComment,
-    );
-    const updatedComments = await AnnotationController.getAnnotations(id);
-    updatedComments && setAnnotations(updatedComments);
-    setEditedComment("");
-    setIsLoading(false);
-    setIsEditCommentModalOpen(false);
-  }
-
-  return (
-    <ListContainer scrollEnabled>
-      {!isDisabled && (
-        <Input
-          label={"Inserir atualização"}
-          placeholder={"Nova atualização sobre a parceria..."}
-          value={newComment}
-          onChangeText={text => setNewComment(text)}
-          hasOutIcon
-          onPressIcon={handleAddComment}
-        />
-      )}
-
-      <Text size={14} color={"#666666"} style={{ marginVertical: 16 }}>
-        Todas as atualizações e anotações
-      </Text>
-
-      {isLoading ? (
-        <LoadingContainer>
-          <Loading />
-        </LoadingContainer>
-      ) : annotations?.length === 0 ? (
-        <Text
-          size={14}
-          color={"#999999"}
-          style={{ textAlign: "center", marginVertical: 24 }}
-        >
-          Sem atualizações ou anotações
-        </Text>
-      ) : (
-        annotations?.map(card => {
-          const isEdited = card.createdAt != card.updatedAt;
-
-          return (
-            <Card
-              key={card.id}
-              id={card.id}
-              type={card.title ? "annotation" : "update"}
-              date={formatDate(isEdited ? card.updatedAt : card.createdAt)}
-              time={formatTime(isEdited ? card.updatedAt : card.createdAt)}
-              description={card.comment}
-              author={`${card.User.name} ${card.User.lastName}`}
-              title={card.title}
-              onPress={() => {
-                setModalComment(card);
-                setIsCommentModalOpen(true);
-              }}
-              onEdit={() => {
-                setModalComment(card);
-                setEditedComment(card.comment);
-                setIsEditCommentModalOpen(true);
-              }}
-              isDisabled={isDisabled}
-            />
-          );
-        })
-      )}
-
-      <Modal
-        visible={isCommentModalOpen}
-        onClose={() => setIsCommentModalOpen(false)}
-        title={`Autor(a): ${modalComment?.User.name}`}
-        content={<Text>{modalComment?.comment}</Text>}
-      />
-
-      <Modal
-        visible={isEditCommentModalOpen}
-        onClose={() => setIsEditCommentModalOpen(false)}
-        title={"Editar comentário"}
-        buttonTitle="Editar comentário"
-        onPressButton={handleEditComment}
-        isLoading={isLoading}
-        content={
-          <Input
-            value={editedComment}
-            onChangeText={text => setEditedComment(text)}
-          />
-        }
-      />
-    </ListContainer>
-  );
-}
-
-function MeetingList() {
-  return <Text>Em breve...</Text>;
 }

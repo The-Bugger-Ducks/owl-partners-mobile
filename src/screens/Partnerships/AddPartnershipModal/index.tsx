@@ -1,31 +1,26 @@
-import { Button, Close, Drop, Text } from "@components";
-import { useState } from "react";
+import { Drop, Modal, Text } from "@components";
 import {
-  Controller,
-  SubmitHandler,
-  useController,
-  useForm,
-} from "react-hook-form";
-import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
+  ClassificationSelectOptions,
+  stateSelectOptions,
+  statusSelectOptions,
+} from "@constants";
+import { IModalPropsForm, IPartnership } from "@interfaces/partner.interface";
+import partnershipRequests from "@requests/partnership.requests";
+import { Key, useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { ScrollView, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import {
-  AddPartnerView,
   ClassicationDropDownArea,
   Container,
   StateDropDowArea,
   StatusDropDowArea,
   TextInput,
 } from "./styles";
-import { stateSelectOptions } from "@utils/stateSelectOptions";
-import { statusSelectOptions } from "@utils/statusSelectOptions";
-import {
-  IModalPropsForm,
-  IPartnership,
-} from "../../shared/interfaces/partner.interface";
-import partnerRequest from "../../shared/services/partner.request";
-import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
 
-export function PartnershipForm({
+
+
+export function AddPartnershipModal({
   visible,
   onClose,
   closeAfterUpdate,
@@ -40,7 +35,7 @@ export function PartnershipForm({
   const [selectStates, setSelectStates] = useState("");
   const [selectClassification, setSelectClassification] = useState("");
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [pickerFocused, setPickerFocused] = useState(false);
 
   const onSubmit: SubmitHandler<IPartnership> = async payload => {
@@ -51,7 +46,7 @@ export function PartnershipForm({
 
     try {
       setIsLoading(true);
-      await partnerRequest.create(data);
+      await partnershipRequests.createPartnership(data)
     } catch (error) {
       console.error(error);
     }
@@ -61,26 +56,13 @@ export function PartnershipForm({
 
   return (
     <Modal
+      title="Adicionar nova parceria"
       visible={visible}
-      animationType="slide"
-      onRequestClose={onClose}
-      transparent
-    >
-      <Container>
-        <AddPartnerView
-          style={{
-            justifyContent: "space-between",
-            flexDirection: "row",
-            gap: 140.25,
-            marginBottom: 24,
-          }}
-        >
-          <Text>Adicionar nova parceria</Text>
-
-          <TouchableOpacity onPress={onClose}>
-            <Close color="#666666" />
-          </TouchableOpacity>
-        </AddPartnerView>
+      isLoading={isLoading}
+      onClose={onClose}
+      buttonTitle= "Adicionar parceria"
+      onPressButton={handleSubmit(onSubmit)}
+      content={
         <ScrollView>
           <View style={{ gap: 12 }}>
             <Text weight="500">Informações gerais</Text>
@@ -88,18 +70,16 @@ export function PartnershipForm({
             <Controller
               control={control}
               name="name"
-              rules={{
-                required: "informe o nome do parceiro",
-              }}
+              rules={{ required: "informe o nome do parceiro" }}
               render={({ field: { onChange } }) => (
-                <View>
+                <>
                   <Text>Parceria</Text>
                   <TextInput
                     placeholder="The Bugger Ducks"
                     onChangeText={onChange}
                   />
                   {errors.name && <Text>Este campo é obrigatório</Text>}
-                </View>
+                </>
               )}
             />
 
@@ -107,13 +87,13 @@ export function PartnershipForm({
               control={control}
               name="email"
               render={({ field: { onChange } }) => (
-                <View>
+                <>
                   <Text>E-mail</Text>
                   <TextInput
                     placeholder="nome@gmail.com"
                     onChangeText={onChange}
                   />
-                </View>
+                </>
               )}
             />
 
@@ -121,7 +101,7 @@ export function PartnershipForm({
               control={control}
               name="classification"
               render={({ field: { onChange } }) => (
-                <View>
+                <>
                   <Text>Classificação</Text>
                   <ClassicationDropDownArea>
                     <Picker
@@ -153,18 +133,17 @@ export function PartnershipForm({
                       )}
                     </Picker>
                   </ClassicationDropDownArea>
-                </View>
+
+                </>
               )}
             />
 
             <Controller
               control={control}
               name="status"
-              rules={{
-                required: "informe o status da parceria",
-              }}
+              rules={{ required: "informe o status da parceria" }}
               render={({ field: { onChange } }) => (
-                <View>
+                <>
                   <Text>Status</Text>
                   <StatusDropDowArea>
                     <Picker
@@ -193,7 +172,7 @@ export function PartnershipForm({
                     </Picker>
                   </StatusDropDowArea>
                   {errors.status && <Text>Este campo é obrigatório</Text>}
-                </View>
+                </>
               )}
             />
 
@@ -236,13 +215,13 @@ export function PartnershipForm({
               control={control}
               name="city"
               render={({ field: { onChange } }) => (
-                <View>
+                <>
                   <Text>Cidade</Text>
                   <TextInput
                     placeholder="São José dos campos"
                     onChangeText={onChange}
                   />
-                </View>
+                </>
               )}
             />
 
@@ -250,10 +229,10 @@ export function PartnershipForm({
               control={control}
               name="zipCode"
               render={({ field: { onChange } }) => (
-                <View>
+                <>
                   <Text>CEP</Text>
                   <TextInput placeholder="12654-356" onChangeText={onChange} />
-                </View>
+                </>
               )}
             />
 
@@ -261,13 +240,13 @@ export function PartnershipForm({
               control={control}
               name="address"
               render={({ field: { onChange } }) => (
-                <View>
+                <>
                   <Text>Endereço</Text>
                   <TextInput
                     placeholder="Rua 21, 123"
                     onChangeText={onChange}
                   />
-                </View>
+                </>
               )}
             />
 
@@ -275,14 +254,14 @@ export function PartnershipForm({
               control={control}
               name="memberNumber"
               render={({ field: { onChange } }) => (
-                <View>
+                <>
                   <Text>Número de membros</Text>
                   <TextInput
                     placeholder="100"
                     keyboardType="number-pad"
                     onChangeText={onChange}
                   />
-                </View>
+                </>
               )}
             />
 
@@ -290,25 +269,19 @@ export function PartnershipForm({
               control={control}
               name="phoneNumber"
               render={({ field: { onChange } }) => (
-                <View>
+                <>
                   <Text>Telefone</Text>
                   <TextInput
                     keyboardType="phone-pad"
                     placeholder="(12)99454-3275"
                     onChangeText={onChange}
                   />
-                </View>
+                </>
               )}
             />
           </View>
         </ScrollView>
-
-        <View style={{ padding: 20 }}>
-          <Button type="filled" onPress={handleSubmit(onSubmit)}>
-            Adicionar parceria
-          </Button>
-        </View>
-      </Container>
-    </Modal>
+      }
+    />
   );
 }

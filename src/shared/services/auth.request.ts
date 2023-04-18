@@ -1,23 +1,23 @@
 import { api } from "./api";
 
-import { IUserAuthenticated, IUserLogin } from "../interfaces/user.interface";
-import { USER_ENDPOINTS } from "../utils/endpoints";
-import StorageController from "../utils/handlers/StorageController";
+import { IUserAuthenticated, IUserLogin } from "@interfaces/user.interface";
+import StorageController from "@utils/handlers/StorageController";
+import { USER_ENDPOINTS } from "../constants/endpoints";
 
-class AuthRequest {
-  public async authenticate(payload: IUserLogin) {
+class AuthRequests {
+  async authenticate(payload: IUserLogin) {
     const response = await api.post<IUserAuthenticated>(
       USER_ENDPOINTS.USER_LOGIN,
       payload,
     );
 
-    const user = response.data;
+    const data = response.data;
 
-    await StorageController.setToken(user.token);
-    await StorageController.setUserInfo(user);
+    await StorageController.setToken(data.token);
+    await StorageController.setUserInfo(data.user);
 
     return response;
   }
 }
 
-export default new AuthRequest();
+export default new AuthRequests();

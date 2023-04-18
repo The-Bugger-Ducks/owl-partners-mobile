@@ -1,20 +1,20 @@
-import { Button, Close, Drop, Text } from "@components";
-import { Modal, ScrollView, TouchableOpacity, View } from "react-native";
+import { Close, Drop, Modal, Text } from "@components";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import { AddPartnerView, Container, SelectArea, TextInput } from "./styles";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { ClassificationSelectOptions } from "@utils/classificationSelectOptions";
+import { Key, useEffect, useState } from "react";
+import { ClassificationSelectOptions } from "@constants";
 import {
   IModalPropsEdit,
   IPartnership,
   IPartnershipEdit,
-} from "../../shared/interfaces/partner.interface";
-import { stateSelectOptions } from "@utils/stateSelectOptions";
-import { statusSelectOptions } from "@utils/statusSelectOptions";
-import PartnershipController from "@requests/PartnershipController";
+} from "@interfaces/partner.interface"
+import { stateSelectOptions } from "@constants";
+import { statusSelectOptions } from "@constants";
 import { Picker } from "@react-native-picker/picker";
+import partnershipRequests from "@requests/partnership.requests";
 
-export function PartnershipEdit({
+export function EditPartnershipModal({
   visible,
   onClose,
   closeAfterUpdate,
@@ -30,7 +30,7 @@ export function PartnershipEdit({
     defaultValues: partnerProps,
   });
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectStatus, setSelectStatus] = useState("");
   const [selectStates, setSelectStates] = useState("");
@@ -54,7 +54,7 @@ export function PartnershipEdit({
     console.log(data);
     try {
       setIsLoading(true);
-      await PartnershipController.updatePartnership(data, partnerProps.id);
+      await partnershipRequests.updatePartnership(data, partnerProps.id)
     } catch (error) {
       console.error(error);
     }
@@ -65,38 +65,39 @@ export function PartnershipEdit({
   useEffect(() => {
     if (partnerProps) {
       setValue("name", partnerProps["name"]),
-      setValue("email", partnerProps["email"]),
-      setValue("phoneNumber", partnerProps["phoneNumber"]),
-      setValue("zipCode", partnerProps["zipCode"]),
-      setValue("state", partnerProps["state"]),
-      setValue("city", partnerProps["city"]),
-      setValue("neighborhood", partnerProps["neighborhood"]),
-      setValue("address", partnerProps["address"]),
-      setValue("classification", partnerProps["classification"]),
-      setValue("status", partnerProps["status"]),
-      setValue("memberNumber", partnerProps["memberNumber"]);
+        setValue("email", partnerProps["email"]),
+        setValue("phoneNumber", partnerProps["phoneNumber"]),
+        setValue("zipCode", partnerProps["zipCode"]),
+        setValue("state", partnerProps["state"]),
+        setValue("city", partnerProps["city"]),
+        setValue("neighborhood", partnerProps["neighborhood"]),
+        setValue("address", partnerProps["address"]),
+        setValue("classification", partnerProps["classification"]),
+        setValue("status", partnerProps["status"]),
+        setValue("memberNumber", partnerProps["memberNumber"]);
     }
   }, [partnerProps]);
 
   return (
     <Modal
+      title="Editar parceria"
+      onClose={onClose}
+      isLoading={isLoading}
       visible={visible}
-      animationType="slide"
-      onRequestClose={onClose}
-      transparent
-    >
-      <Container>
-        <AddPartnerView
-          style={{ justifyContent: "space-between", flexDirection: "row" }}
-        >
-          <Text>Editar parceria</Text>
-
-          <TouchableOpacity onPress={onClose}>
-            <Close color="#666666" />
-          </TouchableOpacity>
-        </AddPartnerView>
+      buttonTitle="Editar parceria"
+      onPressButton={handleSubmit(onSubmit)}
+      content={
         <ScrollView>
-          <View style={{ gap: 12 }}>
+          <Container>
+            <AddPartnerView
+              style={{ justifyContent: "space-between", flexDirection: "row" }}
+            >
+              <Text>Editar parceria</Text>
+
+              <TouchableOpacity onPress={onClose}>
+                <Close color="#666666" />
+              </TouchableOpacity>
+            </AddPartnerView>
             <Text weight="500">Informações gerais</Text>
 
             <Controller
@@ -106,7 +107,7 @@ export function PartnershipEdit({
                 required: "informe o nome do parceiro",
               }}
               render={({ field }) => (
-                <View>
+                <>
                   <Text>Parceria</Text>
                   <TextInput
                     {...field}
@@ -114,7 +115,7 @@ export function PartnershipEdit({
                     onChangeText={field.onChange}
                   />
                   {errors.name && <Text>Este campo é obrigatório</Text>}
-                </View>
+                </>
               )}
             />
 
@@ -122,14 +123,14 @@ export function PartnershipEdit({
               control={control}
               name="email"
               render={({ field }) => (
-                <View>
+                <>
                   <Text>E-mail</Text>
                   <TextInput
                     {...field}
                     placeholder="nome@gmail.com"
                     onChangeText={field.onChange}
                   />
-                </View>
+                </>
               )}
             />
 
@@ -137,14 +138,14 @@ export function PartnershipEdit({
               control={control}
               name="classification"
               render={({ field }) => (
-                <View>
+                <>
                   <Text>Classificação</Text>
                   <SelectArea>
                     <Picker
                       selectedValue={field.value}
                       onValueChange={itemValue => {
                         setSelectClassification(itemValue),
-                        field.onChange(itemValue);
+                          field.onChange(itemValue);
                       }}
                     >
                       {Object.keys(ClassificationSelectOptions).map(
@@ -160,7 +161,7 @@ export function PartnershipEdit({
                       )}
                     </Picker>
                   </SelectArea>
-                </View>
+                </>
               )}
             />
 
@@ -171,7 +172,7 @@ export function PartnershipEdit({
                 required: "informe o status da parceria",
               }}
               render={({ field }) => (
-                <View>
+                <>
                   <Text>Status</Text>
                   <SelectArea>
                     <Picker
@@ -193,7 +194,7 @@ export function PartnershipEdit({
                     </Picker>
                   </SelectArea>
                   {errors.status && <Text>Este campo é obrigatório</Text>}
-                </View>
+                </>
               )}
             />
 
@@ -201,7 +202,7 @@ export function PartnershipEdit({
               control={control}
               name="state"
               render={({ field }) => (
-                <View>
+                <>
                   <Text>Estado</Text>
                   <SelectArea>
                     <Picker
@@ -221,7 +222,7 @@ export function PartnershipEdit({
                       })}
                     </Picker>
                   </SelectArea>
-                </View>
+                </>
               )}
             />
 
@@ -229,14 +230,14 @@ export function PartnershipEdit({
               control={control}
               name="city"
               render={({ field }) => (
-                <View>
+                <>
                   <Text>Cidade</Text>
                   <TextInput
                     {...field}
                     placeholder="São José dos campos"
                     onChangeText={field.onChange}
                   />
-                </View>
+                </>
               )}
             />
 
@@ -244,14 +245,14 @@ export function PartnershipEdit({
               control={control}
               name="zipCode"
               render={({ field }) => (
-                <View>
+                <>
                   <Text>CEP</Text>
                   <TextInput
                     {...field}
                     placeholder="12654-356"
                     onChangeText={field.onChange}
                   />
-                </View>
+                </>
               )}
             />
 
@@ -259,14 +260,14 @@ export function PartnershipEdit({
               control={control}
               name="address"
               render={({ field }) => (
-                <View>
+                <>
                   <Text>Endereço</Text>
                   <TextInput
                     {...field}
                     placeholder="Rua 21, 123"
                     onChangeText={field.onChange}
                   />
-                </View>
+                </>
               )}
             />
 
@@ -274,7 +275,7 @@ export function PartnershipEdit({
               control={control}
               name="memberNumber"
               render={({ field }) => (
-                <View>
+                <>
                   <Text>Número de membros</Text>
                   <TextInput
                     value={`${field.value}`}
@@ -282,7 +283,7 @@ export function PartnershipEdit({
                     keyboardType="number-pad"
                     onChangeText={field.onChange}
                   />
-                </View>
+                </>
               )}
             />
 
@@ -290,7 +291,7 @@ export function PartnershipEdit({
               control={control}
               name="phoneNumber"
               render={({ field }) => (
-                <View>
+                <>
                   <Text>Telefone</Text>
                   <TextInput
                     {...field}
@@ -298,18 +299,14 @@ export function PartnershipEdit({
                     placeholder="(12)99454-3275"
                     onChangeText={field.onChange}
                   />
-                </View>
+                </>
               )}
             />
-          </View>
+          </Container>
         </ScrollView>
+      }
+    />
 
-        <View style={{ padding: 20 }}>
-          <Button type="filled" onPress={handleSubmit(onSubmit)}>
-            Editar parceria
-          </Button>
-        </View>
-      </Container>
-    </Modal>
+
   );
 }

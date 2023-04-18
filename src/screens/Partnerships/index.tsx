@@ -1,9 +1,10 @@
 import { Button, Header, Loading, Tabs, Text } from "@components";
+import { PropsStack } from "@custom-types/rootStackParamList";
 import { IPartnership } from "@interfaces/partner.interface";
 import { useNavigation } from "@react-navigation/native";
-import { PartnershipForm } from "@screens/PartnershipForm";
+import partnershipRequests from "@requests/partnership.requests";
 import { useEffect, useState } from "react";
-import partnerRequest from "../../shared/services/partner.request";
+import { AddPartnershipModal } from "./AddPartnershipModal";
 import {
   ButtonView,
   Container,
@@ -12,10 +13,10 @@ import {
   PartnershipsList,
   TabsContainer,
 } from "./styles";
-import { PropsStack } from "src/shared/types/rootStackParamList";
 
 export function Partnerships() {
-  const [visibleModal, setVisibleModal] = useState(false);
+  const [visibleAddPartnershipModal, setVisibleAddPartnershipModal] =
+    useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<IPartnership[]>([]);
   const [tab, setTab] = useState(0);
@@ -23,7 +24,8 @@ export function Partnerships() {
 
   async function getPartnerships() {
     setIsLoading(true);
-    const partnerships: IPartnership[] = await partnerRequest.List(tab === 1);
+    const partnerships: IPartnership[] =
+      await partnershipRequests.getPartnerships(tab === 1);
     setData(partnerships);
     setIsLoading(false);
   }
@@ -34,14 +36,17 @@ export function Partnerships() {
 
   function handleCloseEditModal() {
     getPartnerships();
-    setVisibleModal(false);
+    setVisibleAddPartnershipModal(false);
   }
 
   return (
     <Container>
       <Header isHero={true} />
       <ButtonView>
-        <Button type="unfilled" onPress={() => setVisibleModal(true)}>
+        <Button
+          type="unfilled"
+          onPress={() => setVisibleAddPartnershipModal(true)}
+        >
           Adicionar nova parceria
         </Button>
       </ButtonView>
@@ -78,16 +83,8 @@ export function Partnerships() {
                       {name}
                     </Text>
                   </Text>
-                  <Text
-                    color="#999999"
-                    size={14}
-                    weight="400"
-                    numberOfLines={1}
-                  >
-                    Status:{" "}
-                    <Text size={14} weight="400">
-                      {status}
-                    </Text>
+                  <Text color="#999999" size={14} numberOfLines={1}>
+                    Status: <Text>{status}</Text>
                   </Text>
                 </PartnerView>
               );
@@ -96,9 +93,9 @@ export function Partnerships() {
         </PartnershipsList>
       </TabsContainer>
 
-      <PartnershipForm
-        visible={visibleModal}
-        onClose={() => setVisibleModal(false)}
+      <AddPartnershipModal
+        visible={visibleAddPartnershipModal}
+        onClose={() => setVisibleAddPartnershipModal(false)}
         closeAfterUpdate={() => handleCloseEditModal()}
       />
     </Container>

@@ -83,9 +83,7 @@ function Update({ props }: SpecificCardProps) {
         {props.description}
       </Text>
       <Comment>
-        <Text color="#333333" size={12}>
-          Comentado por {props.author}
-        </Text>
+        <Text size={12}>Comentado por {props.author}</Text>
       </Comment>
     </Container>
   );
@@ -102,16 +100,12 @@ function Anotation({ props }: SpecificCardProps) {
           <Edit />
         </EditIcon>
       </Title>
-      <Text color="#333333" size={14}>
-        {props.title}
-      </Text>
+      <Text size={14}>{props.title}</Text>
       <Text color="#999999" size={12} numberOfLines={1}>
         {props.description}
       </Text>
       <Comment>
-        <Text color="#333333" size={12}>
-          Criado por {props.author}
-        </Text>
+        <Text size={12}>Criado por {props.author}</Text>
       </Comment>
     </Container>
   );
@@ -132,7 +126,7 @@ function Meeting({ props }: SpecificCardProps) {
         <Text color="#999999" size={14}>
           {props.time}
         </Text>
-        <Text color="#333333" size={14} numberOfLines={1}>
+        <Text size={14} numberOfLines={1}>
           {props.title}
         </Text>
       </MeetingDetails>
