@@ -15,6 +15,7 @@ interface CardProps {
   onPress?: () => void;
   onEdit?: () => void;
   isDisabled: boolean;
+  isInHomepage: boolean;
 }
 
 export function Card({
@@ -30,6 +31,7 @@ export function Card({
   onPress,
   onEdit,
   isDisabled,
+  isInHomepage,
 }: CardProps) {
   const props: SpecificCardProps["props"] = {
     id,
@@ -43,6 +45,7 @@ export function Card({
     onPress,
     onEdit,
     isDisabled,
+    isInHomepage,
   };
 
   if (type === "annotation") return <Anotation props={props} />;
@@ -63,6 +66,7 @@ export interface SpecificCardProps {
     onPress?: () => void;
     onEdit?: () => void;
     isDisabled: boolean;
+    isInHomepage: boolean;
   };
 }
 
@@ -118,9 +122,11 @@ function Meeting({ props }: SpecificCardProps) {
         <Text color="#000000" size={12} weight="500">
           {props.date} | {props.partner}
         </Text>
-        <EditIcon onPress={props.onEdit}>
-          <Edit />
-        </EditIcon>
+        {!props.isInHomepage && !props.isDisabled ? (
+          <EditIcon onPress={props.onEdit}>
+            <Edit />
+          </EditIcon>
+        ) : null}
       </Title>
       <MeetingDetails>
         <Text color="#999999" size={14}>

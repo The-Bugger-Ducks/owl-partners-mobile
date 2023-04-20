@@ -146,7 +146,9 @@ export function Partnership() {
               isPartnershipDisabled={isLoading || (data?.disabled ?? false)}
             />
           ) : (
-            <MeetingsList />
+            <MeetingsList
+              isPartnershipDisabled={isLoading || (data?.disabled ?? false)}
+            />
           )}
         </HistoryContainer>
       </ScrollView>
