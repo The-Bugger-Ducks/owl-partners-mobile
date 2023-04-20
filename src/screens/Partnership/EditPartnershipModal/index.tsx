@@ -8,7 +8,7 @@ import {
   IModalPropsEdit,
   IPartnership,
   IPartnershipEdit,
-} from "@interfaces/partner.interface"
+} from "@interfaces/partner.interface";
 import { stateSelectOptions } from "@constants";
 import { statusSelectOptions } from "@constants";
 import { Picker } from "@react-native-picker/picker";
@@ -54,7 +54,7 @@ export function EditPartnershipModal({
     console.log(data);
     try {
       setIsLoading(true);
-      await partnershipRequests.updatePartnership(data, partnerProps.id)
+      await partnershipRequests.updatePartnership(data, partnerProps.id);
     } catch (error) {
       console.error(error);
     }
@@ -65,16 +65,16 @@ export function EditPartnershipModal({
   useEffect(() => {
     if (partnerProps) {
       setValue("name", partnerProps["name"]),
-        setValue("email", partnerProps["email"]),
-        setValue("phoneNumber", partnerProps["phoneNumber"]),
-        setValue("zipCode", partnerProps["zipCode"]),
-        setValue("state", partnerProps["state"]),
-        setValue("city", partnerProps["city"]),
-        setValue("neighborhood", partnerProps["neighborhood"]),
-        setValue("address", partnerProps["address"]),
-        setValue("classification", partnerProps["classification"]),
-        setValue("status", partnerProps["status"]),
-        setValue("memberNumber", partnerProps["memberNumber"]);
+      setValue("email", partnerProps["email"]),
+      setValue("phoneNumber", partnerProps["phoneNumber"]),
+      setValue("zipCode", partnerProps["zipCode"]),
+      setValue("state", partnerProps["state"]),
+      setValue("city", partnerProps["city"]),
+      setValue("neighborhood", partnerProps["neighborhood"]),
+      setValue("address", partnerProps["address"]),
+      setValue("classification", partnerProps["classification"]),
+      setValue("status", partnerProps["status"]),
+      setValue("memberNumber", partnerProps["memberNumber"]);
     }
   }, [partnerProps]);
 
@@ -145,7 +145,7 @@ export function EditPartnershipModal({
                       selectedValue={field.value}
                       onValueChange={itemValue => {
                         setSelectClassification(itemValue),
-                          field.onChange(itemValue);
+                        field.onChange(itemValue);
                       }}
                     >
                       {Object.keys(ClassificationSelectOptions).map(
@@ -306,7 +306,5 @@ export function EditPartnershipModal({
         </ScrollView>
       }
     />
-
-
   );
 }
