@@ -1,18 +1,23 @@
 import { Card, Loading, Text } from "@components";
 import { RootStackParamList } from "@custom-types/rootStackParamList";
 import { IMeeting } from "@interfaces/meeting.interface";
+import { IPartnership } from "@interfaces/partner.interface";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
 import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 interface MeetingListyProps {
   isPartnershipDisabled: boolean;
+  partnerProps: IPartnership;
 }
 
-export function MeetingsList({ isPartnershipDisabled }: MeetingListyProps) {
+export function MeetingsList({
+  isPartnershipDisabled,
+  partnerProps,
+}: MeetingListyProps) {
   const route = useRoute<RouteProp<RootStackParamList, "Partnership">>();
   const [data, setData] = useState<IMeeting>();
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +38,7 @@ export function MeetingsList({ isPartnershipDisabled }: MeetingListyProps) {
   }, [id]);
 
   return (
-    <View>
+    <ScrollView>
       {isLoading ? (
         <View style={{ marginTop: 24 }}>
           <Loading />
@@ -50,7 +55,7 @@ export function MeetingsList({ isPartnershipDisabled }: MeetingListyProps) {
         <View>
           <Text>Proximas reuniões</Text>
           {data?.upcomingMeetings.map(
-            ({ id, title, description, meetingDateTime, name }) => {
+            ({ id, title, description, meetingDateTime }) => {
               const isEdited = meetingDateTime != meetingDateTime;
               return (
                 <Card
@@ -66,7 +71,7 @@ export function MeetingsList({ isPartnershipDisabled }: MeetingListyProps) {
                   isDisabled={isPartnershipDisabled}
                   description={description}
                   title={title}
-                  partner={name}
+                  partner={partnerProps.name}
                   isInHomepage={false}
                 />
               );
@@ -107,7 +112,7 @@ export function MeetingsList({ isPartnershipDisabled }: MeetingListyProps) {
                   isDisabled={isPartnershipDisabled}
                   description={description}
                   title={title}
-                  partner={name}
+                  partner={partnerProps.name}
                   isInHomepage={false}
                 />
               );
@@ -115,6 +120,6 @@ export function MeetingsList({ isPartnershipDisabled }: MeetingListyProps) {
           )}
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 }
