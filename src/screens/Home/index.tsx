@@ -57,17 +57,12 @@ export function Home() {
                   id={partnerId}
                   key={id}
                   type={title ? "meeting" : "update"}
-                  date={formatDate(
-                    isEdited ? meetingDateTime : meetingDateTime,
-                  )}
-                  time={formatTime(
-                    isEdited ? meetingDateTime : meetingDateTime,
-                  )}
-                  isDisabled={false}
+                  date={formatDate(meetingDateTime)}
+                  time={formatTime(meetingDateTime)}
+                  canEdit={true}
                   description={description}
                   title={title}
                   partner={name}
-                  isInHomepage={true}
                 />
               );
             },
@@ -96,11 +91,10 @@ export function Home() {
                   time={formatTime(
                     isEdited ? meetingDateTime : meetingDateTime,
                   )}
-                  isDisabled={false}
                   description={description}
                   title={title}
                   partner={name}
-                  isInHomepage={true}
+                  canEdit={true}
                 />
               );
             },

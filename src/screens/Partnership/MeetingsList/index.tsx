@@ -27,8 +27,6 @@ export function MeetingsList({
   async function getMeetings() {
     setIsLoading(true);
     const meeting: IMeeting = await meetingRequest.getPartnerMeetigs(id);
-    console.log(meeting);
-
     setData(meeting);
     setIsLoading(false);
   }
@@ -68,11 +66,10 @@ export function MeetingsList({
                   time={formatTime(
                     isEdited ? meetingDateTime : meetingDateTime,
                   )}
-                  isDisabled={isPartnershipDisabled}
+                  canEdit={isPartnershipDisabled}
                   description={description}
                   title={title}
                   partner={partnerProps.name}
-                  isInHomepage={false}
                 />
               );
             },
@@ -96,24 +93,18 @@ export function MeetingsList({
         <View>
           <Text>Ultimas reuniões</Text>
           {data?.pastMeetings.map(
-            ({ id, title, description, meetingDateTime, name }) => {
-              const isEdited = meetingDateTime != meetingDateTime;
+            ({ id, title, description, meetingDateTime }) => {
               return (
                 <Card
                   id={id}
                   key={id}
                   type={title ? "meeting" : "update"}
-                  date={formatDate(
-                    isEdited ? meetingDateTime : meetingDateTime,
-                  )}
-                  time={formatTime(
-                    isEdited ? meetingDateTime : meetingDateTime,
-                  )}
-                  isDisabled={isPartnershipDisabled}
+                  date={formatDate(meetingDateTime)}
+                  time={formatTime(meetingDateTime)}
+                  canEdit={isPartnershipDisabled}
                   description={description}
                   title={title}
                   partner={partnerProps.name}
-                  isInHomepage={false}
                 />
               );
             },

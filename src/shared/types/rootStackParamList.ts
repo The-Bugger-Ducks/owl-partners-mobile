@@ -4,7 +4,7 @@ type RootStackParamList = {
   SignIn: undefined;
   Partnership: { id: string };
   Partnerships: undefined;
-  Home: { id: string };
+  Home: undefined;
   HomeStack: undefined;
   MyProfile: undefined;
 };
