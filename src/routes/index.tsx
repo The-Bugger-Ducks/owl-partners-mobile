@@ -11,20 +11,30 @@ import { SignIn } from "@screens/Auth/SignIn";
 import { BottomTabs } from "@routes/BottomTabs";
 import { Partnership } from "@screens/Partnership";
 
+import { CustomHeaderTitle } from "./CustomHeaderTitle";
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function AppRoutes() {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="SignIn"
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="SignIn" component={SignIn} />
-        <Stack.Screen name="HomeStack" component={BottomTabs} />
-        <Stack.Screen name="Partnership" component={Partnership} />
+      <Stack.Navigator initialRouteName="SignIn">
+        <Stack.Group screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen name="HomeStack" component={BottomTabs} />
+        </Stack.Group>
+        <Stack.Group
+          screenOptions={{
+            headerTitle: "",
+            headerBackTitle: "",
+            headerShown: true,
+            headerTransparent: true,
+            headerBackVisible: false,
+            headerLeft: () => <CustomHeaderTitle />,
+          }}
+        >
+          <Stack.Screen name="Partnership" component={Partnership} />
+        </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );
