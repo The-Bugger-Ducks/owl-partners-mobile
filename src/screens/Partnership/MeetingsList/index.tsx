@@ -54,18 +54,13 @@ export function MeetingsList({
           <Text>Proximas reuniões</Text>
           {data?.upcomingMeetings.map(
             ({ id, title, description, meetingDateTime }) => {
-              const isEdited = meetingDateTime != meetingDateTime;
               return (
                 <Card
                   id={id}
                   key={id}
                   type={title ? "meeting" : "update"}
-                  date={formatDate(
-                    isEdited ? meetingDateTime : meetingDateTime,
-                  )}
-                  time={formatTime(
-                    isEdited ? meetingDateTime : meetingDateTime,
-                  )}
+                  date={formatDate(meetingDateTime)}
+                  time={formatTime(meetingDateTime)}
                   canEdit={isPartnershipDisabled}
                   description={description}
                   title={title}

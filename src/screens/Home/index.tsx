@@ -51,7 +51,6 @@ export function Home() {
               meetingDateTime,
               Partner: { name, partnerId },
             }) => {
-              const isEdited = meetingDateTime != meetingDateTime;
               return (
                 <Card
                   id={partnerId}
@@ -79,18 +78,13 @@ export function Home() {
               meetingDateTime,
               Partner: { name, partnerId },
             }) => {
-              const isEdited = meetingDateTime != meetingDateTime;
               return (
                 <Card
                   id={partnerId}
                   key={id}
                   type={title ? "meeting" : "meeting"}
-                  date={formatDate(
-                    isEdited ? meetingDateTime : meetingDateTime,
-                  )}
-                  time={formatTime(
-                    isEdited ? meetingDateTime : meetingDateTime,
-                  )}
+                  date={formatDate(meetingDateTime)}
+                  time={formatTime(meetingDateTime)}
                   description={description}
                   title={title}
                   partner={name}
