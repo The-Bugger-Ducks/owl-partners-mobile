@@ -112,7 +112,7 @@ export function AnnotationsList({
                 setEditedComment(card.comment);
                 setIsEditCommentModalOpen(true);
               }}
-              isDisabled={isPartnershipDisabled}
+              canEdit={isPartnershipDisabled}
             />
           );
         })
