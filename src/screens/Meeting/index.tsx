@@ -22,6 +22,7 @@ export function Meeting() {
   const [updatedMeetingHour, setUpdatedMeetingHour] = useState("");
   const [updatedMeetingTheme, setUpdatedMeetingTheme] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
   const route = useRoute<RouteProp<RootStackParamList, "Meeting">>();
   const { id } = route.params;
@@ -41,7 +42,9 @@ export function Meeting() {
   }, [id]);
 
   async function handleDeleteMeeting() {
+    setIsLoadingDelete(true);
     await meetingRequest.deleteMeeting(id);
+    setIsLoadingDelete(false);
   }
 
   async function handleUpdateMeeting() {
@@ -98,7 +101,7 @@ export function Meeting() {
 
       <ButtonsContainer>
         <Button type="unfilled" onPress={handleDeleteMeeting}>
-          Deletar reunião
+          {isLoadingDelete ? <Loading /> : "   Deletar reunião"}
         </Button>
         <Button
           onPress={() => setIsEditModalOpen(true)}
