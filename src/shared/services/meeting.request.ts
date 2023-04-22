@@ -1,14 +1,22 @@
 import { IComment } from "@interfaces/annotation.interface";
-import { IMeeting } from "@interfaces/meeting.interface";
 import { alertError } from "@utils/alertError";
 import { Alert } from "react-native";
 import { MEETING_ENDPOINTS } from "../constants/endpoints";
 import { api } from "./api";
 
 class MeetingRequests {
-  async createMeeting(meeting: IMeeting) {
+  async createMeeting(partnershipId: string, dateTime: string, theme: string) {
     try {
-      await api.post(MEETING_ENDPOINTS.CREATE, meeting);
+      const payload = {
+        title: theme.trim(),
+        partnerId: partnershipId,
+        meetingDateTime: dateTime,
+      };
+      await api.post(MEETING_ENDPOINTS.CREATE, payload);
+      Alert.alert(
+        "Reunião cadastrada!",
+        "A partir de agora a nova reunião irá aparecer nas listagens",
+      );
     } catch (error) {
       alertError(error, "Não foi possível cadastrar a reunião :(");
     }

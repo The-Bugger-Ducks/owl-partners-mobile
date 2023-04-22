@@ -1,17 +1,19 @@
 import { Button, Card, Header, Loading, Text } from "@components";
 import { PropsStack } from "@custom-types/rootStackParamList";
 import { IMeetingsHome } from "@interfaces/meeting.interface";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { View } from "react-native";
+import { AddMeetingModal } from "./AddMeetingModal";
 import { ButtonsContainer, Container, MeetingContainer } from "./styles";
 
 export function Home() {
   const [data, setData] = useState<IMeetingsHome>();
   const [isLoading, setIsLoading] = useState(true);
+  const [isAddMeetingModalOpen, setIsAddMeetingModalOpen] = useState(false);
   const navigation = useNavigation<PropsStack>();
 
   async function getMeetings() {
@@ -21,16 +23,18 @@ export function Home() {
     setIsLoading(false);
   }
 
-  useEffect(() => {
-    getMeetings();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getMeetings();
+    }, []),
+  );
 
   return (
     <Container>
       <Header isHero={true} />
 
       <ButtonsContainer>
-        <Button type="unfilled" onPress={() => alert("Reunião!")}>
+        <Button type="unfilled" onPress={() => setIsAddMeetingModalOpen(true)}>
           Agendar reunião
         </Button>
         <Button
@@ -113,6 +117,11 @@ export function Home() {
             </View>
           )}
         </>
+
+        <AddMeetingModal
+          visible={isAddMeetingModalOpen}
+          onClose={() => setIsAddMeetingModalOpen(false)}
+        />
       </MeetingContainer>
     </Container>
   );
