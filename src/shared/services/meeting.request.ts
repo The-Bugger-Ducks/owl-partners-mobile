@@ -10,7 +10,7 @@ class MeetingRequests {
     try {
       await api.post(MEETING_ENDPOINTS.CREATE, meeting);
     } catch (error) {
-      console.error(error);
+      alertError(error, "Não foi possível cadastrar a reunião :(");
     }
   }
 
