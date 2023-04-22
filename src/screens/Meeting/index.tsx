@@ -55,14 +55,14 @@ export function Meeting() {
 
   async function handleUpdateMeeting() {
     setIsLoading(true);
-    const updatedData: IMeeting = await meetingRequest.updateMeeting(
+    await meetingRequest.updateMeeting(
       id,
       formatDateISO(updatedMeetingDate, updatedMeetingHour),
       updatedMeetingTheme,
     );
-    setData(updatedData);
-    setIsEditModalOpen(false);
+    getData();
     setIsLoading(false);
+    setIsEditModalOpen(false);
   }
 
   return (

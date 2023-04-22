@@ -13,6 +13,6 @@ export const ButtonsContainer = styled.View`
   padding: 24px 24px;
 `;
 
-export const MeetingContainer = styled.View`
+export const MeetingContainer = styled.ScrollView`
   padding: 24px 24px;
 `;

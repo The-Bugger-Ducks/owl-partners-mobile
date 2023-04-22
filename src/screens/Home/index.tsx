@@ -89,7 +89,7 @@ export function Home() {
               <Loading />
             </View>
           ) : (
-            <View style={{ marginTop: 16 }}>
+            <View style={{ marginVertical: 16 }}>
               {data?.pastMeetings.map(
                 ({
                   id,

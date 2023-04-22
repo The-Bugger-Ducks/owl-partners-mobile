@@ -9,9 +9,9 @@ export interface IMeeting {
   Partner: {
     id: IPartnership["id"];
     name: IPartnership["name"];
-    email: IPartnership["email"];
-    phoneNumber: IPartnership["phoneNumber"];
-    status: IPartnership["status"];
+    email?: IPartnership["email"];
+    phoneNumber?: IPartnership["phoneNumber"];
+    status?: IPartnership["status"];
   };
   meetingComments: IComment[];
 }

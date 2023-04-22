@@ -57,8 +57,11 @@ class MeetingRequests {
         meetingDateTime: dateTime,
         title: updatedTheme.trim(),
       };
-      const { data } = await api.put(MEETING_ENDPOINTS.EDIT + id, payload);
-      return data;
+      await api.put(MEETING_ENDPOINTS.EDIT + id, payload);
+      Alert.alert(
+        "Reunião atualizada!",
+        "Os dados da reunião foram atualizados",
+      );
     } catch (error) {
       alertError(error, "Não foi possível atualizar os dados da reunião :(");
     }
