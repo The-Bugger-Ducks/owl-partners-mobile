@@ -18,7 +18,9 @@ import {
 export function Meeting() {
   const [data, setData] = useState<IMeeting>();
   const [isLoading, setIsLoading] = useState(true);
-  const [updatedMeeting, setUpdatedMeeting] = useState<IMeeting>();
+  const [updatedMeetingDate, setUpdatedMeetingDate] = useState("");
+  const [updatedMeetingHour, setUpdatedMeetingHour] = useState("");
+  const [updatedMeetingTheme, setUpdatedMeetingTheme] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const route = useRoute<RouteProp<RootStackParamList, "Meeting">>();
@@ -26,8 +28,11 @@ export function Meeting() {
 
   async function getData() {
     setIsLoading(true);
-    const meetingData = await meetingRequest.getMeeting(id);
+    const meetingData: IMeeting = await meetingRequest.getMeeting(id);
     setData(meetingData);
+    setUpdatedMeetingDate(formatDate(meetingData.meetingDateTime));
+    setUpdatedMeetingHour(formatTime(meetingData.meetingDateTime));
+    setUpdatedMeetingTheme(meetingData.title);
     setIsLoading(false);
   }
 
@@ -40,8 +45,24 @@ export function Meeting() {
   }
 
   async function handleUpdateMeeting() {
-    const updatedData = await meetingRequest.updateMeeting(updatedMeeting!);
+    setIsLoading(true);
+    const year = Number(updatedMeetingDate.split("/")[2]);
+    const month = Number(updatedMeetingDate.split("/")[1]) - 1;
+    const day = Number(updatedMeetingDate.split("/")[0]);
+    const hours = Number(updatedMeetingHour.split(":")[0]);
+    const minutes = Number(updatedMeetingHour.split(":")[1]);
+
+    const meetingDate = new Date(year, month, day, hours, minutes);
+    const dateTime = meetingDate.toISOString();
+
+    const updatedData: IMeeting = await meetingRequest.updateMeeting(
+      id,
+      dateTime,
+      updatedMeetingTheme,
+    );
     setData(updatedData);
+    setIsEditModalOpen(false);
+    setIsLoading(false);
   }
 
   return (
@@ -104,18 +125,18 @@ export function Meeting() {
               <>
                 <Input
                   label="Data"
-                  value={formatDate(data.meetingDateTime)}
-                  onChangeText={text => console.log(text)}
+                  value={updatedMeetingDate}
+                  onChangeText={text => setUpdatedMeetingDate(text)}
                 />
                 <Input
                   label="Hora"
-                  value={formatTime(data.meetingDateTime)}
-                  onChangeText={text => console.log(text)}
+                  value={updatedMeetingHour}
+                  onChangeText={text => setUpdatedMeetingHour(text)}
                 />
                 <Input
                   label="Tema (opcional)"
-                  value={data.title}
-                  onChangeText={text => console.log(text)}
+                  value={updatedMeetingTheme}
+                  onChangeText={text => setUpdatedMeetingTheme(text)}
                 />
               </>
             )}

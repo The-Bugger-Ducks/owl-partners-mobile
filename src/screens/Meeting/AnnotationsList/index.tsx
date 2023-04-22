@@ -89,7 +89,7 @@ export function AnnotationsList({ data }: AnnotationsListProps) {
             <Card
               key={card.id}
               id={card.id}
-              isDisabled={false}
+              canEdit={true}
               type={"annotation"}
               date={formatDate(isEdited ? card.updatedAt : card.createdAt)}
               time={formatTime(isEdited ? card.updatedAt : card.createdAt)}

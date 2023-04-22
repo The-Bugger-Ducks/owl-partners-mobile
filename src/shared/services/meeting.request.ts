@@ -43,9 +43,13 @@ class MeetingRequests {
     }
   }
 
-  async updateMeeting(updatedMeeting: IMeeting) {
+  async updateMeeting(id: string, dateTime: string, updatedTheme: string) {
     try {
-      const { data } = await api.put(MEETING_ENDPOINTS.EDIT, updatedMeeting);
+      const payload = {
+        meetingDateTime: dateTime,
+        title: updatedTheme.trim(),
+      };
+      const { data } = await api.put(MEETING_ENDPOINTS.EDIT + id, payload);
       return data;
     } catch (error) {
       alertError(error, "Não foi possível atualizar os dados da reunião :(");
