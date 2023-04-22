@@ -1,7 +1,10 @@
 import { Button, Header, Input, Loading, Modal, Text } from "@components";
-import { RootStackParamList } from "@custom-types/rootStackParamList";
+import {
+  PropsStack,
+  RootStackParamList,
+} from "@custom-types/rootStackParamList";
 import { IMeeting } from "@interfaces/meeting.interface";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatDateISO } from "@utils/formatDateISO";
@@ -24,6 +27,7 @@ export function Meeting() {
   const [updatedMeetingTheme, setUpdatedMeetingTheme] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const navigation = useNavigation<PropsStack>();
 
   const route = useRoute<RouteProp<RootStackParamList, "Meeting">>();
   const { id } = route.params;
@@ -46,6 +50,7 @@ export function Meeting() {
     setIsLoadingDelete(true);
     await meetingRequest.deleteMeeting(id);
     setIsLoadingDelete(false);
+    navigation.navigate("Home");
   }
 
   async function handleUpdateMeeting() {

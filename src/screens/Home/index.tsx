@@ -7,11 +7,13 @@ import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
+import { AddMeetingModal } from "./AddMeetingModal";
 import { ButtonsContainer, Container, MeetingContainer } from "./styles";
 
 export function Home() {
   const [data, setData] = useState<IMeetingsHome>();
   const [isLoading, setIsLoading] = useState(true);
+  const [isAddMeetingModalOpen, setIsAddMeetingModalOpen] = useState(false);
   const navigation = useNavigation<PropsStack>();
 
   async function getMeetings() {
@@ -30,7 +32,7 @@ export function Home() {
       <Header isHero={true} />
 
       <ButtonsContainer>
-        <Button type="unfilled" onPress={() => alert("Reunião!")}>
+        <Button type="unfilled" onPress={() => setIsAddMeetingModalOpen(true)}>
           Agendar reunião
         </Button>
         <Button
@@ -113,6 +115,15 @@ export function Home() {
             </View>
           )}
         </>
+
+        <AddMeetingModal
+          visible={isAddMeetingModalOpen}
+          onClose={() => setIsAddMeetingModalOpen(false)}
+          onSubmit={() => {
+            setIsAddMeetingModalOpen(false);
+            getMeetings();
+          }}
+        />
       </MeetingContainer>
     </Container>
   );
