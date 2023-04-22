@@ -148,6 +148,7 @@ export function Partnership() {
           ) : (
             data && (
               <MeetingsList
+                partnershipId={id}
                 isPartnershipDisabled={isLoading || (data?.disabled ?? false)}
                 partnerProps={data}
               />

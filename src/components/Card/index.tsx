@@ -15,6 +15,7 @@ interface CardProps {
   onPress?: () => void;
   onEdit?: () => void;
   canEdit: boolean;
+  isEdited?: boolean;
 }
 
 export function Card({
@@ -30,6 +31,7 @@ export function Card({
   onPress,
   onEdit,
   canEdit,
+  isEdited = false,
 }: CardProps) {
   const props: SpecificCardProps["props"] = {
     id,
@@ -43,6 +45,7 @@ export function Card({
     onPress,
     onEdit,
     canEdit,
+    isEdited,
   };
 
   if (type === "annotation") return <Anotation props={props} />;
@@ -63,6 +66,7 @@ export interface SpecificCardProps {
     onPress?: () => void;
     onEdit?: () => void;
     canEdit: boolean;
+    isEdited?: boolean;
   };
 }
 
@@ -94,7 +98,12 @@ function Anotation({ props }: SpecificCardProps) {
     <Container onPress={props.onPress} activeOpacity={0.7}>
       <Title>
         <Text color="#000000" size={12} weight="500">
-          Anotação | {props.date}, {props.time}
+          Anotação | {props.date}, {props.time}{" "}
+          {props.isEdited && (
+            <Text color="#999999" size={12} weight="500">
+              (editado)
+            </Text>
+          )}
         </Text>
         <EditIcon onPress={props.onEdit}>
           <Edit />

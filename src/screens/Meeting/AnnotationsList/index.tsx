@@ -50,7 +50,7 @@ export function AnnotationsList({ data, meetingId }: AnnotationsListProps) {
 
   async function handleEditComment() {
     setIsLoading(true);
-    await meetingRequest.updateMeetingComment(editedComment, modalComment!.id);
+    await meetingRequest.updateMeetingComment(modalComment!.id, editedComment);
     const updatedComments = await meetingRequest.getMeetingComments(meetingId);
     updatedComments && setAnnotations(updatedComments);
     setEditedComment("");
@@ -66,7 +66,7 @@ export function AnnotationsList({ data, meetingId }: AnnotationsListProps) {
         value={newComment}
         onChangeText={text => setNewComment(text)}
         hasOutIcon
-        onPressIcon={handleAddComment}
+        onPressIcon={() => newComment.length > 0 && handleAddComment()}
       />
 
       <Text size={14} color={"#666666"} style={{ marginVertical: 16 }}>
@@ -95,6 +95,7 @@ export function AnnotationsList({ data, meetingId }: AnnotationsListProps) {
               id={card.id}
               canEdit={true}
               type={"annotation"}
+              isEdited={isEdited}
               date={formatDate(isEdited ? card.updatedAt : card.createdAt)}
               time={formatTime(isEdited ? card.updatedAt : card.createdAt)}
               description={card.comment}

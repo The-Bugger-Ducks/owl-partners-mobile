@@ -1,18 +1,19 @@
-import { Close, Drop, Modal, Text } from "@components";
-import { ScrollView, TouchableOpacity, View } from "react-native";
-import { AddPartnerView, Container, SelectArea, TextInput } from "./styles";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { Key, useEffect, useState } from "react";
-import { ClassificationSelectOptions } from "@constants";
+import { Close, Modal, Text } from "@components";
+import {
+  ClassificationSelectOptions,
+  stateSelectOptions,
+  statusSelectOptions,
+} from "@constants";
 import {
   IModalPropsEdit,
-  IPartnership,
   IPartnershipEdit,
 } from "@interfaces/partner.interface";
-import { stateSelectOptions } from "@constants";
-import { statusSelectOptions } from "@constants";
 import { Picker } from "@react-native-picker/picker";
 import partnershipRequests from "@requests/partnership.requests";
+import { useEffect, useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { ScrollView, TouchableOpacity } from "react-native";
+import { AddPartnerView, Container, SelectArea, TextInput } from "./styles";
 
 export function EditPartnershipModal({
   visible,
@@ -51,7 +52,6 @@ export function EditPartnershipModal({
       status: payload.status,
       zipCode: payload.zipCode,
     };
-    console.log(data);
     try {
       setIsLoading(true);
       await partnershipRequests.updatePartnership(data, partnerProps.id);
