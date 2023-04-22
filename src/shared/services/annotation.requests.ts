@@ -2,8 +2,8 @@ import { api } from "@api";
 
 import { IComment } from "@interfaces/annotation.interface";
 import { alertError } from "@utils/alertError";
-import { ANNOTATION_ENDPOINTS } from "../constants/endpoints";
 import StorageController from "@utils/handlers/StorageController";
+import { ANNOTATION_ENDPOINTS } from "../constants/endpoints";
 
 class AnnotationRequests {
   async createAnnotation(partnerId: string, comment: string) {

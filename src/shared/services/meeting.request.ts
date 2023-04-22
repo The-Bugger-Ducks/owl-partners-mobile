@@ -1,8 +1,9 @@
-import { api } from "./api";
-import { MEETING_ENDPOINTS } from "../utils/endpoints";
-import { IMeeting } from "@interfaces/meeting.interface";
-import { Alert } from "react-native";
 import { IComment } from "@interfaces/annotation.interface";
+import { IMeeting } from "@interfaces/meeting.interface";
+import { alertError } from "@utils/alertError";
+import { Alert } from "react-native";
+import { MEETING_ENDPOINTS } from "../constants/endpoints";
+import { api } from "./api";
 
 class MeetingRequests {
   async createMeeting(meeting: IMeeting) {
@@ -30,7 +31,7 @@ class MeetingRequests {
       const { data } = await api.get(MEETING_ENDPOINTS.DETAILS + id);
       return data;
     } catch (error) {
-      console.error(error);
+      alertError(error, "Não foi possível carregar os dados da reunião :(");
     }
   }
 
@@ -39,7 +40,7 @@ class MeetingRequests {
       const { data } = await api.put(MEETING_ENDPOINTS.EDIT, updatedMeeting);
       return data;
     } catch (error) {
-      console.error(error);
+      alertError(error, "Não foi possível atualizar os dados da reunião :(");
     }
   }
 
@@ -51,7 +52,7 @@ class MeetingRequests {
         "Esta reunião deixará de aparecer em listagens e históricos",
       );
     } catch (error) {
-      console.error(error);
+      alertError(error, "Não foi possível deletar a reunião :(");
     }
   }
 
@@ -60,7 +61,10 @@ class MeetingRequests {
       const { data } = await api.get(MEETING_ENDPOINTS.COMMENTS + id);
       return data;
     } catch (error) {
-      console.error(error);
+      alertError(
+        error,
+        "Não foi possível carregar os comentários da reunião :(",
+      );
     }
   }
 
@@ -72,7 +76,7 @@ class MeetingRequests {
       );
       return data;
     } catch (error) {
-      console.error(error);
+      alertError(error, "Não foi possível cadastrar o comentário :(");
     }
   }
 
@@ -84,7 +88,7 @@ class MeetingRequests {
       );
       return data;
     } catch (error) {
-      console.error(error);
+      alertError(error, "Não foi possível atualizar o comentário :(");
     }
   }
 }
