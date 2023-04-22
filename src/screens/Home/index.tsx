@@ -1,11 +1,11 @@
 import { Button, Card, Header, Loading, Text } from "@components";
 import { PropsStack } from "@custom-types/rootStackParamList";
 import { IMeetingsHome } from "@interfaces/meeting.interface";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { View } from "react-native";
 import { AddMeetingModal } from "./AddMeetingModal";
 import { ButtonsContainer, Container, MeetingContainer } from "./styles";
@@ -23,9 +23,11 @@ export function Home() {
     setIsLoading(false);
   }
 
-  useEffect(() => {
-    getMeetings();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getMeetings();
+    }, []),
+  );
 
   return (
     <Container>
@@ -119,10 +121,6 @@ export function Home() {
         <AddMeetingModal
           visible={isAddMeetingModalOpen}
           onClose={() => setIsAddMeetingModalOpen(false)}
-          onSubmit={() => {
-            setIsAddMeetingModalOpen(false);
-            getMeetings();
-          }}
         />
       </MeetingContainer>
     </Container>

@@ -11,14 +11,9 @@ import { PartnershipDropDownArea } from "./styles";
 interface AddMeetingModalProps {
   visible: boolean;
   onClose: () => void;
-  onSubmit: () => void;
 }
 
-export function AddMeetingModal({
-  visible,
-  onClose,
-  onSubmit,
-}: AddMeetingModalProps) {
+export function AddMeetingModal({ visible, onClose }: AddMeetingModalProps) {
   const [partnership, setPartnership] = useState("");
   const [pickerFocused, setPickerFocused] = useState(false);
   const [partnerships, setPartnerships] = useState<IPartnership[]>([]);
@@ -46,7 +41,7 @@ export function AddMeetingModal({
       theme,
     );
     setIsLoading(false);
-    onSubmit();
+    onClose();
   }
 
   return (
