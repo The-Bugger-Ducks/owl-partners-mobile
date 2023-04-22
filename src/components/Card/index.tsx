@@ -77,11 +77,11 @@ function Update({ props }: SpecificCardProps) {
         <Text color="#000000" size={12} weight="500">
           Atualização | {props.date}, {props.time}
         </Text>
-        {!props.canEdit ? (
+        {props.canEdit && (
           <EditIcon onPress={props.onEdit}>
             <Edit />
           </EditIcon>
-        ) : null}
+        )}
       </Title>
       <Text color="#999999" size={12} numberOfLines={1}>
         {props.description}
