@@ -1,7 +1,7 @@
 import { StatusBar } from "react-native";
 import styled from "styled-components/native";
 
-import { isAndroid } from "@utils/checkPlatform";
+import { isAndroid } from "@constants";
 
 export const Container = styled.SafeAreaView`
   margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : "0"};
@@ -37,4 +37,17 @@ export const TextInput = styled.TextInput`
   justify-content: center;
   width: 345px;
   height: 56px;
+`;
+
+export const InfoContainer = styled.View`
+  padding: 24px 24px;
+  gap: 10px;
+`;
+
+export const InfoCardContainer = styled.View`
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  gap: 8px;
+  justify-content: center;
 `;
