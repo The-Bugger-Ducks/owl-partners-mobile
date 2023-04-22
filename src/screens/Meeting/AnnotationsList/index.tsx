@@ -1,18 +1,18 @@
 import { Card, Input, Loading, Modal, Text } from "@components";
-import { RootStackParamList } from "@custom-types/rootStackParamList";
 import { IComment } from "@interfaces/annotation.interface";
-import { RouteProp, useRoute } from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
+import StorageController from "@utils/handlers/StorageController";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 interface AnnotationsListProps {
   data?: IComment[];
+  meetingId: string;
 }
 
-export function AnnotationsList({ data }: AnnotationsListProps) {
+export function AnnotationsList({ data, meetingId }: AnnotationsListProps) {
   const [newComment, setNewComment] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [annotations, setAnnotations] = useState<IComment[]>(data ?? []);
@@ -21,24 +21,28 @@ export function AnnotationsList({ data }: AnnotationsListProps) {
   const [isEditCommentModalOpen, setIsEditCommentModalOpen] = useState(false);
   const [editedComment, setEditedComment] = useState("");
 
-  const route = useRoute<RouteProp<RootStackParamList, "Meeting">>();
-  const { id } = route.params;
-
   async function getData() {
     setIsLoading(true);
-    const comments = await meetingRequest.getMeetingComments(id);
+    const comments = await meetingRequest.getMeetingComments(meetingId);
     setAnnotations(comments);
     setIsLoading(false);
   }
 
   useEffect(() => {
     getData();
-  }, [id]);
+  }, [meetingId]);
 
   async function handleAddComment() {
     setIsLoading(true);
-    await meetingRequest.createMeetingComment(id, newComment);
-    const updatedComments = await meetingRequest.getMeetingComments(id);
+    const user = await StorageController.getUserInfo();
+    if (user)
+      await meetingRequest.createMeetingComment(
+        meetingId,
+        newComment,
+        user?.id,
+      );
+
+    const updatedComments = await meetingRequest.getMeetingComments(meetingId);
     updatedComments && setAnnotations(updatedComments);
     setNewComment("");
     setIsLoading(false);
@@ -46,8 +50,8 @@ export function AnnotationsList({ data }: AnnotationsListProps) {
 
   async function handleEditComment() {
     setIsLoading(true);
-    await meetingRequest.updateMeetingComment(modalComment!);
-    const updatedComments = await meetingRequest.getMeetingComments(id);
+    await meetingRequest.updateMeetingComment(editedComment, modalComment!.id);
+    const updatedComments = await meetingRequest.getMeetingComments(meetingId);
     updatedComments && setAnnotations(updatedComments);
     setEditedComment("");
     setIsLoading(false);
@@ -95,7 +99,6 @@ export function AnnotationsList({ data }: AnnotationsListProps) {
               time={formatTime(isEdited ? card.updatedAt : card.createdAt)}
               description={card.comment}
               author={`${card.User.name} ${card.User.lastName}`}
-              title={card.title}
               onPress={() => {
                 setModalComment(card);
                 setIsCommentModalOpen(true);

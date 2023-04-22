@@ -100,7 +100,7 @@ function Anotation({ props }: SpecificCardProps) {
           <Edit />
         </EditIcon>
       </Title>
-      <Text size={14}>{props.title}</Text>
+      {props.title && <Text size={14}>{props.title}</Text>}
       <Text color="#999999" size={12} numberOfLines={1}>
         {props.description}
       </Text>
@@ -118,11 +118,11 @@ function Meeting({ props }: SpecificCardProps) {
         <Text color="#000000" size={12} weight="500">
           {props.date} | {props.partner}
         </Text>
-        {props.canEdit ? (
+        {props.canEdit && (
           <EditIcon onPress={props.onEdit}>
             <Edit />
           </EditIcon>
-        ) : null}
+        )}
       </Title>
       <MeetingDetails>
         <Text color="#999999" size={14}>

@@ -11,7 +11,9 @@ import { formatDateISO } from "@utils/formatDateISO";
 import { formatTime } from "@utils/formatTime";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
+import { AnnotationsList } from "./AnnotationsList";
 import {
+  AnnotationsListContainer,
   ButtonsContainer,
   Container,
   InfoCardContainer,
@@ -108,9 +110,9 @@ export function Meeting() {
         </Button>
       </ButtonsContainer>
 
-      {/* <AnnotationsListContainer>
-        <AnnotationsList data={data?.meetingComments} />
-      </AnnotationsListContainer> */}
+      <AnnotationsListContainer>
+        <AnnotationsList data={data?.meetingComments} meetingId={id} />
+      </AnnotationsListContainer>
 
       <Modal
         visible={isEditModalOpen}
