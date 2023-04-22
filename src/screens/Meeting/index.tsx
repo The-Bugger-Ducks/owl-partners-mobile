@@ -4,6 +4,7 @@ import { IMeeting } from "@interfaces/meeting.interface";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
+import { formatDateISO } from "@utils/formatDateISO";
 import { formatTime } from "@utils/formatTime";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
@@ -49,18 +50,9 @@ export function Meeting() {
 
   async function handleUpdateMeeting() {
     setIsLoading(true);
-    const year = Number(updatedMeetingDate.split("/")[2]);
-    const month = Number(updatedMeetingDate.split("/")[1]) - 1;
-    const day = Number(updatedMeetingDate.split("/")[0]);
-    const hours = Number(updatedMeetingHour.split(":")[0]);
-    const minutes = Number(updatedMeetingHour.split(":")[1]);
-
-    const meetingDate = new Date(year, month, day, hours, minutes);
-    const dateTime = meetingDate.toISOString();
-
     const updatedData: IMeeting = await meetingRequest.updateMeeting(
       id,
-      dateTime,
+      formatDateISO(updatedMeetingDate, updatedMeetingHour),
       updatedMeetingTheme,
     );
     setData(updatedData);
