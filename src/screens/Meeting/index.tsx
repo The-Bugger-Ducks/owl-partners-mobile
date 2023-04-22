@@ -101,7 +101,7 @@ export function Meeting() {
 
       <ButtonsContainer>
         <Button type="unfilled" onPress={handleDeleteMeeting}>
-          {isLoadingDelete ? <Loading /> : "   Deletar reunião"}
+          {isLoadingDelete ? <Loading /> : "Deletar reunião"}
         </Button>
         <Button
           onPress={() => setIsEditModalOpen(true)}
