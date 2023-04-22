@@ -110,11 +110,7 @@ class MeetingRequests {
 
   async updateMeetingComment(commentId: string, comment: string) {
     try {
-      const { data } = await api.put(
-        MEETING_ENDPOINTS.UPDATE_COMMENT + commentId,
-        comment,
-      );
-      return data;
+      await api.put(MEETING_ENDPOINTS.UPDATE_COMMENT + commentId, { comment });
     } catch (error) {
       alertError(error, "Não foi possível atualizar o comentário :(");
     }

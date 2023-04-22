@@ -69,7 +69,7 @@ export function AnnotationsList({
           value={newComment}
           onChangeText={text => setNewComment(text)}
           hasOutIcon
-          onPressIcon={handleAddComment}
+          onPressIcon={() => newComment.length > 0 && handleAddComment()}
         />
       )}
 
@@ -97,7 +97,8 @@ export function AnnotationsList({
             <Card
               key={card.id}
               id={card.id}
-              type={card.title ? "annotation" : "update"}
+              type={"annotation"}
+              isEdited={isEdited}
               date={formatDate(isEdited ? card.updatedAt : card.createdAt)}
               time={formatTime(isEdited ? card.updatedAt : card.createdAt)}
               description={card.comment}
