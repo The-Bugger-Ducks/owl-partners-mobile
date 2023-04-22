@@ -10,7 +10,7 @@ export function CustomHeaderTitle() {
 
   return (
     <Container onPress={navigation.goBack}>
-      <Icon icon="arrow-left" />
+      <Icon icon="arrow-left" size={18} />
     </Container>
   );
 }

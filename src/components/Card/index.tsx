@@ -118,7 +118,7 @@ function Meeting({ props }: SpecificCardProps) {
         <Text color="#000000" size={12} weight="500">
           {props.date} | {props.partner}
         </Text>
-        {!props.canEdit ? (
+        {props.canEdit ? (
           <EditIcon onPress={props.onEdit}>
             <Edit />
           </EditIcon>

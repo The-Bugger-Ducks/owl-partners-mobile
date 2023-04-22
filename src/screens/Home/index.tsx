@@ -1,28 +1,29 @@
-import { Button, Header, Text, Card } from "@components";
-import { ButtonsContainer, Container, MeetingContainer } from "./styles";
-import { RootStackParamList } from "@custom-types/rootStackParamList";
-import { IMeeting } from "@interfaces/meeting.interface";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { Button, Card, Header, Loading, Text } from "@components";
+import { PropsStack } from "@custom-types/rootStackParamList";
+import { IMeetingsHome } from "@interfaces/meeting.interface";
+import { useNavigation } from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
+import { ButtonsContainer, Container, MeetingContainer } from "./styles";
 
 export function Home() {
-  const [data, setData] = useState<IMeeting>();
+  const [data, setData] = useState<IMeetingsHome>();
   const [isLoading, setIsLoading] = useState(true);
+  const navigation = useNavigation<PropsStack>();
 
   async function getMeetings() {
     setIsLoading(true);
-    const meeting: IMeeting = await meetingRequest.getMeetigs();
+    const meeting: IMeetingsHome = await meetingRequest.getMeetings();
     setData(meeting);
     setIsLoading(false);
   }
 
   useEffect(() => {
     getMeetings();
-  });
+  }, []);
 
   return (
     <Container>
@@ -41,59 +42,77 @@ export function Home() {
       </ButtonsContainer>
 
       <MeetingContainer>
-        <View>
+        <>
           <Text>Proximas reuniões</Text>
-          {data?.upcomingMeetings.map(
-            ({
-              id,
-              title,
-              description,
-              meetingDateTime,
-              Partner: { name, partnerId },
-            }) => {
-              return (
-                <Card
-                  id={partnerId}
-                  key={id}
-                  type={title ? "meeting" : "update"}
-                  date={formatDate(meetingDateTime)}
-                  time={formatTime(meetingDateTime)}
-                  canEdit={true}
-                  description={description}
-                  title={title}
-                  partner={name}
-                />
-              );
-            },
+          {isLoading ? (
+            <View style={{ height: 80, marginVertical: 16 }}>
+              <Loading />
+            </View>
+          ) : (
+            <View style={{ marginTop: 16 }}>
+              {data?.upcomingMeetings.map(
+                ({
+                  id,
+                  title,
+                  description,
+                  meetingDateTime,
+                  Partner: { name, partnerId },
+                }) => {
+                  return (
+                    <Card
+                      id={partnerId}
+                      key={id}
+                      type={"meeting"}
+                      date={formatDate(meetingDateTime)}
+                      time={formatTime(meetingDateTime)}
+                      canEdit={false}
+                      description={description}
+                      title={title}
+                      partner={name}
+                      onPress={() => navigation.navigate("Meeting", { id })}
+                    />
+                  );
+                },
+              )}
+            </View>
           )}
-        </View>
+        </>
 
-        <View>
+        <>
           <Text>Ultimas reuniões</Text>
-          {data?.pastMeetings.map(
-            ({
-              id,
-              title,
-              description,
-              meetingDateTime,
-              Partner: { name, partnerId },
-            }) => {
-              return (
-                <Card
-                  id={partnerId}
-                  key={id}
-                  type={title ? "meeting" : "meeting"}
-                  date={formatDate(meetingDateTime)}
-                  time={formatTime(meetingDateTime)}
-                  description={description}
-                  title={title}
-                  partner={name}
-                  canEdit={true}
-                />
-              );
-            },
+          {isLoading ? (
+            <View style={{ height: 80, marginVertical: 16 }}>
+              <Loading />
+            </View>
+          ) : (
+            <View style={{ marginTop: 16 }}>
+              {data?.pastMeetings.map(
+                ({
+                  id,
+                  title,
+                  description,
+                  meetingDateTime,
+                  Partner: { name, partnerId },
+                }) => {
+                  return (
+                    <Card
+                      id={partnerId}
+                      key={id}
+                      type={"meeting"}
+                      date={formatDate(meetingDateTime)}
+                      time={formatTime(meetingDateTime)}
+                      description={description}
+                      title={title}
+                      partner={name}
+                      canEdit={false}
+                      onPress={() => navigation.navigate("Meeting", { id })}
+                    />
+                  );
+                },
+              )}
+            </View>
           )}
-        </View>
+        </>
       </MeetingContainer>
     </Container>
   );

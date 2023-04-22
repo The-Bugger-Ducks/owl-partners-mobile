@@ -11,6 +11,7 @@ import { SignIn } from "@screens/Auth/SignIn";
 import { BottomTabs } from "@routes/BottomTabs";
 import { Partnership } from "@screens/Partnership";
 
+import { Meeting } from "@screens/Meeting";
 import { CustomHeaderTitle } from "./CustomHeaderTitle";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -34,6 +35,7 @@ export function AppRoutes() {
           }}
         >
           <Stack.Screen name="Partnership" component={Partnership} />
+          <Stack.Screen name="Meeting" component={Meeting} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
