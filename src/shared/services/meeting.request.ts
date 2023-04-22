@@ -14,15 +14,23 @@ class MeetingRequests {
     }
   }
 
-  async getMeetings(partnershipId?: string) {
+  async getMeetings() {
+    try {
+      const { data } = await api.get(MEETING_ENDPOINTS.LIST);
+      return data;
+    } catch (error) {
+      alertError(error, "Não foi possível carregar a lista de reuniões :(");
+    }
+  }
+
+  async getPartnerMeetigs(partnershipId: string) {
     try {
       const { data } = await api.get(
-        MEETING_ENDPOINTS.LIST +
-          (partnershipId ? "?partnership=" + partnershipId : ""),
+        MEETING_ENDPOINTS.BY_PARTNER + partnershipId,
       );
       return data;
     } catch (error) {
-      console.error(error);
+      alertError(error, "Não foi possível carregar a lista de reuniões :(");
     }
   }
 

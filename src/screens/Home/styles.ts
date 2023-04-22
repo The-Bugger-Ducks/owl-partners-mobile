@@ -12,3 +12,7 @@ export const Container = styled.SafeAreaView`
 export const ButtonsContainer = styled.View`
   padding: 24px 24px;
 `;
+
+export const MeetingContainer = styled.View`
+  padding: 24px 24px;
+`;

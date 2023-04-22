@@ -24,8 +24,10 @@ import refreshIcon from "../../shared/assets/icons/refresh.svg";
 import searchIcon from "../../shared/assets/icons/search.svg";
 import trashIcon from "../../shared/assets/icons/trash.svg";
 import usersIcon from "../../shared/assets/icons/users.svg";
+import arrowLeftIcon from "../../shared/assets/icons/arrow-left.svg";
 
 export type iconsName =
+  | "arrow-left"
   | "check"
   | "checkbox-off"
   | "checkbox-on"
@@ -58,6 +60,7 @@ interface Icon {
 }
 
 export const iconList: Icon[] = [
+  { image: arrowLeftIcon, name: "arrow-left" },
   { image: checkIcon, name: "check" },
   { image: checkboxOffIcon, name: "checkbox-off" },
   { image: checkboxOnIcon, name: "checkbox-on" },
