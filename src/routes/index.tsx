@@ -35,17 +35,6 @@ export function AppRoutes() {
           }}
         >
           <Stack.Screen name="Partnership" component={Partnership} />
-        </Stack.Group>
-        <Stack.Group
-          screenOptions={{
-            headerTitle: "",
-            headerBackTitle: "",
-            headerShown: true,
-            headerTransparent: true,
-            headerBackVisible: false,
-            headerLeft: () => <CustomHeaderTitle />,
-          }}
-        >
           <Stack.Screen name="Meeting" component={Meeting} />
         </Stack.Group>
       </Stack.Navigator>
