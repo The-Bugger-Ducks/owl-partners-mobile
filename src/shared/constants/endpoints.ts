@@ -25,8 +25,8 @@ export enum MEETING_ENDPOINTS {
   DETAILS = "/meetings/",
   EDIT = "/meetings/",
   DELETE = "/meetings/",
-  COMMENTS = "/meetings/",
-  ADD_COMMENT = "/meetings/",
-  UPDATE_COMMENT = "/meetings/",
+  COMMENTS = "/meetings/comment/",
+  ADD_COMMENT = "/meetings/comment",
+  UPDATE_COMMENT = "/meetings/comment/",
   BY_PARTNER = "/meetings/partner/",
 }

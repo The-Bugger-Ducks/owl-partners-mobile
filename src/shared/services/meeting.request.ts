@@ -1,4 +1,3 @@
-import { IComment } from "@interfaces/annotation.interface";
 import { alertError } from "@utils/alertError";
 import { Alert } from "react-native";
 import { MEETING_ENDPOINTS } from "../constants/endpoints";
@@ -91,22 +90,28 @@ class MeetingRequests {
     }
   }
 
-  async createMeetingComment(meetingId: string, comment: string) {
+  async createMeetingComment(
+    meetingId: string,
+    comment: string,
+    userId: string,
+  ) {
     try {
-      const { data } = await api.post(
-        MEETING_ENDPOINTS.ADD_COMMENT + meetingId,
+      const payload = {
         comment,
-      );
+        meetingId,
+        userId,
+      };
+      const { data } = await api.post(MEETING_ENDPOINTS.ADD_COMMENT, payload);
       return data;
     } catch (error) {
       alertError(error, "Não foi possível cadastrar o comentário :(");
     }
   }
 
-  async updateMeetingComment(comment: IComment) {
+  async updateMeetingComment(commentId: string, comment: string) {
     try {
       const { data } = await api.put(
-        MEETING_ENDPOINTS.UPDATE_COMMENT + comment.id,
+        MEETING_ENDPOINTS.UPDATE_COMMENT + commentId,
         comment,
       );
       return data;
