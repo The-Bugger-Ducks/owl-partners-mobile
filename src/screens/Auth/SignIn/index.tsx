@@ -89,7 +89,7 @@ export function SignIn() {
     <Container>
       <FormContainer>
         <Form>
-          <Header align="center" />
+          <Header align="center" isHero />
 
           <LoadingContainer>{isLoading && <Loading />}</LoadingContainer>
 

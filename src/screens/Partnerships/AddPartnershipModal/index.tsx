@@ -18,8 +18,6 @@ import {
   TextInput,
 } from "./styles";
 
-
-
 export function AddPartnershipModal({
   visible,
   onClose,
@@ -46,7 +44,7 @@ export function AddPartnershipModal({
 
     try {
       setIsLoading(true);
-      await partnershipRequests.createPartnership(data)
+      await partnershipRequests.createPartnership(data);
     } catch (error) {
       console.error(error);
     }
@@ -60,7 +58,7 @@ export function AddPartnershipModal({
       visible={visible}
       isLoading={isLoading}
       onClose={onClose}
-      buttonTitle= "Adicionar parceria"
+      buttonTitle="Adicionar parceria"
       onPressButton={handleSubmit(onSubmit)}
       content={
         <ScrollView>
@@ -133,7 +131,6 @@ export function AddPartnershipModal({
                       )}
                     </Picker>
                   </ClassicationDropDownArea>
-
                 </>
               )}
             />

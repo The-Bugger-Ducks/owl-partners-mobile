@@ -1,46 +1,48 @@
 import { Card, Input, Loading, Modal, Text } from "@components";
-import { RootStackParamList } from "@custom-types/rootStackParamList";
 import { IComment } from "@interfaces/annotation.interface";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import annotationRequests from "@requests/annotation.requests";
+import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
+import StorageController from "@utils/handlers/StorageController";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
-interface AnnotationsListyProps {
-  isPartnershipDisabled: boolean;
+interface AnnotationsListProps {
+  data?: IComment[];
+  meetingId: string;
 }
 
-export function AnnotationsList({
-  isPartnershipDisabled,
-}: AnnotationsListyProps) {
+export function AnnotationsList({ data, meetingId }: AnnotationsListProps) {
   const [newComment, setNewComment] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [annotations, setAnnotations] = useState<IComment[]>();
+  const [annotations, setAnnotations] = useState<IComment[]>(data ?? []);
   const [modalComment, setModalComment] = useState<IComment>();
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [isEditCommentModalOpen, setIsEditCommentModalOpen] = useState(false);
   const [editedComment, setEditedComment] = useState("");
-  const route = useRoute<RouteProp<RootStackParamList, "Partnership">>();
-
-  const { id } = route.params;
 
   async function getData() {
     setIsLoading(true);
-    const comments = await annotationRequests.getAnnotations(id);
+    const comments = await meetingRequest.getMeetingComments(meetingId);
     setAnnotations(comments);
     setIsLoading(false);
   }
 
   useEffect(() => {
     getData();
-  }, [id]);
+  }, [meetingId]);
 
   async function handleAddComment() {
     setIsLoading(true);
-    await annotationRequests.createAnnotation(id, newComment);
-    const updatedComments = await annotationRequests.getAnnotations(id);
+    const user = await StorageController.getUserInfo();
+    if (user)
+      await meetingRequest.createMeetingComment(
+        meetingId,
+        newComment,
+        user?.id,
+      );
+
+    const updatedComments = await meetingRequest.getMeetingComments(meetingId);
     updatedComments && setAnnotations(updatedComments);
     setNewComment("");
     setIsLoading(false);
@@ -48,12 +50,8 @@ export function AnnotationsList({
 
   async function handleEditComment() {
     setIsLoading(true);
-    await annotationRequests.updateAnnotation(
-      modalComment?.id ?? "",
-      id,
-      editedComment,
-    );
-    const updatedComments = await annotationRequests.getAnnotations(id);
+    await meetingRequest.updateMeetingComment(modalComment!.id, editedComment);
+    const updatedComments = await meetingRequest.getMeetingComments(meetingId);
     updatedComments && setAnnotations(updatedComments);
     setEditedComment("");
     setIsLoading(false);
@@ -62,19 +60,17 @@ export function AnnotationsList({
 
   return (
     <ScrollView scrollEnabled>
-      {!isPartnershipDisabled && (
-        <Input
-          label={"Inserir atualização"}
-          placeholder={"Nova atualização sobre a parceria..."}
-          value={newComment}
-          onChangeText={text => setNewComment(text)}
-          hasOutIcon
-          onPressIcon={() => newComment.length > 0 && handleAddComment()}
-        />
-      )}
+      <Input
+        label={"Inserir anotação"}
+        placeholder={"Nova anotação em reunião..."}
+        value={newComment}
+        onChangeText={text => setNewComment(text)}
+        hasOutIcon
+        onPressIcon={() => newComment.length > 0 && handleAddComment()}
+      />
 
       <Text size={14} color={"#666666"} style={{ marginVertical: 16 }}>
-        Todas as atualizações e anotações
+        Lista de anotações
       </Text>
 
       {isLoading ? (
@@ -87,7 +83,7 @@ export function AnnotationsList({
           color={"#999999"}
           style={{ textAlign: "center", marginVertical: 24 }}
         >
-          Sem atualizações ou anotações
+          Sem anotações
         </Text>
       ) : (
         annotations?.map(card => {
@@ -97,13 +93,13 @@ export function AnnotationsList({
             <Card
               key={card.id}
               id={card.id}
+              canEdit={true}
               type={"annotation"}
               isEdited={isEdited}
               date={formatDate(isEdited ? card.updatedAt : card.createdAt)}
               time={formatTime(isEdited ? card.updatedAt : card.createdAt)}
               description={card.comment}
               author={`${card.User.name} ${card.User.lastName}`}
-              title={card.title}
               onPress={() => {
                 setModalComment(card);
                 setIsCommentModalOpen(true);
@@ -113,7 +109,6 @@ export function AnnotationsList({
                 setEditedComment(card.comment);
                 setIsEditCommentModalOpen(true);
               }}
-              canEdit={isPartnershipDisabled}
             />
           );
         })
@@ -129,8 +124,8 @@ export function AnnotationsList({
       <Modal
         visible={isEditCommentModalOpen}
         onClose={() => setIsEditCommentModalOpen(false)}
-        title={"Editar comentário"}
-        buttonTitle="Editar comentário"
+        title={"Editar anotação"}
+        buttonTitle="Editar anotação"
         onPressButton={handleEditComment}
         isLoading={isLoading}
         content={

@@ -5,7 +5,7 @@ import { isAndroid } from "@constants";
 
 export const Container = styled.SafeAreaView`
   margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : "0"};
-  gap:10px;
+  gap: 10px;
 `;
 
 export const TextInput = styled.TextInput`
@@ -42,4 +42,3 @@ export const SelectArea = styled.View`
   border-radius: 8px;
   border: 1px solid #cccccc;
 `;
-

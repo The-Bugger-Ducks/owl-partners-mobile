@@ -1,18 +1,19 @@
-import { Close, Drop, Modal, Text } from "@components";
-import { ScrollView, TouchableOpacity, View } from "react-native";
-import { AddPartnerView, Container, SelectArea, TextInput } from "./styles";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { Key, useEffect, useState } from "react";
-import { ClassificationSelectOptions } from "@constants";
+import { Close, Modal, Text } from "@components";
+import {
+  ClassificationSelectOptions,
+  stateSelectOptions,
+  statusSelectOptions,
+} from "@constants";
 import {
   IModalPropsEdit,
-  IPartnership,
   IPartnershipEdit,
-} from "@interfaces/partner.interface"
-import { stateSelectOptions } from "@constants";
-import { statusSelectOptions } from "@constants";
+} from "@interfaces/partner.interface";
 import { Picker } from "@react-native-picker/picker";
 import partnershipRequests from "@requests/partnership.requests";
+import { useEffect, useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { ScrollView, TouchableOpacity } from "react-native";
+import { AddPartnerView, Container, SelectArea, TextInput } from "./styles";
 
 export function EditPartnershipModal({
   visible,
@@ -51,10 +52,9 @@ export function EditPartnershipModal({
       status: payload.status,
       zipCode: payload.zipCode,
     };
-    console.log(data);
     try {
       setIsLoading(true);
-      await partnershipRequests.updatePartnership(data, partnerProps.id)
+      await partnershipRequests.updatePartnership(data, partnerProps.id);
     } catch (error) {
       console.error(error);
     }
@@ -65,16 +65,16 @@ export function EditPartnershipModal({
   useEffect(() => {
     if (partnerProps) {
       setValue("name", partnerProps["name"]),
-        setValue("email", partnerProps["email"]),
-        setValue("phoneNumber", partnerProps["phoneNumber"]),
-        setValue("zipCode", partnerProps["zipCode"]),
-        setValue("state", partnerProps["state"]),
-        setValue("city", partnerProps["city"]),
-        setValue("neighborhood", partnerProps["neighborhood"]),
-        setValue("address", partnerProps["address"]),
-        setValue("classification", partnerProps["classification"]),
-        setValue("status", partnerProps["status"]),
-        setValue("memberNumber", partnerProps["memberNumber"]);
+      setValue("email", partnerProps["email"]),
+      setValue("phoneNumber", partnerProps["phoneNumber"]),
+      setValue("zipCode", partnerProps["zipCode"]),
+      setValue("state", partnerProps["state"]),
+      setValue("city", partnerProps["city"]),
+      setValue("neighborhood", partnerProps["neighborhood"]),
+      setValue("address", partnerProps["address"]),
+      setValue("classification", partnerProps["classification"]),
+      setValue("status", partnerProps["status"]),
+      setValue("memberNumber", partnerProps["memberNumber"]);
     }
   }, [partnerProps]);
 
@@ -145,7 +145,7 @@ export function EditPartnershipModal({
                       selectedValue={field.value}
                       onValueChange={itemValue => {
                         setSelectClassification(itemValue),
-                          field.onChange(itemValue);
+                        field.onChange(itemValue);
                       }}
                     >
                       {Object.keys(ClassificationSelectOptions).map(
@@ -306,7 +306,5 @@ export function EditPartnershipModal({
         </ScrollView>
       }
     />
-
-
   );
 }

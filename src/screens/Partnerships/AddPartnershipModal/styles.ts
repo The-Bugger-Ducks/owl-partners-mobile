@@ -28,7 +28,6 @@ export const AddPartnerView = styled.View`
   margin-bottom: 24px;
 `;
 
-
 export const ClassicationDropDownArea = styled.View`
   background: #f4f5f7;
   border-radius: 8px;
@@ -46,4 +45,3 @@ export const StateDropDowArea = styled.View`
   border-radius: 8px;
   border: 1px solid #cccccc;
 `;
-

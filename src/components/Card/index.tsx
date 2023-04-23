@@ -14,7 +14,8 @@ interface CardProps {
   author?: string;
   onPress?: () => void;
   onEdit?: () => void;
-  isDisabled: boolean;
+  canEdit: boolean;
+  isEdited?: boolean;
 }
 
 export function Card({
@@ -29,7 +30,8 @@ export function Card({
   author,
   onPress,
   onEdit,
-  isDisabled,
+  canEdit,
+  isEdited = false,
 }: CardProps) {
   const props: SpecificCardProps["props"] = {
     id,
@@ -42,7 +44,8 @@ export function Card({
     author,
     onPress,
     onEdit,
-    isDisabled,
+    canEdit,
+    isEdited,
   };
 
   if (type === "annotation") return <Anotation props={props} />;
@@ -62,7 +65,8 @@ export interface SpecificCardProps {
     author?: string;
     onPress?: () => void;
     onEdit?: () => void;
-    isDisabled: boolean;
+    canEdit: boolean;
+    isEdited?: boolean;
   };
 }
 
@@ -73,11 +77,11 @@ function Update({ props }: SpecificCardProps) {
         <Text color="#000000" size={12} weight="500">
           Atualização | {props.date}, {props.time}
         </Text>
-        {!props.isDisabled ? (
+        {props.canEdit && (
           <EditIcon onPress={props.onEdit}>
             <Edit />
           </EditIcon>
-        ) : null}
+        )}
       </Title>
       <Text color="#999999" size={12} numberOfLines={1}>
         {props.description}
@@ -94,13 +98,18 @@ function Anotation({ props }: SpecificCardProps) {
     <Container onPress={props.onPress} activeOpacity={0.7}>
       <Title>
         <Text color="#000000" size={12} weight="500">
-          Anotação | {props.date}, {props.time}
+          Anotação | {props.date}, {props.time}{" "}
+          {props.isEdited && (
+            <Text color="#999999" size={12} weight="500">
+              (editado)
+            </Text>
+          )}
         </Text>
         <EditIcon onPress={props.onEdit}>
           <Edit />
         </EditIcon>
       </Title>
-      <Text size={14}>{props.title}</Text>
+      {props.title && <Text size={14}>{props.title}</Text>}
       <Text color="#999999" size={12} numberOfLines={1}>
         {props.description}
       </Text>
@@ -118,9 +127,11 @@ function Meeting({ props }: SpecificCardProps) {
         <Text color="#000000" size={12} weight="500">
           {props.date} | {props.partner}
         </Text>
-        <EditIcon onPress={props.onEdit}>
-          <Edit />
-        </EditIcon>
+        {props.canEdit && (
+          <EditIcon onPress={props.onEdit}>
+            <Edit />
+          </EditIcon>
+        )}
       </Title>
       <MeetingDetails>
         <Text color="#999999" size={14}>

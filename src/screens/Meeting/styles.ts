@@ -1,21 +1,31 @@
+import { StatusBar } from "react-native";
 import styled from "styled-components/native";
 
 import { isAndroid } from "@constants";
 
 export const Container = styled.SafeAreaView`
-  padding-top: ${isAndroid ? "60px" : "0"};
+  margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : "0"};
   flex: 1;
   background: #f4f5f7;
-  gap: 10px;
 `;
 
 export const ButtonsContainer = styled.View`
   padding: 12px 24px;
 `;
 
-export const HistoryContainer = styled.View`
+export const AnnotationsListContainer = styled.View`
   padding: 24px 24px;
   flex: 1;
+`;
+
+export const ModalContent = styled.View`
+  gap: 8px;
+`;
+
+export const ListContainer = styled.ScrollView``;
+
+export const LoadingContainer = styled.View`
+  margin-top: 24px;
 `;
 
 export const TextInput = styled.TextInput`
@@ -29,27 +39,15 @@ export const TextInput = styled.TextInput`
   height: 56px;
 `;
 
-export const InformationView = styled.View`
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 24px;
-  gap: 8px;
-  width: 345px;
-  height: 160px;
-  justify-content: center;
-`;
-
-export const ContactView = styled.View`
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 24px;
-  gap: 8px;
-  width: 345px;
-  height: 123px;
-  justify-content: center;
-`;
-
-export const PartnerInfoView = styled.View`
+export const InfoContainer = styled.View`
   padding: 24px 24px;
   gap: 10px;
+`;
+
+export const InfoCardContainer = styled.View`
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  gap: 8px;
+  justify-content: center;
 `;
