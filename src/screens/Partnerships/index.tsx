@@ -1,9 +1,10 @@
-import { Button, Header, Loading, Tabs, Text, Input } from "@components";
+import { Button, Header, Input, Loading, Tabs, Text } from "@components";
 import { PropsStack } from "@custom-types/rootStackParamList";
 import { IPartnership } from "@interfaces/partner.interface";
 import { useNavigation } from "@react-navigation/native";
 import partnershipRequests from "@requests/partnership.requests";
 import { useEffect, useState } from "react";
+import { View } from "react-native";
 import { AddPartnershipModal } from "./AddPartnershipModal";
 import {
   ButtonView,
@@ -13,7 +14,6 @@ import {
   PartnershipsList,
   TabsContainer,
 } from "./styles";
-import { View } from "react-native";
 
 export function Partnerships() {
   const [visibleAddPartnershipModal, setVisibleAddPartnershipModal] =
@@ -35,7 +35,8 @@ export function Partnerships() {
   }
 
   async function filterPartnership(name: string) {
-    const filteredPartnerships = await partnershipRequests.getPartnershipByName(
+    const filteredPartnerships = await partnershipRequests.getPartnerships(
+      tab === 1,
       name,
     );
     setFilteredData(filteredPartnerships);
