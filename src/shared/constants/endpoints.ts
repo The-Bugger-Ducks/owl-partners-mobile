@@ -8,6 +8,7 @@ export enum PARTNERSHIP_ENDPOINTS {
 
   CREATE = "/partners",
   LIST = "/partners/search",
+  LIST_BY_NAME = "/partners/search",
   DETAILS = "/partners/",
   EDIT = "/partners/",
   DELETE = "/partners/",

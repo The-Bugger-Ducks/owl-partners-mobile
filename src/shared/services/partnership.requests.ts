@@ -57,6 +57,17 @@ class PartnershipRequests {
       alertError(error, "Não foi possível deletar a parceria :(");
     }
   }
+
+  async getPartnershipByName(name: string) {
+    try {
+      const { data } = await api.get(
+        PARTNERSHIP_ENDPOINTS.LIST_BY_NAME + `?name=${name}`,
+      );
+      return data;
+    } catch (error) {
+      alertError(error, "Não foi possível filtrar as parcerias");
+    }
+  }
 }
 
 export default new PartnershipRequests();
