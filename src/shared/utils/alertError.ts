@@ -4,22 +4,21 @@ import { Alert } from "react-native";
 export function alertError(error: any, mensage?: string) {
   if (isAxiosError(error)) {
     if (error.response && error.response.status === 401) {
+      console.error(error);
       Alert.alert(
         "Sessão expirada!",
         "Faça login novamente para continuar navegando pelo app",
       );
-      console.error(error);
       throw new Error("Unauthorized");
-    }
-    if (error.response && error.response.status >= 500) {
+    } else if (error.response && error.response.status >= 500) {
+      console.error(error);
       Alert.alert(
         "Instabilidade no servidor!",
         "Tente novamente dentro de alguns instantes...",
       );
+    } else {
       console.error(error);
+      Alert.alert("Ops!", mensage);
     }
-
-    console.error(error);
-    Alert.alert("Ops!", mensage);
   }
 }
