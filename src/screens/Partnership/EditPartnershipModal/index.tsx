@@ -1,4 +1,4 @@
-import { Close, Modal, Text } from "@components";
+import { Icon, Modal, Text } from "@components";
 import {
   ClassificationSelectOptions,
   stateSelectOptions,
@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ScrollView, TouchableOpacity } from "react-native";
 import { AddPartnerView, Container, SelectArea, TextInput } from "./styles";
+import { getPartnerStatusEnumByValue } from "@utils/handlers/formatEnumsPartner";
 
 export function EditPartnershipModal({
   visible,
@@ -40,7 +41,6 @@ export function EditPartnershipModal({
   const onSubmit: SubmitHandler<IPartnershipEdit> = async payload => {
     const data = {
       memberNumber: Number(payload.memberNumber),
-
       address: payload.address,
       city: payload.city,
       classification: payload.classification,
@@ -64,17 +64,21 @@ export function EditPartnershipModal({
 
   useEffect(() => {
     if (partnerProps) {
-      setValue("name", partnerProps["name"]),
-      setValue("email", partnerProps["email"]),
-      setValue("phoneNumber", partnerProps["phoneNumber"]),
-      setValue("zipCode", partnerProps["zipCode"]),
-      setValue("state", partnerProps["state"]),
-      setValue("city", partnerProps["city"]),
-      setValue("neighborhood", partnerProps["neighborhood"]),
-      setValue("address", partnerProps["address"]),
-      setValue("classification", partnerProps["classification"]),
-      setValue("status", partnerProps["status"]),
+      setValue("name", partnerProps["name"]);
+      setValue("email", partnerProps["email"]);
+      setValue("phoneNumber", partnerProps["phoneNumber"]);
+      setValue("zipCode", partnerProps["zipCode"]);
+      setValue("state", partnerProps["state"]);
+      setValue("city", partnerProps["city"]);
+      setValue("neighborhood", partnerProps["neighborhood"]);
+      setValue("address", partnerProps["address"]);
+      setValue("classification", partnerProps["classification"]);
       setValue("memberNumber", partnerProps["memberNumber"]);
+
+      const partnerStatus =
+        getPartnerStatusEnumByValue(partnerProps["status"])?.statusKey ??
+        partnerProps["status"];
+      setValue("status", partnerStatus);
     }
   }, [partnerProps]);
 
@@ -95,7 +99,7 @@ export function EditPartnershipModal({
               <Text>Editar parceria</Text>
 
               <TouchableOpacity onPress={onClose}>
-                <Close color="#666666" />
+                <Icon icon="close" />
               </TouchableOpacity>
             </AddPartnerView>
             <Text weight="500">Informações gerais</Text>
@@ -145,7 +149,7 @@ export function EditPartnershipModal({
                       selectedValue={field.value}
                       onValueChange={itemValue => {
                         setSelectClassification(itemValue),
-                        field.onChange(itemValue);
+                          field.onChange(itemValue);
                       }}
                     >
                       {Object.keys(ClassificationSelectOptions).map(

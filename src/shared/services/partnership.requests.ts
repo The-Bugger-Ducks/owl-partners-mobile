@@ -4,6 +4,10 @@ import { IPartnership, IPartnershipEdit } from "@interfaces/partner.interface";
 import { alertError } from "@utils/alertError";
 import { Alert } from "react-native";
 import { PARTNERSHIP_ENDPOINTS } from "../constants/endpoints";
+import {
+  formatPartnerStatusByList,
+  formatStatus,
+} from "@utils/handlers/formatEnumsPartner";
 
 class PartnershipRequests {
   async createPartnership(newPartnership: IPartnership) {
@@ -21,13 +25,14 @@ class PartnershipRequests {
   async getPartnerships(disabled?: boolean, name?: string) {
     try {
       const { data } = name
-        ? await api.get(
+        ? await api.get<IPartnership[]>(
           PARTNERSHIP_ENDPOINTS.LIST +
               `?disabled=${disabled}` +
               `&name=${name}`,
         )
-        : await api.get(PARTNERSHIP_ENDPOINTS.LIST + `?disabled=${disabled}`);
-      return data;
+        : await api.get<IPartnership[]>(PARTNERSHIP_ENDPOINTS.LIST + `?disabled=${disabled}`);
+
+      return formatPartnerStatusByList(data);
     } catch (error) {
       alertError(error, "Não foi possível carregar a lista de parcerias :(");
     }
@@ -35,8 +40,10 @@ class PartnershipRequests {
 
   async getPartnership(id: string) {
     try {
-      const { data } = await api.get(PARTNERSHIP_ENDPOINTS.DETAILS + id);
-      return data as IPartnership;
+      const { data } = await api.get<IPartnership>(
+        PARTNERSHIP_ENDPOINTS.DETAILS + id,
+      );
+      return formatStatus(data);
     } catch (error) {
       alertError(error, "Não foi possível carregar os dados da parceria :(");
     }
