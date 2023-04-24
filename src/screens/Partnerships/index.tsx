@@ -1,9 +1,10 @@
-import { Button, Header, Loading, Tabs, Text } from "@components";
+import { Button, Header, Input, Loading, Tabs, Text } from "@components";
 import { PropsStack } from "@custom-types/rootStackParamList";
 import { IPartnership } from "@interfaces/partner.interface";
 import { useNavigation } from "@react-navigation/native";
 import partnershipRequests from "@requests/partnership.requests";
 import { useEffect, useState } from "react";
+import { View } from "react-native";
 import { AddPartnershipModal } from "./AddPartnershipModal";
 import {
   ButtonView,
@@ -19,7 +20,9 @@ export function Partnerships() {
     useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<IPartnership[]>([]);
+  const [filteredData, setFilteredData] = useState<IPartnership[]>([]);
   const [tab, setTab] = useState(0);
+
   const navigation = useNavigation<PropsStack>();
 
   async function getPartnerships() {
@@ -27,7 +30,17 @@ export function Partnerships() {
     const partnerships: IPartnership[] =
       await partnershipRequests.getPartnerships(tab === 1);
     setData(partnerships);
+    setFilteredData(partnerships);
     setIsLoading(false);
+  }
+
+  async function filterPartnership(name: string) {
+    const isPartnershipDisabledTab = tab === 1;
+    const filteredPartnerships = await partnershipRequests.getPartnerships(
+      isPartnershipDisabledTab,
+      name,
+    );
+    setFilteredData(filteredPartnerships);
   }
 
   useEffect(() => {
@@ -57,6 +70,12 @@ export function Partnerships() {
           onChangeTab={tab => setTab(tab)}
         />
 
+        <Input
+          label="Encontrar parceria"
+          placeholder="The Bugger Ducks..."
+          onChangeText={text => filterPartnership(text)}
+        />
+
         <PartnershipsList>
           <Text style={{ marginBottom: 16 }}>Parcerias encontradas</Text>
 
@@ -65,30 +84,43 @@ export function Partnerships() {
               <Loading />
             </LoadingContainer>
           ) : (
-            data?.map(({ name, classification, status, id }) => {
-              return (
-                <PartnerView
-                  key={id}
-                  activeOpacity={0.7}
-                  onPress={() => navigation.navigate("Partnership", { id })}
-                >
+            <>
+              {filteredData.length === 0 && (
+                <View>
                   <Text
-                    color="#EF4444"
-                    size={12}
-                    weight="500"
-                    numberOfLines={1}
+                    size={14}
+                    color="#999999"
+                    style={{ textAlign: "center", marginVertical: 24 }}
                   >
-                    {classification} |{" "}
-                    <Text size={12} weight="500">
-                      {name}
+                    Não foi encontrada nenhuma parceria
+                  </Text>
+                </View>
+              )}
+              {filteredData?.map(({ name, classification, status, id }) => {
+                return (
+                  <PartnerView
+                    key={id}
+                    activeOpacity={0.7}
+                    onPress={() => navigation.navigate("Partnership", { id })}
+                  >
+                    <Text
+                      color="#EF4444"
+                      size={12}
+                      weight="500"
+                      numberOfLines={1}
+                    >
+                      {classification} |{" "}
+                      <Text size={12} weight="500">
+                        {name}
+                      </Text>
                     </Text>
-                  </Text>
-                  <Text color="#999999" size={14} numberOfLines={1}>
-                    Status: <Text>{status}</Text>
-                  </Text>
-                </PartnerView>
-              );
-            })
+                    <Text color="#999999" size={14} numberOfLines={1}>
+                      Status: <Text>{status}</Text>
+                    </Text>
+                  </PartnerView>
+                );
+              })}
+            </>
           )}
         </PartnershipsList>
       </TabsContainer>

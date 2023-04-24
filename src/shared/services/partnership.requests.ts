@@ -22,11 +22,15 @@ class PartnershipRequests {
     }
   }
 
-  async getPartnerships(disabled?: boolean) {
+  async getPartnerships(disabled?: boolean, name?: string) {
     try {
-      const { data } = await api.get<IPartnership[]>(
-        PARTNERSHIP_ENDPOINTS.LIST + "?disabled=" + disabled,
-      );
+      const { data } = name
+        ? await api.get<IPartnership[]>(
+          PARTNERSHIP_ENDPOINTS.LIST +
+              `?disabled=${disabled}` +
+              `&name=${name}`,
+        )
+        : await api.get<IPartnership[]>(PARTNERSHIP_ENDPOINTS.LIST + `?disabled=${disabled}`);
 
       return formatPartnerStatusByList(data);
     } catch (error) {

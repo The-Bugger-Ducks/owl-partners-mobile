@@ -5,7 +5,6 @@ export enum USER_ENDPOINTS {
 export enum PARTNERSHIP_ENDPOINTS {
   CREATE_PARTNERSHIP = "/partners",
   LIST_PARTNERSHIP = "/partners/search",
-
   CREATE = "/partners",
   LIST = "/partners/search",
   DETAILS = "/partners/",
