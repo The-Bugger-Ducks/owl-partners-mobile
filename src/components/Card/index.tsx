@@ -14,6 +14,8 @@ interface CardProps {
   author?: string;
   onPress?: () => void;
   onEdit?: () => void;
+  canEdit: boolean;
+  isEdited?: boolean;
 }
 
 export function Card({
@@ -28,6 +30,8 @@ export function Card({
   author,
   onPress,
   onEdit,
+  canEdit,
+  isEdited = false,
 }: CardProps) {
   const props: SpecificCardProps["props"] = {
     id,
@@ -40,6 +44,8 @@ export function Card({
     author,
     onPress,
     onEdit,
+    canEdit,
+    isEdited,
   };
 
   if (type === "annotation") return <Anotation props={props} />;
@@ -59,6 +65,8 @@ export interface SpecificCardProps {
     author?: string;
     onPress?: () => void;
     onEdit?: () => void;
+    canEdit: boolean;
+    isEdited?: boolean;
   };
 }
 
@@ -69,17 +77,17 @@ function Update({ props }: SpecificCardProps) {
         <Text color="#000000" size={12} weight="500">
           Atualização | {props.date}, {props.time}
         </Text>
-        <EditIcon onPress={props.onEdit}>
-          <Edit />
-        </EditIcon>
+        {props.canEdit && (
+          <EditIcon onPress={props.onEdit}>
+            <Edit />
+          </EditIcon>
+        )}
       </Title>
       <Text color="#999999" size={12} numberOfLines={1}>
         {props.description}
       </Text>
       <Comment>
-        <Text color="#333333" size={12}>
-          Comentado por {props.author}
-        </Text>
+        <Text size={12}>Comentado por {props.author}</Text>
       </Comment>
     </Container>
   );
@@ -90,22 +98,23 @@ function Anotation({ props }: SpecificCardProps) {
     <Container onPress={props.onPress} activeOpacity={0.7}>
       <Title>
         <Text color="#000000" size={12} weight="500">
-          Anotação | {props.date}, {props.time}
+          Anotação | {props.date}, {props.time}{" "}
+          {props.isEdited && (
+            <Text color="#999999" size={12} weight="500">
+              (editado)
+            </Text>
+          )}
         </Text>
         <EditIcon onPress={props.onEdit}>
           <Edit />
         </EditIcon>
       </Title>
-      <Text color="#333333" size={14}>
-        {props.title}
-      </Text>
+      {props.title && <Text size={14}>{props.title}</Text>}
       <Text color="#999999" size={12} numberOfLines={1}>
         {props.description}
       </Text>
       <Comment>
-        <Text color="#333333" size={12}>
-          Criado por {props.author}
-        </Text>
+        <Text size={12}>Criado por {props.author}</Text>
       </Comment>
     </Container>
   );
@@ -118,15 +127,17 @@ function Meeting({ props }: SpecificCardProps) {
         <Text color="#000000" size={12} weight="500">
           {props.date} | {props.partner}
         </Text>
-        <EditIcon onPress={props.onEdit}>
-          <Edit />
-        </EditIcon>
+        {props.canEdit && (
+          <EditIcon onPress={props.onEdit}>
+            <Edit />
+          </EditIcon>
+        )}
       </Title>
       <MeetingDetails>
         <Text color="#999999" size={14}>
           {props.time}
         </Text>
-        <Text color="#333333" size={14} numberOfLines={1}>
+        <Text size={14} numberOfLines={1}>
           {props.title}
         </Text>
       </MeetingDetails>

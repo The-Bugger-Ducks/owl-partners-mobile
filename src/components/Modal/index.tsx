@@ -1,4 +1,4 @@
-import { isAndroid } from "@utils/checkPlatform";
+import { isAndroid } from "@constants";
 import { ReactNode } from "react";
 import { Modal as ReactNativeModal, TouchableOpacity } from "react-native";
 import { Button } from "../Button";
@@ -39,9 +39,7 @@ export function Modal({
       >
         <Container>
           <Header>
-            <Text size={16} weight="500">
-              {title}
-            </Text>
+            <Text weight="500">{title}</Text>
             <TouchableOpacity onPress={onClose}>
               <Close color="#666666" />
             </TouchableOpacity>

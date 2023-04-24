@@ -1,7 +1,7 @@
 import { StatusBar } from "react-native";
 import styled, { css } from "styled-components/native";
 
-import { isAndroid } from "@utils/checkPlatform";
+import { isAndroid } from "@constants";
 
 export const Overlay = styled.KeyboardAvoidingView<{ isBottom: boolean }>`
   background: rgba(0, 0, 0, 0.6);

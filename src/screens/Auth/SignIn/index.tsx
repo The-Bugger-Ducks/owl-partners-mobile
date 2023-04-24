@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { View } from "react-native";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-
+import {
+  Button,
+  Eye,
+  EyeHidden,
+  Header,
+  Info,
+  Loading,
+  Text,
+} from "@components";
+import { validEmailPattern } from "@constants";
+import { PropsStack } from "@custom-types/rootStackParamList";
+import { IUserLogin } from "@interfaces/user.interface";
 import { StackActions, useNavigation } from "@react-navigation/native";
+import authRequest from "@requests/auth.request";
+import StorageController from "@utils/handlers/StorageController";
 import { isAxiosError } from "axios";
-
-import authRequest from "../../../shared/services/auth.request";
-import { IUserLogin } from "../../../shared/interfaces/user.interface";
-import { validEmailPattern } from "../../../shared/constants/validEmailPattern";
-
-import StorageController from "../../../shared/utils/handlers/StorageController";
-import { PropsStack } from "../../../shared/types/rootStackParamList";
-
-import { Button, Text, Info, EyeHidden, Eye, Loading } from "@components";
-
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { View } from "react-native";
 import {
   Container,
   Form,
@@ -24,7 +27,6 @@ import {
   InputPassword,
   LoadingContainer,
   PasswordInputContainer,
-  TextContainer,
   TextInput,
 } from "./styles";
 
@@ -87,15 +89,7 @@ export function SignIn() {
     <Container>
       <FormContainer>
         <Form>
-          <TextContainer>
-            <Text size={14} opacity={0.9}>
-              Bem vindo(a) ao
-            </Text>
-            <Text size={24} weight="700">
-              OWL
-              <Text size={24}>PARTNERS</Text>
-            </Text>
-          </TextContainer>
+          <Header align="center" isHero />
 
           <LoadingContainer>{isLoading && <Loading />}</LoadingContainer>
 

@@ -1,29 +1,26 @@
 import React from "react";
 
+import { RootStackParamList } from "@custom-types/rootStackParamList";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  BottomTabDescriptorMap,
+  BottomTabNavigationEventMap,
+} from "@react-navigation/bottom-tabs/lib/typescript/src/types";
 import {
   NavigationHelpers,
   ParamListBase,
   StackActions,
   TabNavigationState,
 } from "@react-navigation/native";
-
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-import {
-  BottomTabDescriptorMap,
-  BottomTabNavigationEventMap,
-} from "@react-navigation/bottom-tabs/lib/typescript/src/types";
-
-import StorageController from "@requests/StorageController";
-import { RootStackParamList } from "../../shared/types/rootStackParamList";
+import StorageController from "@utils/handlers/StorageController";
 
 import { Home } from "@screens/Home";
-import { Partnerships } from "@screens/Partnerships";
 import { Partnership } from "@screens/Partnership";
+import { Partnerships } from "@screens/Partnerships";
 
 import { Container, Tab, TabIndicator } from "./styles";
 
-import { Home as HomeIcon, Profile, Order, Text } from "@components";
+import { Home as HomeIcon, Order, Profile, Text } from "@components";
 
 interface TabBarProps {
   state: TabNavigationState<ParamListBase>;

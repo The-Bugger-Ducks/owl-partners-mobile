@@ -1,7 +1,7 @@
 import { StatusBar } from "react-native";
 import styled from "styled-components/native";
 
-import { isAndroid } from "@utils/checkPlatform";
+import { isAndroid } from "@constants";
 
 export const Container = styled.SafeAreaView`
   margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : "0"};
@@ -10,5 +10,9 @@ export const Container = styled.SafeAreaView`
 `;
 
 export const ButtonsContainer = styled.View`
+  padding: 24px 24px;
+`;
+
+export const MeetingContainer = styled.ScrollView`
   padding: 24px 24px;
 `;

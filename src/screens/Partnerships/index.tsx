@@ -1,9 +1,11 @@
-import { Button, Header, Loading, Tabs, Text } from "@components";
+import { Button, Header, Input, Loading, Tabs, Text } from "@components";
+import { PropsStack } from "@custom-types/rootStackParamList";
 import { IPartnership } from "@interfaces/partner.interface";
 import { useNavigation } from "@react-navigation/native";
-import { PartnershipForm } from "@screens/PartnershipForm";
+import partnershipRequests from "@requests/partnership.requests";
 import { useEffect, useState } from "react";
-import partnerRequest from "../../shared/services/partner.request";
+import { View } from "react-native";
+import { AddPartnershipModal } from "./AddPartnershipModal";
 import {
   ButtonView,
   Container,
@@ -14,28 +16,50 @@ import {
 } from "./styles";
 
 export function Partnerships() {
-  const [visibleModal, setVisibleModal] = useState(false);
+  const [visibleAddPartnershipModal, setVisibleAddPartnershipModal] =
+    useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<IPartnership[]>([]);
+  const [filteredData, setFilteredData] = useState<IPartnership[]>([]);
   const [tab, setTab] = useState(0);
-  const navigation = useNavigation();
+
+  const navigation = useNavigation<PropsStack>();
 
   async function getPartnerships() {
     setIsLoading(true);
-    const partnerships: IPartnership[] = await partnerRequest.List(tab === 1);
+    const partnerships: IPartnership[] =
+      await partnershipRequests.getPartnerships(tab === 1);
     setData(partnerships);
+    setFilteredData(partnerships);
     setIsLoading(false);
+  }
+
+  async function filterPartnership(name: string) {
+    const isPartnershipDisabledTab = tab === 1;
+    const filteredPartnerships = await partnershipRequests.getPartnerships(
+      isPartnershipDisabledTab,
+      name,
+    );
+    setFilteredData(filteredPartnerships);
   }
 
   useEffect(() => {
     getPartnerships();
   }, [tab]);
 
+  function handleCloseEditModal() {
+    getPartnerships();
+    setVisibleAddPartnershipModal(false);
+  }
+
   return (
     <Container>
       <Header isHero={true} />
       <ButtonView>
-        <Button type="unfilled" onPress={() => setVisibleModal(true)}>
+        <Button
+          type="unfilled"
+          onPress={() => setVisibleAddPartnershipModal(true)}
+        >
           Adicionar nova parceria
         </Button>
       </ButtonView>
@@ -46,6 +70,12 @@ export function Partnerships() {
           onChangeTab={tab => setTab(tab)}
         />
 
+        <Input
+          label="Encontrar parceria"
+          placeholder="The Bugger Ducks..."
+          onChangeText={text => filterPartnership(text)}
+        />
+
         <PartnershipsList>
           <Text style={{ marginBottom: 16 }}>Parcerias encontradas</Text>
 
@@ -54,49 +84,51 @@ export function Partnerships() {
               <Loading />
             </LoadingContainer>
           ) : (
-            data?.map(({ name, classification, status, id }) => {
-              return (
-                <PartnerView
-                  key={id}
-                  activeOpacity={0.7}
-                  onPress={() =>
-                    navigation.navigate("Partnership", {
-                      partnershipId: id,
-                    })
-                  }
-                >
+            <>
+              {filteredData.length === 0 && (
+                <View>
                   <Text
-                    color="#EF4444"
-                    size={12}
-                    weight="500"
-                    numberOfLines={1}
-                  >
-                    {classification} |{" "}
-                    <Text size={12} weight="500">
-                      {name}
-                    </Text>
-                  </Text>
-                  <Text
-                    color="#999999"
                     size={14}
-                    weight="400"
-                    numberOfLines={1}
+                    color="#999999"
+                    style={{ textAlign: "center", marginVertical: 24 }}
                   >
-                    Status:{" "}
-                    <Text size={14} weight="400">
-                      {status}
-                    </Text>
+                    Não foi encontrada nenhuma parceria
                   </Text>
-                </PartnerView>
-              );
-            })
+                </View>
+              )}
+              {filteredData?.map(({ name, classification, status, id }) => {
+                return (
+                  <PartnerView
+                    key={id}
+                    activeOpacity={0.7}
+                    onPress={() => navigation.navigate("Partnership", { id })}
+                  >
+                    <Text
+                      color="#EF4444"
+                      size={12}
+                      weight="500"
+                      numberOfLines={1}
+                    >
+                      {classification} |{" "}
+                      <Text size={12} weight="500">
+                        {name}
+                      </Text>
+                    </Text>
+                    <Text color="#999999" size={14} numberOfLines={1}>
+                      Status: <Text>{status}</Text>
+                    </Text>
+                  </PartnerView>
+                );
+              })}
+            </>
           )}
         </PartnershipsList>
       </TabsContainer>
 
-      <PartnershipForm
-        visible={visibleModal}
-        onClose={() => setVisibleModal(false)}
+      <AddPartnershipModal
+        visible={visibleAddPartnershipModal}
+        onClose={() => setVisibleAddPartnershipModal(false)}
+        closeAfterUpdate={() => handleCloseEditModal()}
       />
     </Container>
   );
