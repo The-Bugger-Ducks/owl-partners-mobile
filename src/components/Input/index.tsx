@@ -6,7 +6,6 @@ import { Container, IconButton, InputContainer, TextInput } from "./styles";
 interface InputProps extends TextInputProps {
   label?: string;
   placeholder?: string;
-  type?: any;
   onChangeText: (value: string) => void;
   hasError?: boolean;
   errorText?: string;
@@ -17,7 +16,6 @@ interface InputProps extends TextInputProps {
 export function Input({
   label,
   placeholder,
-  type,
   onChangeText,
   hasError,
   errorText,

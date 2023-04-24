@@ -35,8 +35,9 @@ export function Partnerships() {
   }
 
   async function filterPartnership(name: string) {
+    const isPartnershipDisabledTab = tab === 1;
     const filteredPartnerships = await partnershipRequests.getPartnerships(
-      tab === 1,
+      isPartnershipDisabledTab,
       name,
     );
     setFilteredData(filteredPartnerships);
@@ -72,7 +73,6 @@ export function Partnerships() {
         <Input
           label="Encontrar parceria"
           placeholder="The Bugger Ducks..."
-          type="text"
           onChangeText={text => filterPartnership(text)}
         />
 
