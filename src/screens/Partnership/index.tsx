@@ -146,13 +146,7 @@ export function Partnership() {
               isPartnershipDisabled={isLoading || (data?.disabled ?? false)}
             />
           ) : (
-            data && (
-              <MeetingsList
-                partnershipId={id}
-                isPartnershipDisabled={isLoading || (data?.disabled ?? false)}
-                partnerProps={data}
-              />
-            )
+            data && <MeetingsList partnershipId={id} partnerProps={data} />
           )}
         </HistoryContainer>
       </ScrollView>

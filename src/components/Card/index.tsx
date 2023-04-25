@@ -105,9 +105,11 @@ function Anotation({ props }: SpecificCardProps) {
             </Text>
           )}
         </Text>
-        <EditIcon onPress={props.onEdit}>
-          <Edit />
-        </EditIcon>
+        {props.canEdit && (
+          <EditIcon onPress={props.onEdit}>
+            <Edit />
+          </EditIcon>
+        )}
       </Title>
       {props.title && <Text size={14}>{props.title}</Text>}
       <Text color="#999999" size={12} numberOfLines={1}>
