@@ -96,9 +96,7 @@ export function SignIn() {
           <Controller
             control={control}
             name="email"
-            rules={{
-              required: true,
-            }}
+            rules={{ required: true }}
             render={({ field: { onChange } }) => (
               <View>
                 <Text>Email</Text>
@@ -116,9 +114,7 @@ export function SignIn() {
           <Controller
             control={control}
             name="password"
-            rules={{
-              required: true,
-            }}
+            rules={{ required: true }}
             render={({
               field: { onChange },
               fieldState: { error, isTouched },
