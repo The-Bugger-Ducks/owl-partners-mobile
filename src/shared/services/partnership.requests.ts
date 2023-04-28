@@ -30,7 +30,9 @@ class PartnershipRequests {
               `?disabled=${disabled}` +
               `&name=${name}`,
         )
-        : await api.get<IPartnership[]>(PARTNERSHIP_ENDPOINTS.LIST + `?disabled=${disabled}`);
+        : await api.get<IPartnership[]>(
+          PARTNERSHIP_ENDPOINTS.LIST + `?disabled=${disabled}`,
+        );
 
       return formatPartnerStatusByList(data);
     } catch (error) {
