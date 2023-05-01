@@ -1,5 +1,6 @@
 export enum USER_ENDPOINTS {
   USER_LOGIN = "/auth/login",
+  CREATE = "/users/",
 }
 
 export enum PARTNERSHIP_ENDPOINTS {
