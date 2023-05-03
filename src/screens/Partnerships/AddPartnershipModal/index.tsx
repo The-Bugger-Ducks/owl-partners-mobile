@@ -5,65 +5,53 @@ import {
   statusSelectOptions,
 } from "@constants";
 import { IModalPropsForm } from "@interfaces/partner.interface";
+import { Picker } from "@react-native-picker/picker";
 import partnershipRequests from "@requests/partnership.requests";
 import { useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import {
   ClassicationDropDownArea,
   StateDropDowArea,
   StatusDropDowArea,
 } from "./styles";
-import { IPartnership } from "@interfaces/partner.interface";
 
 export function AddPartnershipModal({
   visible,
   onClose,
   closeAfterUpdate,
 }: IModalPropsForm) {
-  const [partnership, setPartnership] = useState("");
-  const [email, setEmail] = useState("");
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
+  const [partnership, setPartnership] = useState<string>();
+  const [email, setEmail] = useState<string>();
+  const [state, setState] = useState<string>();
+  const [city, setCity] = useState<string>();
   const [membersCount, setMembersCount] = useState(0);
-  const [phone, setPhone] = useState("");
-  const [status, setStatus] = useState("");
-  const [classification, setClassification] = useState("");
+  const [phone, setPhone] = useState<string>();
+  const [status, setStatus] = useState<string>();
+  const [classification, setClassification] = useState<string>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [pickerFocused, setPickerFocused] = useState(false);
 
   async function handleSubmit() {
-    if (!partnership) {
+    if (!partnership || !status) {
       Alert.alert(
         "Opa!",
-        "O nome da parceria é obrigatório. Por favor, preencha o campo correspondente",
-      );
-      return;
-    }
-    if (!status) {
-      Alert.alert(
-        "Opa!",
-        "O status da parceria é obrigatório. Por favor, preencha o campo correspondente",
+        "O nome e o status da parceria são campos obrigatórios. Por favor, preencha-os e tente novamente!",
       );
       return;
     }
 
     setIsLoading(true);
-
-    const newPartnershipData: IPartnership = {
-      name: partnership,
+    await partnershipRequests.createPartnership(
+      partnership,
+      status,
       email,
-      phoneNumber: phone,
+      phone,
       state,
       city,
       classification,
-      status,
-      memberNumber: membersCount,
-    };
-
-    await partnershipRequests.createPartnership(newPartnershipData);
-
+      membersCount,
+    );
     setIsLoading(false);
     closeAfterUpdate();
   }
