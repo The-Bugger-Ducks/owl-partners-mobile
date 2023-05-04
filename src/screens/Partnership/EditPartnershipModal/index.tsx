@@ -73,16 +73,6 @@ export function EditPartnershipModal({
       content={
         <ScrollView style={{ height: "80%" }}>
           <Container>
-            <AddPartnerView
-              style={{ justifyContent: "space-between", flexDirection: "row" }}
-            >
-              <Text>Editar parceria</Text>
-
-              <TouchableOpacity onPress={onClose}>
-                <Icon icon="close" />
-              </TouchableOpacity>
-            </AddPartnerView>
-
             <Input
               label="Parceria"
               defaultValue={partnershipName}
