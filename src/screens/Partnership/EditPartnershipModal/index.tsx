@@ -1,4 +1,4 @@
-import { Icon, Modal, Text } from "@components";
+import { Icon, Input, Modal, Text } from "@components";
 import {
   ClassificationSelectOptions,
   stateSelectOptions,
@@ -11,9 +11,8 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import partnershipRequests from "@requests/partnership.requests";
 import { useEffect, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ScrollView, TouchableOpacity } from "react-native";
-import { AddPartnerView, Container, SelectArea, TextInput } from "./styles";
+import { AddPartnerView, Container, SelectArea } from "./styles";
 import { getPartnerStatusEnumByValue } from "@utils/handlers/formatEnumsPartner";
 
 export function EditPartnershipModal({
@@ -22,65 +21,46 @@ export function EditPartnershipModal({
   closeAfterUpdate,
   partnerProps,
 }: IModalPropsEdit) {
-  const {
-    control,
-    setValue,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IPartnershipEdit>({
-    mode: "onChange",
-    defaultValues: partnerProps,
-  });
-
   const [isLoading, setIsLoading] = useState(false);
 
-  const [selectStatus, setSelectStatus] = useState("");
-  const [selectStates, setSelectStates] = useState("");
-  const [selectClassification, setSelectClassification] = useState("");
+  const [partnershipName, setPartnershipName] = useState(
+    partnerProps.name ?? "",
+  );
+  const [email, setEmail] = useState(partnerProps.email ?? "");
+  const [status, setStatus] = useState(
+    getPartnerStatusEnumByValue(partnerProps.status)?.statusKey ??
+      partnerProps.status,
+  );
+  const [city, setCity] = useState(partnerProps.city);
+  const [membersCount, setMembersCount] = useState(
+    partnerProps.memberNumber ?? "",
+  );
+  const [phone, setPhone] = useState(partnerProps.phoneNumber ?? "");
+  const [state, setState] = useState(partnerProps.state ?? "");
+  const [classification, setClassification] = useState(
+    partnerProps.classification ?? "",
+  );
 
-  const onSubmit: SubmitHandler<IPartnershipEdit> = async payload => {
-    const data = {
-      memberNumber: Number(payload.memberNumber),
-      address: payload.address,
-      city: payload.city,
-      classification: payload.classification,
-      email: payload.email,
-      name: payload.name,
-      neighborhood: payload.neighborhood,
-      phoneNumber: payload.phoneNumber,
-      state: payload.state,
-      status: payload.status,
-      zipCode: payload.zipCode,
+  async function handleSubmit() {
+    const partnershipEditted: IPartnershipEdit = {
+      memberNumber: membersCount,
+      city,
+      classification,
+      email,
+      name: partnershipName,
+      phoneNumber: phone,
+      state,
+      status,
     };
-    try {
-      setIsLoading(true);
-      await partnershipRequests.updatePartnership(data, partnerProps.id);
-    } catch (error) {
-      console.error(error);
-    }
+
+    setIsLoading(true);
+    await partnershipRequests.updatePartnership(
+      partnershipEditted,
+      partnerProps.id!,
+    );
     setIsLoading(false);
     closeAfterUpdate();
-  };
-
-  useEffect(() => {
-    if (partnerProps) {
-      setValue("name", partnerProps["name"]);
-      setValue("email", partnerProps["email"]);
-      setValue("phoneNumber", partnerProps["phoneNumber"]);
-      setValue("zipCode", partnerProps["zipCode"]);
-      setValue("state", partnerProps["state"]);
-      setValue("city", partnerProps["city"]);
-      setValue("neighborhood", partnerProps["neighborhood"]);
-      setValue("address", partnerProps["address"]);
-      setValue("classification", partnerProps["classification"]);
-      setValue("memberNumber", partnerProps["memberNumber"]);
-
-      const partnerStatus =
-        getPartnerStatusEnumByValue(partnerProps["status"])?.statusKey ??
-        partnerProps["status"];
-      setValue("status", partnerStatus);
-    }
-  }, [partnerProps]);
+  }
 
   return (
     <Modal
@@ -89,222 +69,107 @@ export function EditPartnershipModal({
       isLoading={isLoading}
       visible={visible}
       buttonTitle="Editar parceria"
-      onPressButton={handleSubmit(onSubmit)}
+      onPressButton={handleSubmit}
       content={
-        <ScrollView>
+        <ScrollView style={{ height: "80%" }}>
           <Container>
-            <AddPartnerView
-              style={{ justifyContent: "space-between", flexDirection: "row" }}
-            >
-              <Text>Editar parceria</Text>
-
-              <TouchableOpacity onPress={onClose}>
-                <Icon icon="close" />
-              </TouchableOpacity>
-            </AddPartnerView>
-            <Text weight="500">Informações gerais</Text>
-
-            <Controller
-              control={control}
-              name="name"
-              rules={{
-                required: "informe o nome do parceiro",
-              }}
-              render={({ field }) => (
-                <>
-                  <Text>Parceria</Text>
-                  <TextInput
-                    {...field}
-                    placeholder="The Bugger Ducks"
-                    onChangeText={field.onChange}
-                  />
-                  {errors.name && <Text>Este campo é obrigatório</Text>}
-                </>
-              )}
+            <Input
+              label="Parceria"
+              defaultValue={partnershipName}
+              placeholder="The Bugger Ducks"
+              onChangeText={text => setPartnershipName(text)}
             />
-
-            <Controller
-              control={control}
-              name="email"
-              render={({ field }) => (
-                <>
-                  <Text>E-mail</Text>
-                  <TextInput
-                    {...field}
-                    placeholder="nome@gmail.com"
-                    onChangeText={field.onChange}
-                  />
-                </>
-              )}
+            <Input
+              label="E-mail"
+              defaultValue={email}
+              placeholder="nome@gmail.com"
+              onChangeText={text => setEmail(text)}
             />
-
-            <Controller
-              control={control}
-              name="classification"
-              render={({ field }) => (
-                <>
-                  <Text>Classificação</Text>
-                  <SelectArea>
-                    <Picker
-                      selectedValue={field.value}
-                      onValueChange={itemValue => {
-                        setSelectClassification(itemValue),
-                          field.onChange(itemValue);
-                      }}
-                    >
-                      {Object.keys(ClassificationSelectOptions).map(
-                        classification => {
-                          return (
-                            <Picker.Item
-                              key={classification}
-                              label={classification}
-                              value={classification}
-                            ></Picker.Item>
-                          );
-                        },
-                      )}
-                    </Picker>
-                  </SelectArea>
-                </>
-              )}
+            <>
+              <Text size={14} color={"#666666"} style={{ marginBottom: 8 }}>
+                Classificação
+              </Text>
+              <SelectArea>
+                <Picker
+                  selectedValue={classification}
+                  onValueChange={itemValue => setClassification(itemValue)}
+                >
+                  {Object.keys(ClassificationSelectOptions).map(
+                    classification => {
+                      return (
+                        <Picker.Item
+                          key={classification}
+                          label={classification}
+                          value={classification}
+                        />
+                      );
+                    },
+                  )}
+                </Picker>
+              </SelectArea>
+            </>
+            <>
+              <Text size={14} color={"#666666"} style={{ marginBottom: 8 }}>
+                Status
+              </Text>
+              <SelectArea>
+                <Picker
+                  placeholder="status"
+                  selectedValue={status}
+                  onValueChange={itemValue => setStatus(itemValue)}
+                >
+                  {statusSelectOptions.map(status => {
+                    return (
+                      <Picker.Item
+                        key={status.id}
+                        label={status.description}
+                        value={status.value}
+                      />
+                    );
+                  })}
+                </Picker>
+              </SelectArea>
+            </>
+            <>
+              <Text size={14} color={"#666666"} style={{ marginBottom: 8 }}>
+                Estado
+              </Text>
+              <SelectArea>
+                <Picker
+                  selectedValue={state}
+                  onValueChange={itemValue => setState(itemValue)}
+                >
+                  {stateSelectOptions.map(state => {
+                    return (
+                      <Picker.Item
+                        key={state.UF}
+                        label={state.name}
+                        value={state.name}
+                      />
+                    );
+                  })}
+                </Picker>
+              </SelectArea>
+            </>
+            <Input
+              label="Cidade"
+              defaultValue={city}
+              placeholder="São José dos campos"
+              onChangeText={text => setCity(text)}
             />
-
-            <Controller
-              control={control}
-              name="status"
-              rules={{
-                required: "informe o status da parceria",
-              }}
-              render={({ field }) => (
-                <>
-                  <Text>Status</Text>
-                  <SelectArea>
-                    <Picker
-                      placeholder="status"
-                      selectedValue={field.value}
-                      onValueChange={itemValue => {
-                        setSelectStatus(itemValue), field.onChange(itemValue);
-                      }}
-                    >
-                      {statusSelectOptions.map(status => {
-                        return (
-                          <Picker.Item
-                            key={status.id}
-                            label={status.description}
-                            value={status.value}
-                          ></Picker.Item>
-                        );
-                      })}
-                    </Picker>
-                  </SelectArea>
-                  {errors.status && <Text>Este campo é obrigatório</Text>}
-                </>
-              )}
+            <Input
+              label="Número de membros"
+              placeholder="100"
+              keyboardType="number-pad"
+              defaultValue={membersCount.toString()}
+              onChangeText={text => setMembersCount(Number(text))}
             />
-
-            <Controller
-              control={control}
-              name="state"
-              render={({ field }) => (
-                <>
-                  <Text>Estado</Text>
-                  <SelectArea>
-                    <Picker
-                      selectedValue={field.value}
-                      onValueChange={itemValue => {
-                        setSelectStates(itemValue), field.onChange(itemValue);
-                      }}
-                    >
-                      {stateSelectOptions.map(state => {
-                        return (
-                          <Picker.Item
-                            key={state.UF}
-                            label={state.name}
-                            value={state.name}
-                          ></Picker.Item>
-                        );
-                      })}
-                    </Picker>
-                  </SelectArea>
-                </>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="city"
-              render={({ field }) => (
-                <>
-                  <Text>Cidade</Text>
-                  <TextInput
-                    {...field}
-                    placeholder="São José dos campos"
-                    onChangeText={field.onChange}
-                  />
-                </>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="zipCode"
-              render={({ field }) => (
-                <>
-                  <Text>CEP</Text>
-                  <TextInput
-                    {...field}
-                    placeholder="12654-356"
-                    onChangeText={field.onChange}
-                  />
-                </>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="address"
-              render={({ field }) => (
-                <>
-                  <Text>Endereço</Text>
-                  <TextInput
-                    {...field}
-                    placeholder="Rua 21, 123"
-                    onChangeText={field.onChange}
-                  />
-                </>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="memberNumber"
-              render={({ field }) => (
-                <>
-                  <Text>Número de membros</Text>
-                  <TextInput
-                    value={`${field.value}`}
-                    placeholder="100"
-                    keyboardType="number-pad"
-                    onChangeText={field.onChange}
-                  />
-                </>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <>
-                  <Text>Telefone</Text>
-                  <TextInput
-                    {...field}
-                    keyboardType="phone-pad"
-                    placeholder="(12)99454-3275"
-                    onChangeText={field.onChange}
-                  />
-                </>
-              )}
+            <Input
+              label="Telefone"
+              keyboardType="phone-pad"
+              placeholder="(12)99454-3275"
+              defaultValue={phone}
+              onChangeText={text => setPhone(text)}
             />
           </Container>
         </ScrollView>

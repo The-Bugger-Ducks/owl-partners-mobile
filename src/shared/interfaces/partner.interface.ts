@@ -1,28 +1,28 @@
 export interface IPartnership {
-  id: string;
+  id?: string;
   name: string;
   email: string;
-  phoneNumber: string;
-  zipCode: string;
+  phoneNumber?: string;
+  zipCode?: string;
   state: string;
   city: string;
-  neighborhood: string;
-  address: string;
+  neighborhood?: string;
+  address?: string;
   classification: string;
   status: string;
   memberNumber: number;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export interface IPartnershipEdit {
   name: string;
   email: string;
   phoneNumber: string;
-  zipCode: string;
+  zipCode?: string;
   state: string;
   city: string;
-  neighborhood: string;
-  address: string;
+  neighborhood?: string;
+  address?: string;
   classification: string;
   status: string;
   memberNumber: number;
