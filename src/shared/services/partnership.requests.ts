@@ -24,12 +24,12 @@ class PartnershipRequests {
       const payload = {
         name,
         status,
-        email: email ?? null,
-        phoneNumber: phoneNumber ?? null,
-        state: state ?? null,
-        city: city ?? null,
-        classification: classification ?? null,
-        memberNumber: memberNumber ?? null,
+        email,
+        phoneNumber,
+        state,
+        city,
+        classification,
+        memberNumber,
       };
       const { data } = await api.post(PARTNERSHIP_ENDPOINTS.CREATE, payload);
       return data;
@@ -42,13 +42,13 @@ class PartnershipRequests {
     try {
       const { data } = name
         ? await api.get<IPartnership[]>(
-          PARTNERSHIP_ENDPOINTS.LIST +
+            PARTNERSHIP_ENDPOINTS.LIST +
               `?disabled=${disabled}` +
               `&name=${name}`,
-        )
+          )
         : await api.get<IPartnership[]>(
-          PARTNERSHIP_ENDPOINTS.LIST + `?disabled=${disabled}`,
-        );
+            PARTNERSHIP_ENDPOINTS.LIST + `?disabled=${disabled}`,
+          );
 
       return formatPartnerStatusByList(data);
     } catch (error) {

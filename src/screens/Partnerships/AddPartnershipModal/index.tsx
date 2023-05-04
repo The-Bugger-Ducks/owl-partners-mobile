@@ -61,14 +61,22 @@ export function AddPartnershipModal({
       title="Adicionar nova parceria"
       visible={visible}
       isLoading={isLoading}
-      onClose={onClose}
+      onClose={() => {
+        onClose();
+        setPartnership(undefined);
+        setEmail(undefined);
+        setState(undefined);
+        setCity(undefined);
+        setMembersCount(0);
+        setPhone(undefined);
+        setStatus(undefined);
+        setClassification(undefined);
+      }}
       buttonTitle="Adicionar parceria"
       onPressButton={handleSubmit}
       content={
-        <ScrollView>
+        <ScrollView style={{ height: "80%" }}>
           <View style={{ gap: 12 }}>
-            <Text weight="500">Informações gerais</Text>
-
             <Input
               label="Parceria"
               placeholder="The Bugger Ducks"
@@ -81,7 +89,9 @@ export function AddPartnershipModal({
             />
 
             <>
-              <Text>Classificação</Text>
+              <Text size={14} color={"#666666"} style={{ marginBottom: 8 }}>
+                Classificação
+              </Text>
               <ClassicationDropDownArea>
                 <Picker
                   placeholder="Universidade"
@@ -113,7 +123,9 @@ export function AddPartnershipModal({
             </>
 
             <>
-              <Text>Status</Text>
+              <Text size={14} color={"#666666"} style={{ marginBottom: 8 }}>
+                Status
+              </Text>
               <StatusDropDowArea>
                 <Picker
                   placeholder="status"
@@ -141,7 +153,9 @@ export function AddPartnershipModal({
             </>
 
             <>
-              <Text>Estado</Text>
+              <Text size={14} color={"#666666"} style={{ marginBottom: 8 }}>
+                Estado
+              </Text>
               <StateDropDowArea>
                 <Picker
                   selectedValue={state}
