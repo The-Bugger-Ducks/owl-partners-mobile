@@ -71,7 +71,7 @@ export function EditPartnershipModal({
       buttonTitle="Editar parceria"
       onPressButton={handleSubmit}
       content={
-        <ScrollView>
+        <ScrollView style={{ height: "80%" }}>
           <Container>
             <AddPartnerView
               style={{ justifyContent: "space-between", flexDirection: "row" }}
@@ -82,7 +82,6 @@ export function EditPartnershipModal({
                 <Icon icon="close" />
               </TouchableOpacity>
             </AddPartnerView>
-            <Text weight="500">Informações gerais</Text>
 
             <Input
               label="Parceria"
@@ -97,7 +96,9 @@ export function EditPartnershipModal({
               onChangeText={text => setEmail(text)}
             />
             <>
-              <Text>Classificação</Text>
+              <Text size={14} color={"#666666"} style={{ marginBottom: 8 }}>
+                Classificação
+              </Text>
               <SelectArea>
                 <Picker
                   selectedValue={classification}
@@ -118,7 +119,9 @@ export function EditPartnershipModal({
               </SelectArea>
             </>
             <>
-              <Text>Status</Text>
+              <Text size={14} color={"#666666"} style={{ marginBottom: 8 }}>
+                Status
+              </Text>
               <SelectArea>
                 <Picker
                   placeholder="status"
@@ -138,7 +141,9 @@ export function EditPartnershipModal({
               </SelectArea>
             </>
             <>
-              <Text>Estado</Text>
+              <Text size={14} color={"#666666"} style={{ marginBottom: 8 }}>
+                Estado
+              </Text>
               <SelectArea>
                 <Picker
                   selectedValue={state}
