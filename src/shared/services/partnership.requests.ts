@@ -26,13 +26,13 @@ class PartnershipRequests {
     try {
       const { data } = name
         ? await api.get<IPartnership[]>(
-          PARTNERSHIP_ENDPOINTS.LIST +
+            PARTNERSHIP_ENDPOINTS.LIST +
               `?disabled=${disabled}` +
               `&name=${name}`,
-        )
+          )
         : await api.get<IPartnership[]>(
-          PARTNERSHIP_ENDPOINTS.LIST + `?disabled=${disabled}`,
-        );
+            PARTNERSHIP_ENDPOINTS.LIST + `?disabled=${disabled}`,
+          );
 
       return formatPartnerStatusByList(data);
     } catch (error) {
