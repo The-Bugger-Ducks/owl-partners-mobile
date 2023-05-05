@@ -98,17 +98,33 @@ export function Meeting() {
         </InfoContainer>
       )}
 
-      <ButtonsContainer>
-        <Button type="unfilled" onPress={handleDeleteMeeting}>
-          {isLoadingDelete ? <Loading /> : "Deletar reunião"}
-        </Button>
-        <Button
-          onPress={() => setIsEditModalOpen(true)}
-          style={{ marginVertical: 8 }}
+      {data?.Partner.disabled ? (
+        <Text
+          size={12}
+          weight="500"
+          style={{
+            padding: 24,
+            margin: 24,
+            backgroundColor: "#FFFFFF",
+            borderRadius: 8,
+          }}
         >
-          Editar reunião
-        </Button>
-      </ButtonsContainer>
+          Essa reunião pertence a uma parceria deletada e, portanto, não pode
+          ser modificada
+        </Text>
+      ) : (
+        <ButtonsContainer>
+          <Button type="unfilled" onPress={handleDeleteMeeting}>
+            {isLoadingDelete ? <Loading /> : "Deletar reunião"}
+          </Button>
+          <Button
+            onPress={() => setIsEditModalOpen(true)}
+            style={{ marginVertical: 8 }}
+          >
+            Editar reunião
+          </Button>
+        </ButtonsContainer>
+      )}
 
       <AnnotationsListContainer>
         <AnnotationsList data={data?.meetingComments} meetingId={id} />

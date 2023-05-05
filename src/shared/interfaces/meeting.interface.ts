@@ -12,6 +12,7 @@ export interface IMeeting {
     email?: IPartnership["email"];
     phoneNumber?: IPartnership["phoneNumber"];
     status?: IPartnership["status"];
+    disabled?: IPartnership["disabled"];
   };
   meetingComments: IComment[];
 }
