@@ -41,6 +41,10 @@ export function AddMeetingModal({ visible, onClose }: AddMeetingModalProps) {
       formatDateISO(date, hour),
       theme,
     );
+    setPartnership("");
+    setDate("");
+    setHour("");
+    setTheme("");
     setIsLoading(false);
     onClose();
   }
@@ -50,7 +54,13 @@ export function AddMeetingModal({ visible, onClose }: AddMeetingModalProps) {
       title="Agendar reunião"
       visible={visible}
       isLoading={isLoading}
-      onClose={onClose}
+      onClose={() => {
+        setPartnership("");
+        setDate("");
+        setHour("");
+        setTheme("");
+        onClose();
+      }}
       buttonTitle="Agendar reunião"
       onPressButton={handleSubmit}
       content={
@@ -88,12 +98,14 @@ export function AddMeetingModal({ visible, onClose }: AddMeetingModalProps) {
               label="Data"
               placeholder="21/07/2023"
               maxLength={10}
+              value={date}
               onChangeText={text => setDate(formatInput(text, "date"))}
             />
             <Input
               label="Hora"
               placeholder="16:00"
               maxLength={5}
+              value={hour}
               onChangeText={text => setHour(formatInput(text, "hour"))}
             />
             <Input

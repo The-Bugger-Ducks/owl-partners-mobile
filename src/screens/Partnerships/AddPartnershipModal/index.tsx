@@ -197,6 +197,7 @@ export function AddPartnershipModal({
               label="Telefone"
               keyboardType="phone-pad"
               placeholder="(12) 99454-3275"
+              value={phone}
               onChangeText={text => setPhone(formatInput(text, "phone"))}
             />
           </View>
