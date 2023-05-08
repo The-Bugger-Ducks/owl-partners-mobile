@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
 import { AddPartnerView, Container, SelectArea } from "./styles";
 import { getPartnerStatusEnumByValue } from "@utils/handlers/formatEnumsPartner";
+import { formatInput } from "@utils/formatInput";
 
 export function EditPartnershipModal({
   visible,
@@ -169,7 +170,7 @@ export function EditPartnershipModal({
               keyboardType="phone-pad"
               placeholder="(12)99454-3275"
               defaultValue={phone}
-              onChangeText={text => setPhone(text)}
+              onChangeText={text => setPhone(formatInput(text, "phone"))}
             />
           </Container>
         </ScrollView>

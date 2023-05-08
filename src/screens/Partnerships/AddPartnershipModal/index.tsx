@@ -14,6 +14,7 @@ import {
   StateDropDowArea,
   StatusDropDowArea,
 } from "./styles";
+import { formatInput } from "@utils/formatInput";
 
 export function AddPartnershipModal({
   visible,
@@ -196,7 +197,7 @@ export function AddPartnershipModal({
               label="Telefone"
               keyboardType="phone-pad"
               placeholder="(12) 99454-3275"
-              onChangeText={text => setPhone(text)}
+              onChangeText={text => setPhone(formatInput(text, "phone"))}
             />
           </View>
         </ScrollView>
