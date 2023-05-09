@@ -18,7 +18,7 @@ export const UserCard = styled.View`
   width: 345px;
   height: 97px;
   border-radius: 8px;
-  background: #FFFFFF;
+  background: #ffffff;
   justify-content: center;
 `;
 
@@ -30,6 +30,4 @@ export const UserCardActions = styled.View`
 export const IconArea = styled.TouchableOpacity`
   align-items: center;
   flex-direction: row;
-
-
-`
+`;

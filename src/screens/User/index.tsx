@@ -12,12 +12,10 @@ import {
 import { Trash } from "../../components/Icons/Trash";
 import { MinusCircle } from "../../components/Icons/MinusCircle";
 
-
 export function User() {
   const [data, setData] = useState<IUser[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
-
 
   async function getUser() {
     setIsLoading(true);
@@ -32,52 +30,57 @@ export function User() {
     getUser();
   }, []);
 
-  async function handleDeleteUser(id:string) {
+  async function handleDeleteUser(id: string) {
     setIsLoadingDelete(true);
     await userRequest.deleteUser(id);
     setIsLoadingDelete(false);
   }
 
-  async function handleUpdateUpdateUserRoleUp(id:string) {
+  async function handleUpdateUpdateUserRoleUp(id: string) {
     setIsLoadingDelete(true);
     await userRequest.updateUser(id);
     setIsLoadingDelete(false);
   }
 
-  async function handleUpdateUpdateUserRoleDowm(id:string) {
+  async function handleUpdateUpdateUserRoleDowm(id: string) {
     setIsLoadingDelete(true);
     await userRequest.updateUser(id);
     setIsLoadingDelete(false);
   }
-
 
   return (
     <Container>
-      <Header/>
+      <Header />
       <UsersContainer>
         <Text>Usuários encontrados</Text>
         {data?.map(user => {
           return (
             <UserCard style={{ marginVertical: 10 }}>
-                <Text weight="500" color="#000000" size={12}>
-                  {user.role} | {user.name}
-                </Text>
-                <UserCardActions>
-                  <IconArea  onPress={() => handleDeleteUser}>
-                    <Trash />
-                    <Text weight="400" color="#000000" size={14} >Remover</Text>
-                  </IconArea>
+              <Text weight="500" color="#000000" size={12}>
+                {user.role} | {user.name}
+              </Text>
+              <UserCardActions>
+                <IconArea onPress={() => handleDeleteUser}>
+                  <Trash />
+                  <Text weight="400" color="#000000" size={14}>
+                    Remover
+                  </Text>
+                </IconArea>
 
-                  <IconArea onPress={() => handleUpdateUpdateUserRoleDowm}>
-                    <MinusCircle />
-                    <Text weight="400" color="#000000" size={14}>Rebaixar</Text>
-                  </IconArea>
+                <IconArea onPress={() => handleUpdateUpdateUserRoleDowm}>
+                  <MinusCircle />
+                  <Text weight="400" color="#000000" size={14}>
+                    Rebaixar
+                  </Text>
+                </IconArea>
 
-                  <IconArea onPress={() => handleUpdateUpdateUserRoleUp}>
-                    <PlusCircle />
-                    <Text weight="400" color="#000000" size={14}>Promover</Text>
-                  </IconArea>
-                </UserCardActions>
+                <IconArea onPress={() => handleUpdateUpdateUserRoleUp}>
+                  <PlusCircle />
+                  <Text weight="400" color="#000000" size={14}>
+                    Promover
+                  </Text>
+                </IconArea>
+              </UserCardActions>
             </UserCard>
           );
         })}

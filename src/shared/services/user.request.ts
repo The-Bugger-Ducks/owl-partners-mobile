@@ -24,7 +24,7 @@ class UserRequest {
 
   async deleteUser(id: string) {
     try {
-      const { data } = await api.delete(USER_ENDPOINTS.DELETE + id );
+      const { data } = await api.delete(USER_ENDPOINTS.DELETE + id);
       return data;
     } catch (error) {
       alertError(error, "Não foi possível deletar o usuário :(");
@@ -33,7 +33,7 @@ class UserRequest {
 
   async updateUser(id: string) {
     try {
-      const { data } = await api.put(USER_ENDPOINTS.UPDATE + id );
+      const { data } = await api.put(USER_ENDPOINTS.UPDATE + id);
       return data;
     } catch (error) {
       alertError(error, "Não foi possível editar o usuário :(");

@@ -1,7 +1,15 @@
 import { Button, Card, Header, Loading, Text } from "@components";
-import { PropsStack, RootStackParamList } from "@custom-types/rootStackParamList";
+import {
+  PropsStack,
+  RootStackParamList,
+} from "@custom-types/rootStackParamList";
 import { IMeetingsHome } from "@interfaces/meeting.interface";
-import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import {
+  RouteProp,
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
@@ -18,7 +26,6 @@ export function Home() {
   const [isUserModalOpen, setisUserModalOpen] = useState(false);
 
   const navigation = useNavigation<PropsStack>();
-  
 
   async function getMeetings() {
     setIsLoading(true);

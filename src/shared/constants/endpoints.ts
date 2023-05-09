@@ -3,7 +3,7 @@ export enum USER_ENDPOINTS {
   CREATE = "/users/",
   LIST = "/users",
   DELETE = "/users/",
-  UPDATE = "/users/"
+  UPDATE = "/users/",
 }
 
 export enum PARTNERSHIP_ENDPOINTS {
