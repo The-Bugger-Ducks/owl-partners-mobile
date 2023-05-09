@@ -1,7 +1,7 @@
 import { Button, Card, Header, Loading, Text } from "@components";
-import { PropsStack } from "@custom-types/rootStackParamList";
+import { PropsStack, RootStackParamList } from "@custom-types/rootStackParamList";
 import { IMeetingsHome } from "@interfaces/meeting.interface";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
@@ -9,12 +9,16 @@ import { useCallback, useState } from "react";
 import { View } from "react-native";
 import { AddMeetingModal } from "./AddMeetingModal";
 import { ButtonsContainer, Container, MeetingContainer } from "./styles";
+import { User } from "@screens/User";
 
 export function Home() {
   const [data, setData] = useState<IMeetingsHome>();
   const [isLoading, setIsLoading] = useState(true);
   const [isAddMeetingModalOpen, setIsAddMeetingModalOpen] = useState(false);
+  const [isUserModalOpen, setisUserModalOpen] = useState(false);
+
   const navigation = useNavigation<PropsStack>();
+  
 
   async function getMeetings() {
     setIsLoading(true);
@@ -38,7 +42,7 @@ export function Home() {
           Agendar reunião
         </Button>
         <Button
-          onPress={() => alert("Usuários!")}
+          onPress={() => navigation.navigate("User")}
           style={{ marginVertical: 8 }}
         >
           Gerenciar usuários

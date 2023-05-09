@@ -8,6 +8,7 @@ type RootStackParamList = {
   Home: undefined;
   HomeStack: undefined;
   MyProfile: undefined;
+  User: undefined;
 };
 
 type PropsStack = NativeStackNavigationProp<RootStackParamList>;
