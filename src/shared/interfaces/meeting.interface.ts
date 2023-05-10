@@ -22,13 +22,13 @@ export interface IMeetingsHome {
     title: string;
     description: string;
     meetingDateTime: string;
-    Partner: { name: string; partnerId: string };
+    Partner: { name: string; partnerId: string; disabled: string };
   }[];
   upcomingMeetings: {
     id: string;
     title: string;
     description: string;
     meetingDateTime: string;
-    Partner: { name: string; partnerId: string };
+    Partner: { name: string; partnerId: string; disabled: string };
   }[];
 }

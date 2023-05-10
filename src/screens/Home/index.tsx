@@ -1,7 +1,15 @@
 import { Button, Card, Header, Loading, Text } from "@components";
-import { PropsStack } from "@custom-types/rootStackParamList";
+import {
+  PropsStack,
+  RootStackParamList,
+} from "@custom-types/rootStackParamList";
 import { IMeetingsHome } from "@interfaces/meeting.interface";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import {
+  RouteProp,
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
@@ -9,6 +17,7 @@ import { useCallback, useState } from "react";
 import { View } from "react-native";
 import { AddMeetingModal } from "./AddMeetingModal";
 import { ButtonsContainer, Container, MeetingContainer } from "./styles";
+import { IPartnership } from "@interfaces/partner.interface";
 
 export function Home() {
   const [data, setData] = useState<IMeetingsHome>();
@@ -19,6 +28,8 @@ export function Home() {
   async function getMeetings() {
     setIsLoading(true);
     const meeting: IMeetingsHome = await meetingRequest.getMeetings();
+    console.log(meeting);
+
     setData(meeting);
     setIsLoading(false);
   }
@@ -60,7 +71,7 @@ export function Home() {
                   title,
                   description,
                   meetingDateTime,
-                  Partner: { name, partnerId },
+                  Partner: { name, partnerId, disabled },
                 }) => {
                   return (
                     <Card
