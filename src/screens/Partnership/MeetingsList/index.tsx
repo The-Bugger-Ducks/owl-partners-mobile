@@ -54,7 +54,13 @@ export function MeetingsList({
           <Text>Proximas reuniões</Text>
           <View style={{ marginVertical: 16 }}>
             {data?.upcomingMeetings.map(
-              ({ id, title, description, meetingDateTime }) => {
+              ({
+                id,
+                title,
+                description,
+                Partner: { disabled },
+                meetingDateTime,
+              }) => {
                 return (
                   <Card
                     id={id}
@@ -66,7 +72,11 @@ export function MeetingsList({
                     description={description}
                     title={title}
                     partner={partnerProps.name}
-                    onPress={() => navigation.navigate("Meeting", { id })}
+                    onPress={() => {
+                      partnerProps.disabled
+                        ? null
+                        : navigation.navigate("Meeting", { id });
+                    }}
                   />
                 );
               },
@@ -104,7 +114,11 @@ export function MeetingsList({
                     description={description}
                     title={title}
                     partner={partnerProps.name}
-                    onPress={() => navigation.navigate("Meeting", { id })}
+                    onPress={() => {
+                      partnerProps.disabled
+                        ? null
+                        : navigation.navigate("Meeting", { id });
+                    }}
                   />
                 );
               },

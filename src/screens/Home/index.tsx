@@ -28,8 +28,6 @@ export function Home() {
   async function getMeetings() {
     setIsLoading(true);
     const meeting: IMeetingsHome = await meetingRequest.getMeetings();
-    console.log(meeting);
-
     setData(meeting);
     setIsLoading(false);
   }
@@ -84,7 +82,11 @@ export function Home() {
                       description={description}
                       title={title}
                       partner={name}
-                      onPress={() => navigation.navigate("Meeting", { id })}
+                      onPress={() => {
+                        disabled
+                          ? null
+                          : navigation.navigate("Meeting", { id });
+                      }}
                     />
                   );
                 },
@@ -107,7 +109,7 @@ export function Home() {
                   title,
                   description,
                   meetingDateTime,
-                  Partner: { name, partnerId },
+                  Partner: { name, partnerId, disabled },
                 }) => {
                   return (
                     <Card
@@ -120,7 +122,11 @@ export function Home() {
                       title={title}
                       partner={name}
                       canEdit={false}
-                      onPress={() => navigation.navigate("Meeting", { id })}
+                      onPress={() => {
+                        disabled
+                          ? null
+                          : navigation.navigate("Meeting", { id });
+                      }}
                     />
                   );
                 },
