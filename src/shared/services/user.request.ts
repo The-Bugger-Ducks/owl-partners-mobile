@@ -31,9 +31,9 @@ class UserRequest {
     }
   }
 
-  async updateUser(id: string) {
+  async updateUser(payload: IUserRegister, id: string) {
     try {
-      const { data } = await api.put(USER_ENDPOINTS.UPDATE + id);
+      const { data } = await api.put(USER_ENDPOINTS.UPDATE + id, payload);
       return data;
     } catch (error) {
       alertError(error, "Não foi possível editar o usuário :(");

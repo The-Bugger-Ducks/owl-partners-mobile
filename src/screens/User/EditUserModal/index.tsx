@@ -1,6 +1,6 @@
 import { Input, Modal, Text } from "@components";
 import { IModalPropsForm } from "@interfaces/partner.interface";
-import { IUserRegister } from "@interfaces/user.interface";
+import { IUserModalPropsForm, IUserRegister } from "@interfaces/user.interface";
 import userRequest from "@requests/user.request";
 import React from "react";
 import { useState } from "react";
@@ -10,54 +10,30 @@ export function AddUserModal({
   visible,
   onClose,
   closeAfterUpdate,
-}: IModalPropsForm) {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+  userProps,
+}: IUserModalPropsForm) {
+  const [email, setEmail] = useState(userProps.email ?? "");
+  const [name, setName] = useState(userProps.name ?? "");
+  const [password, setPassword] = useState(userProps.password ?? "");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit() {
-    if (!name) {
-      Alert.alert(
-        "Opa!",
-        "O nome é obrigatório. Por favor, preencha o campo correspondente",
-      );
-      return;
-    }
-
-    if (!email) {
-      Alert.alert(
-        "Opa!",
-        "O email é obrigatório. Por favor, preencha o campo correspondente",
-      );
-      return;
-    }
-
-    if (!password) {
-      Alert.alert(
-        "Opa!",
-        "A senha é obrigatória. Por favor, preencha o campo correspondente",
-      );
-      return;
-    }
-
     if (confirmPassword != password) {
-      Alert.alert("Opa!", "Este campo deve ser igual ao anterior");
+      Alert.alert("Opa!", "Este campo deve ser igual a senha");
       return;
     }
 
-    setIsLoading(true);
-
-    const newUser: IUserRegister = {
+    const payload: IUserRegister = {
       name,
       email,
       password,
     };
-
-    await userRequest.createUser(newUser);
+    setIsLoading(true);
+    await userRequest.updateUser(payload, userProps.id!);
     setIsLoading(false);
+    closeAfterUpdate();
   }
 
   return (
@@ -65,7 +41,7 @@ export function AddUserModal({
       isLoading={isLoading}
       buttonTitle="Adicionar parceria"
       onPressButton={handleSubmit}
-      visible={visible}
+      visible={false}
       onClose={onClose}
       title="Novo usuário"
       content={
@@ -74,18 +50,21 @@ export function AddUserModal({
             <Text>Meu perfil</Text>
             <Input
               label="Nome"
+              defaultValue={name}
               placeholder="Ana Soares"
               onChangeText={text => setName(text)}
             />
 
             <Input
               label="Email"
+              defaultValue={email}
               placeholder="Ana@gmail.com"
               onChangeText={text => setEmail(text)}
             />
 
             <Input
               label="Senha"
+              defaultValue={password}
               placeholder="********"
               onChangeText={text => setPassword(text)}
             />

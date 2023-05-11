@@ -27,3 +27,17 @@ export interface IUserRegister {
   email: string;
   password: string;
 }
+
+export interface IUserEdit {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface IUserModalPropsForm {
+  visible: boolean;
+  onClose: () => void;
+  closeAfterUpdate: () => void;
+  userProps: IUserEdit;
+}
