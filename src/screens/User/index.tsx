@@ -20,7 +20,6 @@ export function User() {
   async function getUser() {
     setIsLoading(true);
     const user: IUser[] = await userRequest.listUser();
-    console.log(user);
 
     setData(user);
     setIsLoading(false);
@@ -36,18 +35,6 @@ export function User() {
     setIsLoadingDelete(false);
   }
 
-  async function handleUpdateUpdateUserRoleUp(id: string) {
-    setIsLoadingDelete(true);
-    await userRequest.updateUser(id);
-    setIsLoadingDelete(false);
-  }
-
-  async function handleUpdateUpdateUserRoleDowm(id: string) {
-    setIsLoadingDelete(true);
-    await userRequest.updateUser(id);
-    setIsLoadingDelete(false);
-  }
-
   return (
     <Container>
       <Header />
@@ -55,26 +42,26 @@ export function User() {
         <Text>Usuários encontrados</Text>
         {data?.map(user => {
           return (
-            <UserCard style={{ marginVertical: 10 }}>
+            <UserCard key={user.id} style={{ marginVertical: 10 }}>
               <Text weight="500" color="#000000" size={12}>
                 {user.role} | {user.name}
               </Text>
               <UserCardActions>
-                <IconArea onPress={() => handleDeleteUser}>
+                <IconArea onPress={() => handleDeleteUser(user.id)}>
                   <Trash />
                   <Text weight="400" color="#000000" size={14}>
                     Remover
                   </Text>
                 </IconArea>
 
-                <IconArea onPress={() => handleUpdateUpdateUserRoleDowm}>
+                <IconArea>
                   <MinusCircle />
                   <Text weight="400" color="#000000" size={14}>
                     Rebaixar
                   </Text>
                 </IconArea>
 
-                <IconArea onPress={() => handleUpdateUpdateUserRoleUp}>
+                <IconArea>
                   <PlusCircle />
                   <Text weight="400" color="#000000" size={14}>
                     Promover

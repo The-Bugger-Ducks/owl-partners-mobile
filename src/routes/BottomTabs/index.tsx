@@ -21,6 +21,7 @@ import { Partnerships } from "@screens/Partnerships";
 import { Container, Tab, TabIndicator } from "./styles";
 
 import { Home as HomeIcon, Order, Profile, Text } from "@components";
+import { MyProfile } from "@screens/MyProfile";
 
 interface TabBarProps {
   state: TabNavigationState<ParamListBase>;
@@ -51,7 +52,7 @@ export function BottomTabs() {
       />
       <BottomTab.Screen
         name="MyProfile"
-        component={Partnership}
+        component={MyProfile}
         options={{ tabBarLabel: "Meu Perfil" }}
       />
     </BottomTab.Navigator>
@@ -94,7 +95,7 @@ function CustomTabBar({ state, descriptors, navigation }: TabBarProps) {
             canPreventDefault: true,
           });
 
-          if (route.name === "MyProfile") {
+          if (route.name === "SignOut") {
             await StorageController.clearUserInfo();
             navigation.dispatch(StackActions.replace("SignIn"));
           }

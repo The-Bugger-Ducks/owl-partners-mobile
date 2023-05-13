@@ -19,6 +19,7 @@ import { isAxiosError } from "axios";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { View } from "react-native";
 import {
+  ButtonsArea,
   Container,
   Form,
   FormContainer,
@@ -154,13 +155,20 @@ export function SignIn() {
             )}
           />
         </Form>
-        <Button
-          type="filled"
-          disabled={!isDirty || !isValid || isLoading}
-          onPress={handleSubmit(onSubmit)}
-        >
-          Fazer Login
-        </Button>
+
+        <ButtonsArea style={{ gap: 15 }}>
+          <Button
+            type="filled"
+            disabled={!isDirty || !isValid || isLoading}
+            onPress={handleSubmit(onSubmit)}
+          >
+            Fazer Login
+          </Button>
+
+          <Button type="filled" onPress={() => navigation.navigate("SignUp")}>
+            Cadastrar conta
+          </Button>
+        </ButtonsArea>
       </FormContainer>
     </Container>
   );
