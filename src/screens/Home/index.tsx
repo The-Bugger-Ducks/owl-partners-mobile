@@ -13,15 +13,16 @@ import {
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { AddMeetingModal } from "./AddMeetingModal";
 import { ButtonsContainer, Container, MeetingContainer } from "./styles";
-import { User } from "@screens/User";
+import StorageController from "@utils/handlers/StorageController";
 
 export function Home() {
   const [data, setData] = useState<IMeetingsHome>();
   const [isLoading, setIsLoading] = useState(true);
+  const [role, setRole] = useState("");
   const [isAddMeetingModalOpen, setIsAddMeetingModalOpen] = useState(false);
   const [isUserModalOpen, setisUserModalOpen] = useState(false);
 
@@ -40,6 +41,18 @@ export function Home() {
     }, []),
   );
 
+  async function getUser() {
+    const user = await StorageController.getUserInfo();
+    if (!user) {
+      return alert("Usuário não encontrado");
+    }
+    setRole(user.role);
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <Container>
       <Header isHero={true} />
@@ -48,12 +61,15 @@ export function Home() {
         <Button type="unfilled" onPress={() => setIsAddMeetingModalOpen(true)}>
           Agendar reunião
         </Button>
-        <Button
-          onPress={() => navigation.navigate("User")}
-          style={{ marginVertical: 8 }}
-        >
-          Gerenciar usuários
-        </Button>
+
+        {role == "ADMIN" ? (
+          <Button
+            onPress={() => navigation.navigate("User")}
+            style={{ marginVertical: 8 }}
+          >
+            Gerenciar usuários
+          </Button>
+        ) : null}
       </ButtonsContainer>
 
       <MeetingContainer>

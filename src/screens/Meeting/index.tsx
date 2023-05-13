@@ -20,12 +20,14 @@ import {
   InfoContainer,
   ModalContent,
 } from "./styles";
+import StorageController from "@utils/handlers/StorageController";
 
 export function Meeting() {
   const [data, setData] = useState<IMeeting>();
   const [isLoading, setIsLoading] = useState(true);
   const [updatedMeetingDate, setUpdatedMeetingDate] = useState("");
   const [updatedMeetingHour, setUpdatedMeetingHour] = useState("");
+
   const [updatedMeetingTheme, setUpdatedMeetingTheme] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);

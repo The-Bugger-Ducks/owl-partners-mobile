@@ -46,17 +46,20 @@ export function MyProfile() {
     const payload: IUserUpdate = {
       name,
       lastName,
-      email,
     };
 
     if (password.length > 0) {
       payload.password = password;
     }
+    if (email != email) {
+      payload.email = email;
+    }
+    setIsLoading(true);
     console.log(payload);
 
-    setIsLoading(true);
     await userRequest.updateUser(payload);
     setIsLoading(false);
+    getUser();
   }
 
   async function handleSignOut() {
@@ -67,9 +70,9 @@ export function MyProfile() {
   return (
     <Container style={{ gap: 12 }}>
       <Header />
+      <Text>Minhas informações</Text>
       <ScrollView>
         <View style={{ gap: 12 }}>
-          <Text>Meu perfil</Text>
           <Input
             label="Primeiro Nome"
             defaultValue={name}
@@ -105,8 +108,10 @@ export function MyProfile() {
         </View>
       </ScrollView>
 
-      <Button onPress={() => handleSubmit()}>Salvar</Button>
-      <Button onPress={() => handleSignOut()}>Sair </Button>
+      <Button onPress={() => handleSubmit()}>Editar</Button>
+      <Button onPress={() => handleSignOut()} type="unfilled">
+        Sair{" "}
+      </Button>
     </Container>
   );
 }

@@ -31,7 +31,7 @@ export function User() {
 
   async function handleDeleteUser(id: string) {
     setIsLoadingDelete(true);
-    await userRequest.deleteUser(id);
+    if (id) await userRequest.deleteUser(id);
     setIsLoadingDelete(false);
     getUser();
   }

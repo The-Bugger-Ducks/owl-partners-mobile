@@ -5,8 +5,9 @@ import React from "react";
 import { useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
 import { Container } from "./styles";
-import { useNavigation } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import { PropsStack } from "@custom-types/rootStackParamList";
+import StorageController from "@utils/handlers/StorageController";
 
 export function SignUp() {
   const [email, setEmail] = useState("");
@@ -60,6 +61,16 @@ export function SignUp() {
     setIsLoading(false);
   }
 
+  async function handleUserAuthentication() {
+    const token = await StorageController.getToken();
+
+    if (token) goToApp();
+  }
+
+  function goToApp() {
+    navigation.dispatch(StackActions.replace("HomeStack"));
+  }
+
   return (
     <Container style={{ gap: 35 }}>
       <Header isHero={true} />
@@ -92,7 +103,13 @@ export function SignUp() {
           />
         </View>
       </ScrollView>
-      <Button onPress={handleSubmit}>Cadastrar </Button>
+      <Button
+        onPress={() => {
+          handleSubmit(), handleUserAuthentication();
+        }}
+      >
+        Cadastrar{" "}
+      </Button>
     </Container>
   );
 }

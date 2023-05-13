@@ -33,7 +33,7 @@ export interface IUserRegister {
 export interface IUserUpdate {
   name: string;
   lastName: string;
-  email: string;
+  email?: string;
   password?: string;
 }
 

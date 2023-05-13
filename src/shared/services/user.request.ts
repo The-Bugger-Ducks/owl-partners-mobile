@@ -1,4 +1,8 @@
-import { IUserRegister, IUserUpdate } from "@interfaces/user.interface";
+import {
+  IUserAuthenticated,
+  IUserRegister,
+  IUserUpdate,
+} from "@interfaces/user.interface";
 import { alertError } from "@utils/alertError";
 import { USER_ENDPOINTS } from "../constants/endpoints";
 import { api } from "@api";
@@ -7,8 +11,16 @@ import StorageController from "@utils/handlers/StorageController";
 class UserRequest {
   async createUser(newUser: IUserRegister) {
     try {
-      const { data } = await api.post(USER_ENDPOINTS.CREATE, newUser);
-      return data;
+      const response = await api.post<IUserAuthenticated>(
+        USER_ENDPOINTS.CREATE,
+        newUser,
+      );
+      const data = response.data;
+
+      await StorageController.setToken(data.token);
+      await StorageController.setUserInfo(data.user);
+
+      return response;
     } catch (error) {
       alertError(error, "Não foi possível cadastrar o usuário :(");
     }
