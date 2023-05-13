@@ -95,11 +95,6 @@ function CustomTabBar({ state, descriptors, navigation }: TabBarProps) {
             canPreventDefault: true,
           });
 
-          if (route.name === "SignOut") {
-            await StorageController.clearUserInfo();
-            navigation.dispatch(StackActions.replace("SignIn"));
-          }
-
           if (!isFocused && !event.defaultPrevented) {
             // The `merge: true` option makes sure that the params inside the tab screen are preserved
             navigation.navigate({

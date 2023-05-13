@@ -7,6 +7,8 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
 import { Container } from "./styles";
+import { StackActions, useNavigation } from "@react-navigation/native";
+import { PropsStack } from "@custom-types/rootStackParamList";
 
 export function MyProfile() {
   const [email, setEmail] = useState("");
@@ -17,6 +19,8 @@ export function MyProfile() {
   const [role, setRole] = useState("");
   const [lastName, setLastName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigation = useNavigation<PropsStack>();
 
   async function getUser() {
     const user = await StorageController.getUserInfo();
@@ -53,6 +57,11 @@ export function MyProfile() {
     setIsLoading(true);
     await userRequest.updateUser(payload);
     setIsLoading(false);
+  }
+
+  async function handleSignOut() {
+    await StorageController.clearUserInfo();
+    navigation.dispatch(StackActions.replace("SignIn"));
   }
 
   return (
@@ -97,6 +106,7 @@ export function MyProfile() {
       </ScrollView>
 
       <Button onPress={() => handleSubmit()}>Salvar</Button>
+      <Button onPress={() => handleSignOut()}>Sair </Button>
     </Container>
   );
 }

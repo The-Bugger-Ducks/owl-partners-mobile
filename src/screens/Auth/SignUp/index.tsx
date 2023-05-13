@@ -5,17 +5,16 @@ import React from "react";
 import { useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
 import { Container } from "./styles";
-import { IModalPropsForm } from "@interfaces/partner.interface";
+import { useNavigation } from "@react-navigation/native";
+import { PropsStack } from "@custom-types/rootStackParamList";
 
-export function SignUp({
-  visible,
-  onClose,
-  closeAfterUpdate,
-}: IModalPropsForm) {
+export function SignUp() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [role, setRole] = useState("SIMPLE");
   const [lastName, setLastName] = useState("");
+
+  const navigation = useNavigation<PropsStack>();
 
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +54,8 @@ export function SignUp({
       password,
     };
 
+    console.log(newUser);
+
     await userRequest.createUser(newUser);
     setIsLoading(false);
   }
@@ -86,12 +87,12 @@ export function SignUp({
           <Input
             label="Senha"
             placeholder="********"
-            textContentType="password"
+            textContentType="newPassword"
             onChangeText={text => setPassword(text)}
           />
         </View>
       </ScrollView>
-      <Button onPress={handleSubmit}>Salvar </Button>
+      <Button onPress={handleSubmit}>Cadastrar </Button>
     </Container>
   );
 }

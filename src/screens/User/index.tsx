@@ -33,6 +33,7 @@ export function User() {
     setIsLoadingDelete(true);
     await userRequest.deleteUser(id);
     setIsLoadingDelete(false);
+    getUser();
   }
 
   return (
