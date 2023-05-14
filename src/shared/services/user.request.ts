@@ -66,8 +66,15 @@ class UserRequest {
         throw new Error("User is empty");
       }
 
-      const { data } = await api.put(USER_ENDPOINTS.UPDATE + user.id, payload);
-      return data;
+      const updateUser = await api.put(
+        USER_ENDPOINTS.UPDATE + user.id,
+        payload,
+      );
+      const UpdatedUser = updateUser.data.user;
+
+      await StorageController.setUserInfo(UpdatedUser);
+
+      return UpdatedUser;
     } catch (error) {
       alertError(error, "Não foi possível editar o usuário :(");
     }

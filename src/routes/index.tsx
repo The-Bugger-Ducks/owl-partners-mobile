@@ -15,7 +15,6 @@ import { SignUp } from "@screens/Auth/SignUp";
 
 import { Meeting } from "@screens/Meeting";
 import { CustomHeaderTitle } from "./CustomHeaderTitle";
-import { SignOut } from "@screens/SignOut";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -41,7 +40,6 @@ export function AppRoutes() {
           <Stack.Screen name="Meeting" component={Meeting} />
           <Stack.Screen name="User" component={User} />
           <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="SignOut" component={SignOut} />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

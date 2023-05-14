@@ -1,6 +1,6 @@
 import { Button, Header, Input, Modal, Text } from "@components";
 import { IModalPropsForm } from "@interfaces/partner.interface";
-import { IUserUpdate } from "@interfaces/user.interface";
+import { IUserEdit, IUserUpdate } from "@interfaces/user.interface";
 import userRequest from "@requests/user.request";
 import StorageController from "@utils/handlers/StorageController";
 import React, { useEffect } from "react";
@@ -24,6 +24,7 @@ export function MyProfile() {
 
   async function getUser() {
     const user = await StorageController.getUserInfo();
+
     if (!user) {
       return alert("Usuário não encontrado");
     }
@@ -38,6 +39,7 @@ export function MyProfile() {
   }, []);
 
   async function handleSubmit() {
+    setIsLoading(true);
     if (confirmPassword != password) {
       Alert.alert("Opa!", "As senha não conferem");
       return;
@@ -54,11 +56,7 @@ export function MyProfile() {
     if (email != email) {
       payload.email = email;
     }
-    setIsLoading(true);
-    console.log(payload);
-
     await userRequest.updateUser(payload);
-    setIsLoading(false);
     getUser();
   }
 
@@ -110,7 +108,7 @@ export function MyProfile() {
 
       <Button onPress={() => handleSubmit()}>Editar</Button>
       <Button onPress={() => handleSignOut()} type="unfilled">
-        Sair{" "}
+        Sair
       </Button>
     </Container>
   );

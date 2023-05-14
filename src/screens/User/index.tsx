@@ -11,11 +11,28 @@ import {
 } from "./styles";
 import { Trash } from "../../components/Icons/Trash";
 import { MinusCircle } from "../../components/Icons/MinusCircle";
+import StorageController from "@utils/handlers/StorageController";
+import { Alert, View } from "react-native";
+import { then } from "metro.config";
 
 export function User() {
   const [data, setData] = useState<IUser[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const [userId, setUserId] = useState("");
+
+  async function getUserInfomation() {
+    const userInfo = await StorageController.getUserInfo();
+
+    if (!userInfo) {
+      return alert("Usuário não encontrado");
+    }
+    setUserId(userInfo.id);
+  }
+
+  useEffect(() => {
+    getUserInfomation();
+  }, []);
 
   async function getUser() {
     setIsLoading(true);
@@ -36,41 +53,61 @@ export function User() {
     getUser();
   }
 
+  async function handleDeleteUserConfirmation(id: string) {
+    try {
+      Alert.alert("Você está deletand um usuário!", "Tem certeza disso?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel",
+        },
+        { text: "OK", onPress: () => handleDeleteUser(id) },
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Container>
       <Header />
       <UsersContainer>
         <Text>Usuários encontrados</Text>
         {data?.map(user => {
-          return (
-            <UserCard key={user.id} style={{ marginVertical: 10 }}>
-              <Text weight="500" color="#000000" size={12}>
-                {user.role} | {user.name}
-              </Text>
-              <UserCardActions>
-                <IconArea onPress={() => handleDeleteUser(user.id)}>
-                  <Trash />
-                  <Text weight="400" color="#000000" size={14}>
-                    Remover
-                  </Text>
-                </IconArea>
+          const isMyself = userId == user.id;
+          if (!isMyself) {
+            return (
+              <UserCard key={user.id} style={{ marginVertical: 10 }}>
+                <Text weight="500" color="#000000" size={12}>
+                  {user.role} | {user.name}
+                </Text>
+                <UserCardActions>
+                  <IconArea
+                    onPress={() => handleDeleteUserConfirmation(user.id)}
+                  >
+                    <Trash />
+                    <Text weight="400" color="#000000" size={14}>
+                      Remover
+                    </Text>
+                  </IconArea>
 
-                <IconArea>
-                  <MinusCircle />
-                  <Text weight="400" color="#000000" size={14}>
-                    Rebaixar
-                  </Text>
-                </IconArea>
+                  <IconArea>
+                    <MinusCircle />
+                    <Text weight="400" color="#000000" size={14}>
+                      Rebaixar
+                    </Text>
+                  </IconArea>
 
-                <IconArea>
-                  <PlusCircle />
-                  <Text weight="400" color="#000000" size={14}>
-                    Promover
-                  </Text>
-                </IconArea>
-              </UserCardActions>
-            </UserCard>
-          );
+                  <IconArea>
+                    <PlusCircle />
+                    <Text weight="400" color="#000000" size={14}>
+                      Promover
+                    </Text>
+                  </IconArea>
+                </UserCardActions>
+              </UserCard>
+            );
+          }
         })}
       </UsersContainer>
     </Container>
