@@ -11,13 +11,11 @@ import { ScrollView, View } from "react-native";
 
 interface MeetingListyProps {
   partnershipId: string;
-  isPartnershipDisabled: boolean;
   partnerProps: IPartnership;
 }
 
 export function MeetingsList({
   partnershipId,
-  isPartnershipDisabled,
   partnerProps,
 }: MeetingListyProps) {
   const [data, setData] = useState<IMeetingsHome>();
@@ -64,7 +62,7 @@ export function MeetingsList({
                     type={title ? "meeting" : "update"}
                     date={formatDate(meetingDateTime)}
                     time={formatTime(meetingDateTime)}
-                    canEdit={isPartnershipDisabled}
+                    canEdit={false}
                     description={description}
                     title={title}
                     partner={partnerProps.name}
@@ -102,7 +100,7 @@ export function MeetingsList({
                     type={title ? "meeting" : "update"}
                     date={formatDate(meetingDateTime)}
                     time={formatTime(meetingDateTime)}
-                    canEdit={isPartnershipDisabled}
+                    canEdit={false}
                     description={description}
                     title={title}
                     partner={partnerProps.name}

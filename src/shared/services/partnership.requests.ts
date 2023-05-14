@@ -2,20 +2,36 @@ import { api } from "@api";
 
 import { IPartnership, IPartnershipEdit } from "@interfaces/partner.interface";
 import { alertError } from "@utils/alertError";
-import { Alert } from "react-native";
-import { PARTNERSHIP_ENDPOINTS } from "../constants/endpoints";
 import {
   formatPartnerStatusByList,
   formatStatus,
 } from "@utils/handlers/formatEnumsPartner";
+import { Alert } from "react-native";
+import { PARTNERSHIP_ENDPOINTS } from "../constants/endpoints";
 
 class PartnershipRequests {
-  async createPartnership(newPartnership: IPartnership) {
+  async createPartnership(
+    name: string,
+    status: string,
+    email?: string,
+    phoneNumber?: string,
+    state?: string,
+    city?: string,
+    classification?: string,
+    memberNumber?: number,
+  ) {
     try {
-      const { data } = await api.post(
-        PARTNERSHIP_ENDPOINTS.CREATE,
-        newPartnership,
-      );
+      const payload = {
+        name,
+        status,
+        email,
+        phoneNumber,
+        state,
+        city,
+        classification,
+        memberNumber,
+      };
+      const { data } = await api.post(PARTNERSHIP_ENDPOINTS.CREATE, payload);
       return data;
     } catch (error) {
       alertError(error, "Não foi possível cadastrar a parceria :(");
