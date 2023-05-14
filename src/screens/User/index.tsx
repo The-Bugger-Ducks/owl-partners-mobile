@@ -55,7 +55,7 @@ export function User() {
 
   async function handleDeleteUserConfirmation(id: string) {
     try {
-      Alert.alert("Você está deletand um usuário!", "Tem certeza disso?", [
+      Alert.alert("Você está deletando um usuário!", "Tem certeza disso?", [
         {
           text: "Cancel",
           onPress: () => null,
@@ -79,7 +79,7 @@ export function User() {
             return (
               <UserCard key={user.id} style={{ marginVertical: 10 }}>
                 <Text weight="500" color="#000000" size={12}>
-                  {user.role} | {user.name}
+                  {user.role} | {user.name} {user.lastName}
                 </Text>
                 <UserCardActions>
                   <IconArea

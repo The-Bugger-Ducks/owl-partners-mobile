@@ -39,7 +39,6 @@ export function MyProfile() {
   }, []);
 
   async function handleSubmit() {
-    setIsLoading(true);
     if (confirmPassword != password) {
       Alert.alert("Opa!", "As senha não conferem");
       return;
@@ -57,6 +56,8 @@ export function MyProfile() {
       payload.email = email;
     }
     await userRequest.updateUser(payload);
+
+    Alert.alert("As informações foram editadas!");
     getUser();
   }
 

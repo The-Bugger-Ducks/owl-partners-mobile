@@ -70,6 +70,7 @@ export function SignUp() {
     };
 
     await userRequest.createUser(newUser);
+
     setIsLoading(false);
     handleUserAuthentication();
   }
