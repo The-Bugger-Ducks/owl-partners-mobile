@@ -47,25 +47,25 @@ export function User() {
   }, []);
 
   async function handleDeleteUser(id: string) {
-    setIsLoadingDelete(true);
-    if (id) await userRequest.deleteUser(id);
-    setIsLoadingDelete(false);
-    getUser();
-  }
-
-  async function handleDeleteUserConfirmation(id: string) {
     try {
-      Alert.alert("Você está deletando um usuário!", "Tem certeza disso?", [
-        {
-          text: "Cancel",
-          onPress: () => null,
-          style: "cancel",
-        },
-        { text: "OK", onPress: () => handleDeleteUser(id) },
-      ]);
+      setIsLoadingDelete(true);
+      if (id) await userRequest.deleteUser(id);
+      setIsLoadingDelete(false);
+      getUser();
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async function handleDeleteUserConfirmation(id: string) {
+    Alert.alert("Você está deletando um usuário!", "Tem certeza disso?", [
+      {
+        text: "Cancel",
+        onPress: () => null,
+        style: "cancel",
+      },
+      { text: "OK", onPress: () => handleDeleteUser(id) },
+    ]);
   }
 
   return (

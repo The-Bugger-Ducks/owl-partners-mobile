@@ -161,7 +161,7 @@ export function SignIn() {
             Fazer Login
           </Button>
 
-          <Button type="filled" onPress={() => navigation.navigate("SignUp")}>
+          <Button type="unfilled" onPress={() => navigation.navigate("SignUp")}>
             Cadastrar conta
           </Button>
         </ButtonsArea>
