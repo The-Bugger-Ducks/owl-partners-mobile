@@ -77,21 +77,21 @@ export function Partnership() {
                 {data?.name}
               </Text>
             </Text>
-            <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+            <Text color="#999999" size={14} weight="400" numberOfLines={1}>
               Status:{" "}
-              <Text size={16} weight="400">
+              <Text size={14} weight="400">
                 {data?.status}
               </Text>
             </Text>
-            <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+            <Text color="#999999" size={14} weight="400" numberOfLines={1}>
               Quantidade de membros :{" "}
-              <Text size={16} weight="400">
+              <Text size={14} weight="400">
                 {data?.memberNumber}
               </Text>
             </Text>
-            <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+            <Text color="#999999" size={14} weight="400" numberOfLines={1}>
               Localização:{" "}
-              <Text size={16} weight="400">
+              <Text size={14} weight="400">
                 {data?.state}
               </Text>
             </Text>
@@ -101,15 +101,15 @@ export function Partnership() {
               Informações de contato
             </Text>
 
-            <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+            <Text color="#999999" size={14} weight="400" numberOfLines={1}>
               E-mail:{" "}
-              <Text size={16} weight="400">
+              <Text size={14} weight="400">
                 {data?.email}{" "}
               </Text>
             </Text>
-            <Text color="#999999" size={16} weight="400" numberOfLines={1}>
+            <Text color="#999999" size={14} weight="400" numberOfLines={1}>
               Telefone:{" "}
-              <Text size={16} weight="400">
+              <Text size={14} weight="400">
                 {data?.phoneNumber}
               </Text>
             </Text>

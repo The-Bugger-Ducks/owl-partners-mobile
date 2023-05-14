@@ -7,6 +7,7 @@ import { formatDateISO } from "@utils/formatDateISO";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { PartnershipDropDownArea } from "./styles";
+import { formatInput } from "@utils/formatInput";
 
 interface AddMeetingModalProps {
   visible: boolean;
@@ -25,8 +26,8 @@ export function AddMeetingModal({ visible, onClose }: AddMeetingModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   async function getPartnerships() {
-    const data: IPartnership[] = await partnershipRequests.getPartnerships();
-    setPartnerships(data);
+    const data = await partnershipRequests.getPartnerships();
+    setPartnerships(data ?? []);
   }
 
   useEffect(() => {
@@ -40,6 +41,10 @@ export function AddMeetingModal({ visible, onClose }: AddMeetingModalProps) {
       formatDateISO(date, hour),
       theme,
     );
+    setPartnership("");
+    setDate("");
+    setHour("");
+    setTheme("");
     setIsLoading(false);
     onClose();
   }
@@ -49,7 +54,13 @@ export function AddMeetingModal({ visible, onClose }: AddMeetingModalProps) {
       title="Agendar reunião"
       visible={visible}
       isLoading={isLoading}
-      onClose={onClose}
+      onClose={() => {
+        setPartnership("");
+        setDate("");
+        setHour("");
+        setTheme("");
+        onClose();
+      }}
       buttonTitle="Agendar reunião"
       onPressButton={handleSubmit}
       content={
@@ -86,12 +97,16 @@ export function AddMeetingModal({ visible, onClose }: AddMeetingModalProps) {
             <Input
               label="Data"
               placeholder="21/07/2023"
-              onChangeText={text => setDate(text)}
+              maxLength={10}
+              value={date}
+              onChangeText={text => setDate(formatInput(text, "date"))}
             />
             <Input
               label="Hora"
               placeholder="16:00"
-              onChangeText={text => setHour(text)}
+              maxLength={5}
+              value={hour}
+              onChangeText={text => setHour(formatInput(text, "hour"))}
             />
             <Input
               label="Tema (opcional)"
