@@ -17,7 +17,10 @@ import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { AddMeetingModal } from "./AddMeetingModal";
 import { ButtonsContainer, Container, MeetingContainer } from "./styles";
+
 import StorageController from "@utils/handlers/StorageController";
+import { IPartnership } from "@interfaces/partner.interface";
+
 
 export function Home() {
   const [data, setData] = useState<IMeetingsHome>();
@@ -100,7 +103,9 @@ export function Home() {
                       description={description}
                       title={title}
                       partner={name}
-                      onPress={() => navigation.navigate("Meeting", { id })}
+                      onPress={() => {
+                        navigation.navigate("Meeting", { id });
+                      }}
                     />
                   );
                 },
@@ -136,7 +141,9 @@ export function Home() {
                       title={title}
                       partner={name}
                       canEdit={false}
-                      onPress={() => navigation.navigate("Meeting", { id })}
+                      onPress={() => {
+                        navigation.navigate("Meeting", { id });
+                      }}
                     />
                   );
                 },
