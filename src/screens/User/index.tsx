@@ -1,4 +1,4 @@
-import { Card, Header, PlusCircle, Text } from "@components";
+import { Card, Header, Input, PlusCircle, Text } from "@components";
 import { IUser, IUserRegister } from "@interfaces/user.interface";
 import userRequest from "@requests/user.request";
 import { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ import { then } from "metro.config";
 
 export function User() {
   const [data, setData] = useState<IUser[]>();
+  const [filteredData, setFilteredData] = useState<IUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [userId, setUserId] = useState("");
@@ -39,6 +40,14 @@ export function User() {
     const user: IUser[] = await userRequest.listUser();
 
     setData(user);
+    setIsLoading(false);
+  }
+
+  async function getUserByName(name: string) {
+    setIsLoading(true);
+    const filteredUser: IUser[] = await userRequest.listUserByName(name);
+
+    setFilteredData(filteredUser);
     setIsLoading(false);
   }
 
@@ -72,8 +81,14 @@ export function User() {
     <Container>
       <Header />
       <UsersContainer>
+        <Input
+          label="Encontrar usuário"
+          placeholder="Fulano de Tal..."
+          onChangeText={text => getUserByName(text)}
+          style={{ marginBottom: 16 }}
+        />
         <Text>Usuários encontrados</Text>
-        {data?.map(user => {
+        {filteredData?.map(user => {
           const isMyself = userId == user.id;
           if (!isMyself) {
             return (
