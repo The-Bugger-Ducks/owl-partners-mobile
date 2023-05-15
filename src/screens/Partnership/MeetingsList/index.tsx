@@ -73,9 +73,7 @@ export function MeetingsList({
                     title={title}
                     partner={partnerProps.name}
                     onPress={() => {
-                      partnerProps.disabled
-                        ? null
-                        : navigation.navigate("Meeting", { id });
+                      navigation.navigate("Meeting", { id });
                     }}
                   />
                 );
@@ -115,9 +113,7 @@ export function MeetingsList({
                     title={title}
                     partner={partnerProps.name}
                     onPress={() => {
-                      partnerProps.disabled
-                        ? null
-                        : navigation.navigate("Meeting", { id });
+                      navigation.navigate("Meeting", { id });
                     }}
                   />
                 );

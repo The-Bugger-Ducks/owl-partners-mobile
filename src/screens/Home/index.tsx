@@ -69,7 +69,7 @@ export function Home() {
                   title,
                   description,
                   meetingDateTime,
-                  Partner: { name, partnerId, disabled },
+                  Partner: { name, partnerId },
                 }) => {
                   return (
                     <Card
@@ -83,9 +83,7 @@ export function Home() {
                       title={title}
                       partner={name}
                       onPress={() => {
-                        disabled
-                          ? null
-                          : navigation.navigate("Meeting", { id });
+                        navigation.navigate("Meeting", { id });
                       }}
                     />
                   );
@@ -109,7 +107,7 @@ export function Home() {
                   title,
                   description,
                   meetingDateTime,
-                  Partner: { name, partnerId, disabled },
+                  Partner: { name, partnerId },
                 }) => {
                   return (
                     <Card
@@ -123,9 +121,7 @@ export function Home() {
                       partner={name}
                       canEdit={false}
                       onPress={() => {
-                        disabled
-                          ? null
-                          : navigation.navigate("Meeting", { id });
+                        navigation.navigate("Meeting", { id });
                       }}
                     />
                   );
