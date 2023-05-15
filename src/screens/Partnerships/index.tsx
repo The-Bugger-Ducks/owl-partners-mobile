@@ -27,10 +27,9 @@ export function Partnerships() {
 
   async function getPartnerships() {
     setIsLoading(true);
-    const partnerships: IPartnership[] =
-      await partnershipRequests.getPartnerships(tab === 1);
-    setData(partnerships);
-    setFilteredData(partnerships);
+    const partnerships = await partnershipRequests.getPartnerships(tab === 1);
+    setData(partnerships ?? []);
+    setFilteredData(partnerships ?? []);
     setIsLoading(false);
   }
 
@@ -40,7 +39,7 @@ export function Partnerships() {
       isPartnershipDisabledTab,
       name,
     );
-    setFilteredData(filteredPartnerships);
+    setFilteredData(filteredPartnerships ?? []);
   }
 
   useEffect(() => {
@@ -101,7 +100,9 @@ export function Partnerships() {
                   <PartnerView
                     key={id}
                     activeOpacity={0.7}
-                    onPress={() => navigation.navigate("Partnership", { id })}
+                    onPress={() =>
+                      navigation.navigate("Partnership", { id: id ?? "" })
+                    }
                   >
                     <Text
                       color="#EF4444"

@@ -41,7 +41,7 @@ function formatStatus(partner: IPartnership): IPartnership {
 }
 
 function formatPartnerStatusByList(partners: IPartnership[]) {
-  return partners.map(partner => formatStatus(partner));
+  return partners.map(partner => formatStatus(partner)) ?? [];
 }
 
 export {

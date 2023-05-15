@@ -50,6 +50,22 @@ class UserRequest {
     }
   }
 
+  async listUserByName(name: string) {
+    try {
+      const user = await StorageController.getUserInfo();
+
+      if (!user || user?.name == null) {
+        throw new Error("User is empty");
+      }
+
+      const { data } = await api.get(USER_ENDPOINTS.LIST_USERS + name);
+      return data ?? [];
+    } catch (error) {
+      //alertError(error, "Não foi possível achar os usuários :(");
+      return [];
+    }
+  }
+
   async deleteUser(id: string) {
     try {
       return await api.delete(USER_ENDPOINTS.DELETE + id);
