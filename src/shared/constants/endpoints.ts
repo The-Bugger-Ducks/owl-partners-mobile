@@ -1,5 +1,10 @@
 export enum USER_ENDPOINTS {
   USER_LOGIN = "/auth/login",
+  CREATE = "/users",
+  LIST = "/users",
+  USER_ID = "/users/",
+  DELETE = "/users/",
+  UPDATE = "/users/",
 }
 
 export enum PARTNERSHIP_ENDPOINTS {
