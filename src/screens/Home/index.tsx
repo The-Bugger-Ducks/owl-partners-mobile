@@ -1,19 +1,34 @@
 import { Button, Card, Header, Loading, Text } from "@components";
-import { PropsStack } from "@custom-types/rootStackParamList";
+import {
+  PropsStack,
+  RootStackParamList,
+} from "@custom-types/rootStackParamList";
 import { IMeetingsHome } from "@interfaces/meeting.interface";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import {
+  RouteProp,
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { AddMeetingModal } from "./AddMeetingModal";
 import { ButtonsContainer, Container, MeetingContainer } from "./styles";
 
+import StorageController from "@utils/handlers/StorageController";
+import { IPartnership } from "@interfaces/partner.interface";
+
+
 export function Home() {
   const [data, setData] = useState<IMeetingsHome>();
   const [isLoading, setIsLoading] = useState(true);
+  const [role, setRole] = useState("");
   const [isAddMeetingModalOpen, setIsAddMeetingModalOpen] = useState(false);
+  const [isUserModalOpen, setisUserModalOpen] = useState(false);
+
   const navigation = useNavigation<PropsStack>();
 
   async function getMeetings() {
@@ -29,6 +44,18 @@ export function Home() {
     }, []),
   );
 
+  async function getUser() {
+    const user = await StorageController.getUserInfo();
+    if (!user) {
+      return alert("Usuário não encontrado");
+    }
+    setRole(user.role);
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <Container>
       <Header isHero={true} />
@@ -37,12 +64,15 @@ export function Home() {
         <Button type="unfilled" onPress={() => setIsAddMeetingModalOpen(true)}>
           Agendar reunião
         </Button>
-        <Button
-          onPress={() => alert("Usuários!")}
-          style={{ marginVertical: 8 }}
-        >
-          Gerenciar usuários
-        </Button>
+
+        {role == "ADMIN" ? (
+          <Button
+            onPress={() => navigation.navigate("User")}
+            style={{ marginVertical: 8 }}
+          >
+            Gerenciar usuários
+          </Button>
+        ) : null}
       </ButtonsContainer>
 
       <MeetingContainer>
@@ -73,7 +103,9 @@ export function Home() {
                       description={description}
                       title={title}
                       partner={name}
-                      onPress={() => navigation.navigate("Meeting", { id })}
+                      onPress={() => {
+                        navigation.navigate("Meeting", { id });
+                      }}
                     />
                   );
                 },
@@ -109,7 +141,9 @@ export function Home() {
                       title={title}
                       partner={name}
                       canEdit={false}
-                      onPress={() => navigation.navigate("Meeting", { id })}
+                      onPress={() => {
+                        navigation.navigate("Meeting", { id });
+                      }}
                     />
                   );
                 },

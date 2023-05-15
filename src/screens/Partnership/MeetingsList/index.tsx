@@ -11,13 +11,11 @@ import { ScrollView, View } from "react-native";
 
 interface MeetingListyProps {
   partnershipId: string;
-  isPartnershipDisabled: boolean;
   partnerProps: IPartnership;
 }
 
 export function MeetingsList({
   partnershipId,
-  isPartnershipDisabled,
   partnerProps,
 }: MeetingListyProps) {
   const [data, setData] = useState<IMeetingsHome>();
@@ -56,7 +54,13 @@ export function MeetingsList({
           <Text>Proximas reuniões</Text>
           <View style={{ marginVertical: 16 }}>
             {data?.upcomingMeetings.map(
-              ({ id, title, description, meetingDateTime }) => {
+              ({
+                id,
+                title,
+                description,
+                Partner: { disabled },
+                meetingDateTime,
+              }) => {
                 return (
                   <Card
                     id={id}
@@ -64,11 +68,13 @@ export function MeetingsList({
                     type={title ? "meeting" : "update"}
                     date={formatDate(meetingDateTime)}
                     time={formatTime(meetingDateTime)}
-                    canEdit={isPartnershipDisabled}
+                    canEdit={false}
                     description={description}
                     title={title}
                     partner={partnerProps.name}
-                    onPress={() => navigation.navigate("Meeting", { id })}
+                    onPress={() => {
+                      navigation.navigate("Meeting", { id });
+                    }}
                   />
                 );
               },
@@ -102,11 +108,13 @@ export function MeetingsList({
                     type={title ? "meeting" : "update"}
                     date={formatDate(meetingDateTime)}
                     time={formatTime(meetingDateTime)}
-                    canEdit={isPartnershipDisabled}
+                    canEdit={false}
                     description={description}
                     title={title}
                     partner={partnerProps.name}
-                    onPress={() => navigation.navigate("Meeting", { id })}
+                    onPress={() => {
+                      navigation.navigate("Meeting", { id });
+                    }}
                   />
                 );
               },

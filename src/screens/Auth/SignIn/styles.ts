@@ -85,3 +85,5 @@ export const TextInput = styled.TextInput.attrs({
 export const LoadingContainer = styled.View`
   max-height: 60px;
 `;
+
+export const ButtonsArea = styled.View``;

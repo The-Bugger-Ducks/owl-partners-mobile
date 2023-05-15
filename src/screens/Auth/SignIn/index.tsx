@@ -19,6 +19,7 @@ import { isAxiosError } from "axios";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { View } from "react-native";
 import {
+  ButtonsArea,
   Container,
   Form,
   FormContainer,
@@ -96,9 +97,7 @@ export function SignIn() {
           <Controller
             control={control}
             name="email"
-            rules={{
-              required: true,
-            }}
+            rules={{ required: true }}
             render={({ field: { onChange } }) => (
               <View>
                 <Text>Email</Text>
@@ -116,9 +115,7 @@ export function SignIn() {
           <Controller
             control={control}
             name="password"
-            rules={{
-              required: true,
-            }}
+            rules={{ required: true }}
             render={({
               field: { onChange },
               fieldState: { error, isTouched },
@@ -154,13 +151,20 @@ export function SignIn() {
             )}
           />
         </Form>
-        <Button
-          type="filled"
-          disabled={!isDirty || !isValid || isLoading}
-          onPress={handleSubmit(onSubmit)}
-        >
-          Fazer Login
-        </Button>
+
+        <ButtonsArea style={{ gap: 15 }}>
+          <Button
+            type="filled"
+            disabled={!isDirty || !isValid || isLoading}
+            onPress={handleSubmit(onSubmit)}
+          >
+            Fazer Login
+          </Button>
+
+          <Button type="unfilled" onPress={() => navigation.navigate("SignUp")}>
+            Cadastrar conta
+          </Button>
+        </ButtonsArea>
       </FormContainer>
     </Container>
   );
