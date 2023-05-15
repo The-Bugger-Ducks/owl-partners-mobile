@@ -1,7 +1,15 @@
 import { Button, Card, Header, Loading, Text } from "@components";
-import { PropsStack } from "@custom-types/rootStackParamList";
+import {
+  PropsStack,
+  RootStackParamList,
+} from "@custom-types/rootStackParamList";
 import { IMeetingsHome } from "@interfaces/meeting.interface";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import {
+  RouteProp,
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
@@ -9,6 +17,7 @@ import { useCallback, useState } from "react";
 import { View } from "react-native";
 import { AddMeetingModal } from "./AddMeetingModal";
 import { ButtonsContainer, Container, MeetingContainer } from "./styles";
+import { IPartnership } from "@interfaces/partner.interface";
 
 export function Home() {
   const [data, setData] = useState<IMeetingsHome>();
@@ -73,7 +82,9 @@ export function Home() {
                       description={description}
                       title={title}
                       partner={name}
-                      onPress={() => navigation.navigate("Meeting", { id })}
+                      onPress={() => {
+                        navigation.navigate("Meeting", { id });
+                      }}
                     />
                   );
                 },
@@ -109,7 +120,9 @@ export function Home() {
                       title={title}
                       partner={name}
                       canEdit={false}
-                      onPress={() => navigation.navigate("Meeting", { id })}
+                      onPress={() => {
+                        navigation.navigate("Meeting", { id });
+                      }}
                     />
                   );
                 },
