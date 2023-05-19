@@ -58,7 +58,9 @@ class UserRequest {
         throw new Error("User is empty");
       }
 
-      const { data } = await api.get(USER_ENDPOINTS.LIST_USERS + name);
+      const { data } = await api.get(
+        USER_ENDPOINTS.LIST_USERS + "?name=" + name,
+      );
       return data ?? [];
     } catch (error) {
       //alertError(error, "Não foi possível achar os usuários :(");

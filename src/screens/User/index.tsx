@@ -1,4 +1,4 @@
-import { Card, Header, Input, PlusCircle, Text } from "@components";
+import { Card, Header, Input, Loading, PlusCircle, Text } from "@components";
 import { IUser, IUserRegister } from "@interfaces/user.interface";
 import userRequest from "@requests/user.request";
 import { useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import {
   UserCard,
   UsersContainer,
   IconArea,
+  LoadingContainer,
 } from "./styles";
 import { Trash } from "../../components/Icons/Trash";
 import { MinusCircle } from "../../components/Icons/MinusCircle";
@@ -35,16 +36,18 @@ export function User() {
     getUserInfomation();
   }, []);
 
-  async function getUser() {
+  async function getUsers() {
     setIsLoading(true);
     const user: IUser[] = await userRequest.listUser();
 
     setData(user);
+    setFilteredData(user);
     setIsLoading(false);
   }
 
   async function getUserByName(name: string) {
     setIsLoading(true);
+    setFilteredData([]);
     const filteredUser: IUser[] = await userRequest.listUserByName(name);
 
     setFilteredData(filteredUser);
@@ -52,7 +55,7 @@ export function User() {
   }
 
   useEffect(() => {
-    getUser();
+    getUsers();
   }, []);
 
   async function handleDeleteUser(id: string) {
@@ -60,7 +63,7 @@ export function User() {
       setIsLoadingDelete(true);
       if (id) await userRequest.deleteUser(id);
       setIsLoadingDelete(false);
-      getUser();
+      getUsers();
     } catch (error) {
       console.log(error);
     }
@@ -88,6 +91,11 @@ export function User() {
           style={{ marginBottom: 16 }}
         />
         <Text>Usuários encontrados</Text>
+        {isLoading && (
+          <LoadingContainer>
+            <Loading />
+          </LoadingContainer>
+        )}
         {filteredData?.map(user => {
           const isMyself = userId == user.id;
           if (!isMyself) {
