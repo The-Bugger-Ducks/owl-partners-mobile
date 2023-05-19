@@ -63,7 +63,7 @@ class UserRequest {
       );
       return data ?? [];
     } catch (error) {
-      //alertError(error, "Não foi possível achar os usuários :(");
+      alertError(error, "Não foi possível achar os usuários :(");
       return [];
     }
   }
