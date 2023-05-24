@@ -52,7 +52,7 @@ export function MyProfile() {
     if (password.length > 0) {
       payload.password = password;
     }
-    if (email != email) {
+    if (email != payload.email) {
       payload.email = email;
     }
     await userRequest.updateUser(payload);
