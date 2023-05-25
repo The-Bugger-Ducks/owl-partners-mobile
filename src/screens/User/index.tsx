@@ -1,5 +1,11 @@
 import { Card, Header, Input, Loading, PlusCircle, Text } from "@components";
-import { IUser, IUserRegister } from "@interfaces/user.interface";
+import {
+  IUser,
+  IUserRegister,
+  IUserUpdate,
+  IUserUpdatePermission,
+  RoleEnum,
+} from "@interfaces/user.interface";
 import userRequest from "@requests/user.request";
 import { useEffect, useState } from "react";
 import {
@@ -22,6 +28,7 @@ export function User() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [userId, setUserId] = useState("");
+  const [role, setNewRole] = useState<RoleEnum>();
 
   async function getUserInfomation() {
     const userInfo = await StorageController.getUserInfo();
@@ -80,6 +87,32 @@ export function User() {
     ]);
   }
 
+  async function handlePromoteUser(id: string, cardRole: string) {
+    const payload: IUserUpdatePermission = {
+      role,
+    };
+
+    if (cardRole == RoleEnum.SIMPLE) {
+      payload.role = RoleEnum.ADMIN;
+    }
+
+    await userRequest.upatadeUserPermission(payload, id);
+    getUsers();
+  }
+
+  async function handleDemoteUser(id: string, cardRole: string) {
+    const payload: IUserUpdatePermission = {
+      role,
+    };
+
+    if (cardRole == RoleEnum.ADMIN) {
+      payload.role = RoleEnum.SIMPLE;
+    }
+
+    await userRequest.upatadeUserPermission(payload, id);
+    getUsers();
+  }
+
   return (
     <Container>
       <Header />
@@ -114,14 +147,18 @@ export function User() {
                     </Text>
                   </IconArea>
 
-                  <IconArea>
+                  <IconArea
+                    onPress={() => handleDemoteUser(user.id, user.role)}
+                  >
                     <MinusCircle />
                     <Text weight="400" color="#000000" size={14}>
                       Rebaixar
                     </Text>
                   </IconArea>
 
-                  <IconArea>
+                  <IconArea
+                    onPress={() => handlePromoteUser(user.id, user.role)}
+                  >
                     <PlusCircle />
                     <Text weight="400" color="#000000" size={14}>
                       Promover
