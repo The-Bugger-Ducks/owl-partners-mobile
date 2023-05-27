@@ -1,4 +1,12 @@
-import { Card, Header, Input, Loading, PlusCircle, Text } from "@components";
+import {
+  Card,
+  Header,
+  Icon,
+  Input,
+  Loading,
+  PlusCircle,
+  Text,
+} from "@components";
 import { IUser, IUserRegister } from "@interfaces/user.interface";
 import userRequest from "@requests/user.request";
 import { useEffect, useState } from "react";
@@ -108,7 +116,7 @@ export function User() {
                   <IconArea
                     onPress={() => handleDeleteUserConfirmation(user.id)}
                   >
-                    <Trash />
+                    <Icon icon="trash" />
                     <Text weight="400" color="#000000" size={14}>
                       Remover
                     </Text>
@@ -122,7 +130,7 @@ export function User() {
                   </IconArea>
 
                   <IconArea>
-                    <PlusCircle />
+                    <Icon icon="plus" />
                     <Text weight="400" color="#000000" size={14}>
                       Promover
                     </Text>

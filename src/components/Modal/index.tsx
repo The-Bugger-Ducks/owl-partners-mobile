@@ -6,6 +6,7 @@ import { Close } from "../Icons/Close";
 import { Loading } from "../Loading";
 import { Text } from "../Text";
 import { Container, Footer, Header, Overlay } from "./styles";
+import { Icon } from "../Icon";
 
 interface ModalProps {
   visible: boolean;
@@ -41,7 +42,7 @@ export function Modal({
           <Header>
             <Text weight="500">{title}</Text>
             <TouchableOpacity onPress={onClose}>
-              <Close color="#666666" />
+              <Icon icon="close" color="#666666" />
             </TouchableOpacity>
           </Header>
           {content}
