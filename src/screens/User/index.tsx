@@ -123,7 +123,7 @@ export function User() {
                   </IconArea>
 
                   <IconArea>
-                    <MinusCircle />
+                    <Icon icon="minus" />
                     <Text weight="400" color="#000000" size={14}>
                       Rebaixar
                     </Text>
