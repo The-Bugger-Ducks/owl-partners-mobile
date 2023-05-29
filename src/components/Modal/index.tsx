@@ -2,7 +2,6 @@ import { isAndroid } from "@constants";
 import { ReactNode } from "react";
 import { Modal as ReactNativeModal, TouchableOpacity } from "react-native";
 import { Button } from "../Button";
-import { Close } from "../Icons/Close";
 import { Loading } from "../Loading";
 import { Text } from "../Text";
 import { Container, Footer, Header, Overlay } from "./styles";

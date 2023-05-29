@@ -1,5 +1,4 @@
 import { Icon } from "../Icon";
-import { Edit } from "../Icons/Edit";
 import { Text } from "../Text";
 import { Comment, Container, EditIcon, MeetingDetails, Title } from "./styles";
 

@@ -1,8 +1,6 @@
 import { TextInputProps } from "react-native";
-import { PlusCircle } from "../Icons/PlusCircle";
 import { Text } from "../Text";
 import { Container, IconButton, InputContainer, TextInput } from "./styles";
-import { Eye } from "../Icons/Eye";
 import { Icon } from "../Icon";
 
 interface InputProps extends TextInputProps {

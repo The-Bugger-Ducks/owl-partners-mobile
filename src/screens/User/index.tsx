@@ -4,7 +4,6 @@ import {
   Icon,
   Input,
   Loading,
-  PlusCircle,
   Text,
 } from "@components";
 import { IUser, IUserRegister } from "@interfaces/user.interface";
@@ -18,11 +17,8 @@ import {
   IconArea,
   LoadingContainer,
 } from "./styles";
-import { Trash } from "../../components/Icons/Trash";
-import { MinusCircle } from "../../components/Icons/MinusCircle";
 import StorageController from "@utils/handlers/StorageController";
 import { Alert, View } from "react-native";
-import { then } from "metro.config";
 
 export function User() {
   const [data, setData] = useState<IUser[]>();
