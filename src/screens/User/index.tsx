@@ -87,7 +87,7 @@ export function User() {
     ]);
   }
 
-  async function handlePromoteUser(id: string, cardRole: string) {
+  async function handleChangeUserPermission(id: string, cardRole: string) {
     const payload: IUserUpdatePermission = {
       role,
     };
@@ -95,15 +95,6 @@ export function User() {
     if (cardRole == RoleEnum.SIMPLE) {
       payload.role = RoleEnum.ADMIN;
     }
-
-    await userRequest.upatadeUserPermission(payload, id);
-    getUsers();
-  }
-
-  async function handleDemoteUser(id: string, cardRole: string) {
-    const payload: IUserUpdatePermission = {
-      role,
-    };
 
     if (cardRole == RoleEnum.ADMIN) {
       payload.role = RoleEnum.SIMPLE;
@@ -148,7 +139,7 @@ export function User() {
                   </IconArea>
 
                   <IconArea
-                    onPress={() => handleDemoteUser(user.id, user.role)}
+                    onPress={() => handleChangeUserPermission(user.id, user.role)}
                   >
                     <MinusCircle />
                     <Text weight="400" color="#000000" size={14}>
@@ -157,7 +148,7 @@ export function User() {
                   </IconArea>
 
                   <IconArea
-                    onPress={() => handlePromoteUser(user.id, user.role)}
+                    onPress={() => handleChangeUserPermission(user.id, user.role)}
                   >
                     <PlusCircle />
                     <Text weight="400" color="#000000" size={14}>
