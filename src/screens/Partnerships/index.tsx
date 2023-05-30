@@ -14,6 +14,7 @@ import {
   PartnershipsList,
   TabsContainer,
 } from "./styles";
+import { useThrottle } from "@utils/useThrottle";
 
 export function Partnerships() {
   const [visibleAddPartnershipModal, setVisibleAddPartnershipModal] =
@@ -22,6 +23,9 @@ export function Partnerships() {
   const [data, setData] = useState<IPartnership[]>([]);
   const [filteredData, setFilteredData] = useState<IPartnership[]>([]);
   const [tab, setTab] = useState(0);
+  const [partnershipNameFilter, setPartnershipNameFilter] = useState('');
+  
+  useThrottle(partnershipNameFilter, filterPartnership);
 
   const navigation = useNavigation<PropsStack>();
 
@@ -72,7 +76,7 @@ export function Partnerships() {
         <Input
           label="Encontrar parceria"
           placeholder="The Bugger Ducks..."
-          onChangeText={text => filterPartnership(text)}
+          onChangeText={(text) => setPartnershipNameFilter(text)}
         />
 
         <PartnershipsList>

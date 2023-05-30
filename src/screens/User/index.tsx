@@ -21,6 +21,7 @@ import { MinusCircle } from "../../components/Icons/MinusCircle";
 import StorageController from "@utils/handlers/StorageController";
 import { Alert, View } from "react-native";
 import { then } from "metro.config";
+import { useThrottle } from "@utils/useThrottle";
 
 export function User() {
   const [data, setData] = useState<IUser[]>();
@@ -29,6 +30,9 @@ export function User() {
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [userId, setUserId] = useState("");
   const [role, setNewRole] = useState<RoleEnum>();
+  const [userNameFilter, setUserNameFilter] = useState('');
+  
+  useThrottle(userNameFilter, getUserByName);
 
   async function getUserInfomation() {
     const userInfo = await StorageController.getUserInfo();
@@ -53,12 +57,9 @@ export function User() {
   }
 
   async function getUserByName(name: string) {
-    setIsLoading(true);
-    setFilteredData([]);
+    console.log({name})
     const filteredUser: IUser[] = await userRequest.listUserByName(name);
-
     setFilteredData(filteredUser);
-    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -118,7 +119,7 @@ export function User() {
         <Input
           label="Encontrar usuário"
           placeholder="Fulano de Tal..."
-          onChangeText={text => getUserByName(text)}
+          onChangeText={(text) => setUserNameFilter(text)}
           style={{ marginBottom: 16 }}
         />
         <Text>Usuários encontrados</Text>
