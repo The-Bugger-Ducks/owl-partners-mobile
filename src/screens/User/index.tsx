@@ -1,8 +1,6 @@
-import { Card, Header, Input, Loading, PlusCircle, Text } from "@components";
+import { Header, Input, Loading, PlusCircle, Text } from "@components";
 import {
   IUser,
-  IUserRegister,
-  IUserUpdate,
   IUserUpdatePermission,
   RoleEnum,
 } from "@interfaces/user.interface";
@@ -19,27 +17,21 @@ import {
 import { Trash } from "../../components/Icons/Trash";
 import { MinusCircle } from "../../components/Icons/MinusCircle";
 import StorageController from "@utils/handlers/StorageController";
-import { Alert, View } from "react-native";
-import { then } from "metro.config";
+import { Alert } from "react-native";
 import { useThrottle } from "@utils/useThrottle";
 
 export function User() {
   const [data, setData] = useState<IUser[]>();
-  const [filteredData, setFilteredData] = useState<IUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [userId, setUserId] = useState("");
   const [role, setNewRole] = useState<RoleEnum>();
-  const [userNameFilter, setUserNameFilter] = useState('');
-  
+  const [userNameFilter, setUserNameFilter] = useState("");
+
   useThrottle(userNameFilter, getUserByName);
 
   async function getUserInfomation() {
     const userInfo = await StorageController.getUserInfo();
-
-    if (!userInfo) {
-      return alert("Usuário não encontrado");
-    }
+    if (!userInfo) return alert("Usuário não encontrado");
     setUserId(userInfo.id);
   }
 
@@ -49,17 +41,14 @@ export function User() {
 
   async function getUsers() {
     setIsLoading(true);
-    const user: IUser[] = await userRequest.listUser();
-
-    setData(user);
-    setFilteredData(user);
+    const users: IUser[] = await userRequest.listUser();
+    setData(users);
     setIsLoading(false);
   }
 
   async function getUserByName(name: string) {
-    console.log({name})
     const filteredUser: IUser[] = await userRequest.listUserByName(name);
-    setFilteredData(filteredUser);
+    setData(filteredUser);
   }
 
   useEffect(() => {
@@ -68,12 +57,10 @@ export function User() {
 
   async function handleDeleteUser(id: string) {
     try {
-      setIsLoadingDelete(true);
       if (id) await userRequest.deleteUser(id);
-      setIsLoadingDelete(false);
       getUsers();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -89,25 +76,15 @@ export function User() {
   }
 
   async function handlePromoteUser(id: string, cardRole: string) {
-    const payload: IUserUpdatePermission = {
-      role,
-    };
-    if (cardRole == RoleEnum.SIMPLE) {
-      payload.role = RoleEnum.ADMIN;
-    }
-
+    const payload: IUserUpdatePermission = { role };
+    if (cardRole == RoleEnum.SIMPLE) payload.role = RoleEnum.ADMIN;
     await userRequest.upatadeUserPermission(payload, id);
     getUsers();
   }
 
   async function handleDemoteUser(id: string, cardRole: string) {
-    const payload: IUserUpdatePermission = {
-      role,
-    };
-    if (cardRole == RoleEnum.ADMIN) {
-      payload.role = RoleEnum.SIMPLE;
-    }
-
+    const payload: IUserUpdatePermission = { role };
+    if (cardRole == RoleEnum.ADMIN) payload.role = RoleEnum.SIMPLE;
     await userRequest.upatadeUserPermission(payload, id);
     getUsers();
   }
@@ -119,7 +96,7 @@ export function User() {
         <Input
           label="Encontrar usuário"
           placeholder="Fulano de Tal..."
-          onChangeText={(text) => setUserNameFilter(text)}
+          onChangeText={text => setUserNameFilter(text)}
           style={{ marginBottom: 16 }}
         />
         <Text>Usuários encontrados</Text>
@@ -128,7 +105,7 @@ export function User() {
             <Loading />
           </LoadingContainer>
         )}
-        {filteredData?.map(user => {
+        {data?.map(user => {
           const isMyself = userId == user.id;
           const isAdmin = user.role == RoleEnum.ADMIN;
           if (!isMyself) {
