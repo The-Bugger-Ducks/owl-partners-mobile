@@ -160,7 +160,7 @@ export function User() {
                     onPress={() => handlePromoteUser(user.id, user.role)}
                   >
                     <PlusCircle />
-                    <Text weight="400" color="#000000" size={14}>
+                    <Text weight="400" size={14} disabled={isAdmin}>
                       Promover
                     </Text>
                   </IconArea>
