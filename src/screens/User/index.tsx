@@ -87,15 +87,22 @@ export function User() {
     ]);
   }
 
-  async function handleChangeUserPermission(id: string, cardRole: string) {
+  async function handlePromoteUser(id: string, cardRole: string) {
     const payload: IUserUpdatePermission = {
       role,
     };
-
     if (cardRole == RoleEnum.SIMPLE) {
       payload.role = RoleEnum.ADMIN;
     }
 
+    await userRequest.upatadeUserPermission(payload, id);
+    getUsers();
+  }
+
+  async function handleDemoteUser(id: string, cardRole: string) {
+    const payload: IUserUpdatePermission = {
+      role,
+    };
     if (cardRole == RoleEnum.ADMIN) {
       payload.role = RoleEnum.SIMPLE;
     }
@@ -122,6 +129,7 @@ export function User() {
         )}
         {filteredData?.map(user => {
           const isMyself = userId == user.id;
+          const isAdmin = user.role == RoleEnum.ADMIN;
           if (!isMyself) {
             return (
               <UserCard key={user.id} style={{ marginVertical: 10 }}>
@@ -139,7 +147,7 @@ export function User() {
                   </IconArea>
 
                   <IconArea
-                    onPress={() => handleChangeUserPermission(user.id, user.role)}
+                    onPress={() => handleDemoteUser(user.id, user.role)}
                   >
                     <MinusCircle />
                     <Text weight="400" color="#000000" size={14}>
@@ -148,7 +156,8 @@ export function User() {
                   </IconArea>
 
                   <IconArea
-                    onPress={() => handleChangeUserPermission(user.id, user.role)}
+                    disabled={isAdmin}
+                    onPress={() => handlePromoteUser(user.id, user.role)}
                   >
                     <PlusCircle />
                     <Text weight="400" color="#000000" size={14}>

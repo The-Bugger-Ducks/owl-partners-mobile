@@ -2,6 +2,8 @@ import { StatusBar } from "react-native";
 import styled from "styled-components/native";
 
 import { isAndroid } from "@constants";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { PreventRemoveProvider } from "@react-navigation/native";
 
 export const Container = styled.SafeAreaView`
   margin-top: ${isAndroid ? "60px" : "0"};
@@ -28,6 +30,7 @@ export const UserCardActions = styled.View`
   justify-content: space-between;
   align-items: center;
 `;
+
 export const IconArea = styled.TouchableOpacity`
   align-items: center;
   flex-direction: row;
