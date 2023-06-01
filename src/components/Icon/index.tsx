@@ -11,6 +11,7 @@ interface IconProps {
   height?: number;
   fillColor?: string;
   strokeColor?: string;
+  color?: string;
 }
 
 export function Icon({
@@ -20,6 +21,7 @@ export function Icon({
   height = 24,
   strokeColor,
   fillColor,
+  color,
 }: IconProps) {
   function getIcon() {
     const svgFile = iconList.find(item => item.name == icon);
@@ -31,6 +33,7 @@ export function Icon({
 
   return (
     <SvgXml
+      color={color}
       xml={getIcon()}
       stroke={strokeColor}
       fill={fillColor}

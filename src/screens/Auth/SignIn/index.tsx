@@ -5,6 +5,7 @@ import {
   Eye,
   EyeHidden,
   Header,
+  Icon,
   Info,
   Loading,
   Text,
@@ -136,7 +137,11 @@ export function SignIn() {
                   <IconButton
                     onPress={() => setVisiblePassword(!visiblePassword)}
                   >
-                    {visiblePassword ? <EyeHidden /> : <Eye />}
+                    {visiblePassword ? (
+                      <Icon icon="eye-hidden" />
+                    ) : (
+                      <Icon icon="eye" />
+                    )}
                   </IconButton>
                 </PasswordInputContainer>
                 {(error || errorMessage) && (
