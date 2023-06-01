@@ -1,4 +1,3 @@
-import { Card, Header, Input, Loading, PlusCircle, Text } from "@components";
 import {
   IUser,
   IUserRegister,
@@ -6,6 +5,7 @@ import {
   IUserUpdatePermission,
   RoleEnum,
 } from "@interfaces/user.interface";
+import { Card, Header, Icon, Input, Loading, Text } from "@components";
 import userRequest from "@requests/user.request";
 import { useEffect, useState } from "react";
 import {
@@ -16,11 +16,8 @@ import {
   IconArea,
   LoadingContainer,
 } from "./styles";
-import { Trash } from "../../components/Icons/Trash";
-import { MinusCircle } from "../../components/Icons/MinusCircle";
 import StorageController from "@utils/handlers/StorageController";
 import { Alert, View } from "react-native";
-import { then } from "metro.config";
 
 export function User() {
   const [data, setData] = useState<IUser[]>();
@@ -140,27 +137,22 @@ export function User() {
                   <IconArea
                     onPress={() => handleDeleteUserConfirmation(user.id)}
                   >
-                    <Trash />
+                    <Icon icon="trash" />
                     <Text weight="400" color="#000000" size={14}>
                       Remover
                     </Text>
                   </IconArea>
 
-                  <IconArea
-                    onPress={() => handleDemoteUser(user.id, user.role)}
-                  >
-                    <MinusCircle />
+                  <IconArea>
+                    <Icon icon="minus" />
                     <Text weight="400" color="#000000" size={14}>
                       Rebaixar
                     </Text>
                   </IconArea>
 
-                  <IconArea
-                    disabled={isAdmin}
-                    onPress={() => handlePromoteUser(user.id, user.role)}
-                  >
-                    <PlusCircle />
-                    <Text weight="400" size={14} disabled={isAdmin}>
+                  <IconArea>
+                    <Icon icon="plus" />
+                    <Text weight="400" color="#000000" size={14}>
                       Promover
                     </Text>
                   </IconArea>
