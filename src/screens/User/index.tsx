@@ -1,11 +1,19 @@
 import {
+  Card,
+  Header,
+  Icon,
+  Input,
+  Loading,
+  PlusCircle,
+  Text,
+} from "@components";
+import {
   IUser,
   IUserRegister,
   IUserUpdate,
   IUserUpdatePermission,
   RoleEnum,
 } from "@interfaces/user.interface";
-import { Card, Header, Icon, Input, Loading, Text } from "@components";
 import userRequest from "@requests/user.request";
 import { useEffect, useState } from "react";
 import {
@@ -16,8 +24,11 @@ import {
   IconArea,
   LoadingContainer,
 } from "./styles";
+import { Trash } from "../../components/Icons/Trash";
+import { MinusCircle } from "../../components/Icons/MinusCircle";
 import StorageController from "@utils/handlers/StorageController";
 import { Alert, View } from "react-native";
+import { then } from "metro.config";
 
 export function User() {
   const [data, setData] = useState<IUser[]>();
@@ -84,7 +95,7 @@ export function User() {
     ]);
   }
 
-  async function handlePromoteUser(id: string, cardRole: string) {
+  async function handleChangeUserPermission(id: string, cardRole: string) {
     const payload: IUserUpdatePermission = {
       role,
     };
@@ -92,14 +103,6 @@ export function User() {
       payload.role = RoleEnum.ADMIN;
     }
 
-    await userRequest.upatadeUserPermission(payload, id);
-    getUsers();
-  }
-
-  async function handleDemoteUser(id: string, cardRole: string) {
-    const payload: IUserUpdatePermission = {
-      role,
-    };
     if (cardRole == RoleEnum.ADMIN) {
       payload.role = RoleEnum.SIMPLE;
     }
@@ -127,6 +130,7 @@ export function User() {
         {filteredData?.map(user => {
           const isMyself = userId == user.id;
           const isAdmin = user.role == RoleEnum.ADMIN;
+          const isSimple = user.role == RoleEnum.SIMPLE;
           if (!isMyself) {
             return (
               <UserCard key={user.id} style={{ marginVertical: 10 }}>
@@ -137,22 +141,37 @@ export function User() {
                   <IconArea
                     onPress={() => handleDeleteUserConfirmation(user.id)}
                   >
-                    <Icon icon="trash" />
+                    <Trash />
                     <Text weight="400" color="#000000" size={14}>
                       Remover
                     </Text>
                   </IconArea>
 
-                  <IconArea>
+                  <IconArea
+                    onPress={() =>
+                      handleChangeUserPermission(user.id, user.role)
+                    }
+                    disabled={isSimple}
+                  >
                     <Icon icon="minus" />
-                    <Text weight="400" color="#000000" size={14}>
+                    <Text
+                      weight="400"
+                      color="#000000"
+                      size={14}
+                      disabled={isSimple}
+                    >
                       Rebaixar
                     </Text>
                   </IconArea>
 
-                  <IconArea>
+                  <IconArea
+                    disabled={isAdmin}
+                    onPress={() =>
+                      handleChangeUserPermission(user.id, user.role)
+                    }
+                  >
                     <Icon icon="plus" />
-                    <Text weight="400" color="#000000" size={14}>
+                    <Text weight="400" size={14} disabled={isAdmin}>
                       Promover
                     </Text>
                   </IconArea>
