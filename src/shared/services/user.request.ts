@@ -101,12 +101,16 @@ class UserRequest {
   }
 
   async upatadeUserPermission(payload: IUserUpdatePermission, id: string) {
-    const updateUserPermission = await api.put(
-      USER_ENDPOINTS.UPDATE + id,
-      payload,
-    );
+    try {
+      const updateUserPermission = await api.put(
+        USER_ENDPOINTS.UPDATE + id,
+        payload,
+      );
 
-    return updateUserPermission;
+      return updateUserPermission;
+    } catch (error) {
+      alertError(error, "Não foi possível editar a permissão :(");   
+    }   
   }
 }
 
