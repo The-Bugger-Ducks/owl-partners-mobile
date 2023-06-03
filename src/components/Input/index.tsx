@@ -44,7 +44,6 @@ export function Input({
         {hasOutIcon && (
           <IconButton onPress={() => onPressIcon && onPressIcon()}>
             {icon ? <Icon icon={icon} /> : <Icon icon="plus" />}
-            <Icon icon="plus" />
           </IconButton>
         )}
       </InputContainer>
