@@ -21,7 +21,7 @@ import { FilterPartnershipModal } from "./FilterPartnershipModal";
 export function Partnerships() {
   const [visibleAddPartnershipModal, setVisibleAddPartnershipModal] =
     useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<IPartnership[]>([]);
   const [filteredData, setFilteredData] = useState<IPartnership[]>([]);
   const [tab, setTab] = useState(0);
