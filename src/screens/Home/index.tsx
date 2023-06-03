@@ -21,7 +21,6 @@ import { ButtonsContainer, Container, MeetingContainer } from "./styles";
 import StorageController from "@utils/handlers/StorageController";
 import { IPartnership } from "@interfaces/partner.interface";
 
-
 export function Home() {
   const [data, setData] = useState<IMeetingsHome>();
   const [isLoading, setIsLoading] = useState(true);
