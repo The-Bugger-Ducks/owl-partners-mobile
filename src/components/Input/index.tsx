@@ -1,8 +1,6 @@
 import { TextInputProps } from "react-native";
-import { PlusCircle } from "../Icons/PlusCircle";
 import { Text } from "../Text";
 import { Container, IconButton, InputContainer, TextInput } from "./styles";
-import { Eye } from "../Icons/Eye";
 import { Icon } from "@components";
 import { iconsName } from "../Icon/icons";
 
@@ -45,7 +43,8 @@ export function Input({
         />
         {hasOutIcon && (
           <IconButton onPress={() => onPressIcon && onPressIcon()}>
-            {icon ? <Icon icon={icon} /> : <PlusCircle />}
+            {icon ? <Icon icon={icon} /> : <Icon icon="plus" />}
+            <Icon icon="plus" />
           </IconButton>
         )}
       </InputContainer>

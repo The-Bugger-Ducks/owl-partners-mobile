@@ -3,6 +3,7 @@ import {
   Eye,
   EyeHidden,
   Header,
+  Icon,
   Input,
   Modal,
   Text,
@@ -135,7 +136,11 @@ export function SignUp() {
                 secureTextEntry={!visiblePassword}
               />
               <IconButton onPress={() => setVisiblePassword(!visiblePassword)}>
-                {visiblePassword ? <EyeHidden /> : <Eye />}
+                {visiblePassword ? (
+                  <Icon icon="eye-hidden" />
+                ) : (
+                  <Icon icon="eye" />
+                )}
               </IconButton>
             </PassswordInput>
           </PasswordInputContainer>

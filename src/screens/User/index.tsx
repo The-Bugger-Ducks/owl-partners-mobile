@@ -1,4 +1,4 @@
-import { Card, Header, Input, PlusCircle, Text } from "@components";
+import { Card, Header, Icon, Input, Loading, Text } from "@components";
 import { IUser, IUserRegister } from "@interfaces/user.interface";
 import userRequest from "@requests/user.request";
 import { useEffect, useState } from "react";
@@ -8,12 +8,10 @@ import {
   UserCard,
   UsersContainer,
   IconArea,
+  LoadingContainer,
 } from "./styles";
-import { Trash } from "../../components/Icons/Trash";
-import { MinusCircle } from "../../components/Icons/MinusCircle";
 import StorageController from "@utils/handlers/StorageController";
 import { Alert, View } from "react-native";
-import { then } from "metro.config";
 
 export function User() {
   const [data, setData] = useState<IUser[]>();
@@ -35,16 +33,18 @@ export function User() {
     getUserInfomation();
   }, []);
 
-  async function getUser() {
+  async function getUsers() {
     setIsLoading(true);
     const user: IUser[] = await userRequest.listUser();
 
     setData(user);
+    setFilteredData(user);
     setIsLoading(false);
   }
 
   async function getUserByName(name: string) {
     setIsLoading(true);
+    setFilteredData([]);
     const filteredUser: IUser[] = await userRequest.listUserByName(name);
 
     setFilteredData(filteredUser);
@@ -52,7 +52,7 @@ export function User() {
   }
 
   useEffect(() => {
-    getUser();
+    getUsers();
   }, []);
 
   async function handleDeleteUser(id: string) {
@@ -60,7 +60,7 @@ export function User() {
       setIsLoadingDelete(true);
       if (id) await userRequest.deleteUser(id);
       setIsLoadingDelete(false);
-      getUser();
+      getUsers();
     } catch (error) {
       console.log(error);
     }
@@ -88,6 +88,11 @@ export function User() {
           style={{ marginBottom: 16 }}
         />
         <Text>Usuários encontrados</Text>
+        {isLoading && (
+          <LoadingContainer>
+            <Loading />
+          </LoadingContainer>
+        )}
         {filteredData?.map(user => {
           const isMyself = userId == user.id;
           if (!isMyself) {
@@ -100,21 +105,21 @@ export function User() {
                   <IconArea
                     onPress={() => handleDeleteUserConfirmation(user.id)}
                   >
-                    <Trash />
+                    <Icon icon="trash" />
                     <Text weight="400" color="#000000" size={14}>
                       Remover
                     </Text>
                   </IconArea>
 
                   <IconArea>
-                    <MinusCircle />
+                    <Icon icon="minus" />
                     <Text weight="400" color="#000000" size={14}>
                       Rebaixar
                     </Text>
                   </IconArea>
 
                   <IconArea>
-                    <PlusCircle />
+                    <Icon icon="plus" />
                     <Text weight="400" color="#000000" size={14}>
                       Promover
                     </Text>

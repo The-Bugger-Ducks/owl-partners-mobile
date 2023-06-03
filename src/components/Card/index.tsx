@@ -1,4 +1,4 @@
-import { Edit } from "../Icons/Edit";
+import { Icon } from "../Icon";
 import { Text } from "../Text";
 import { Comment, Container, EditIcon, MeetingDetails, Title } from "./styles";
 
@@ -79,7 +79,7 @@ function Update({ props }: SpecificCardProps) {
         </Text>
         {props.canEdit && (
           <EditIcon onPress={props.onEdit}>
-            <Edit />
+            <Icon icon="edit" />
           </EditIcon>
         )}
       </Title>
@@ -107,7 +107,7 @@ function Anotation({ props }: SpecificCardProps) {
         </Text>
         {props.canEdit && (
           <EditIcon onPress={props.onEdit}>
-            <Edit />
+            <Icon icon="edit" />
           </EditIcon>
         )}
       </Title>
@@ -131,7 +131,7 @@ function Meeting({ props }: SpecificCardProps) {
         </Text>
         {props.canEdit && (
           <EditIcon onPress={props.onEdit}>
-            <Edit />
+            <Icon icon="edit" />
           </EditIcon>
         )}
       </Title>

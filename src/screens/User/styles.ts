@@ -31,3 +31,7 @@ export const IconArea = styled.TouchableOpacity`
   align-items: center;
   flex-direction: row;
 `;
+
+export const LoadingContainer = styled.TouchableOpacity`
+  padding-top: 24px;
+`;
