@@ -3,6 +3,8 @@ import { PlusCircle } from "../Icons/PlusCircle";
 import { Text } from "../Text";
 import { Container, IconButton, InputContainer, TextInput } from "./styles";
 import { Eye } from "../Icons/Eye";
+import { Icon } from "@components";
+import { iconsName } from "../Icon/icons";
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -12,6 +14,7 @@ interface InputProps extends TextInputProps {
   errorText?: string;
   hasOutIcon?: boolean;
   onPressIcon?: () => void;
+  icon?: iconsName;
 }
 
 export function Input({
@@ -22,6 +25,7 @@ export function Input({
   errorText,
   hasOutIcon = false,
   onPressIcon,
+  icon,
   ...rest
 }: InputProps) {
   return (
@@ -41,7 +45,7 @@ export function Input({
         />
         {hasOutIcon && (
           <IconButton onPress={() => onPressIcon && onPressIcon()}>
-            <PlusCircle />
+            {icon ? <Icon icon={icon} /> : <PlusCircle />}
           </IconButton>
         )}
       </InputContainer>
