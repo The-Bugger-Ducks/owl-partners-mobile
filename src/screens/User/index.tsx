@@ -14,6 +14,7 @@ import {
   IUserUpdatePermission,
   RoleEnum,
 } from "@interfaces/user.interface";
+
 import userRequest from "@requests/user.request";
 import { useEffect, useState } from "react";
 import {
@@ -24,11 +25,8 @@ import {
   IconArea,
   LoadingContainer,
 } from "./styles";
-import { Trash } from "../../components/Icons/Trash";
-import { MinusCircle } from "../../components/Icons/MinusCircle";
 import StorageController from "@utils/handlers/StorageController";
 import { Alert, View } from "react-native";
-import { then } from "metro.config";
 
 export function User() {
   const [data, setData] = useState<IUser[]>();
@@ -141,11 +139,12 @@ export function User() {
                   <IconArea
                     onPress={() => handleDeleteUserConfirmation(user.id)}
                   >
-                    <Trash />
+                    <Icon icon="trash" />
                     <Text weight="400" color="#000000" size={14}>
                       Remover
                     </Text>
                   </IconArea>
+
 
                   <IconArea
                     onPress={() =>
