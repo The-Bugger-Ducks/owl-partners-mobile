@@ -20,11 +20,12 @@ import { ButtonsContainer, Container, MeetingContainer } from "./styles";
 
 import StorageController from "@utils/handlers/StorageController";
 import { IPartnership } from "@interfaces/partner.interface";
+import { RoleEnum } from "@interfaces/user.interface";
 
 export function Home() {
   const [data, setData] = useState<IMeetingsHome>();
   const [isLoading, setIsLoading] = useState(true);
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState<RoleEnum>();
   const [isAddMeetingModalOpen, setIsAddMeetingModalOpen] = useState(false);
   const [isUserModalOpen, setisUserModalOpen] = useState(false);
 
@@ -65,7 +66,7 @@ export function Home() {
           Agendar reunião
         </Button>
 
-        {role == "ADMIN" ? (
+        {role == RoleEnum.ADMIN ? (
           <Button
             onPress={() => navigation.navigate("User")}
             style={{ marginVertical: 8 }}

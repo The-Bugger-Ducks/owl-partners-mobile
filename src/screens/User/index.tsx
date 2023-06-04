@@ -1,17 +1,21 @@
-import { Card, Header, Icon, Input, Loading, Text } from "@components";
-import { IUser, IUserRegister } from "@interfaces/user.interface";
+import { Header, Icon, Input, Loading, Text } from "@components";
+import {
+  IUser,
+  IUserUpdatePermission,
+  RoleEnum,
+} from "@interfaces/user.interface";
 import userRequest from "@requests/user.request";
+import StorageController from "@utils/handlers/StorageController";
 import { useEffect, useState } from "react";
+import { Alert } from "react-native";
 import {
   Container,
-  UserCardActions,
-  UserCard,
-  UsersContainer,
   IconArea,
   LoadingContainer,
+  UserCard,
+  UserCardActions,
+  UsersContainer,
 } from "./styles";
-import StorageController from "@utils/handlers/StorageController";
-import { Alert, View } from "react-native";
 
 export function User() {
   const [data, setData] = useState<IUser[]>();
@@ -19,13 +23,11 @@ export function User() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [userId, setUserId] = useState("");
+  const [role, setNewRole] = useState<RoleEnum>();
 
   async function getUserInfomation() {
     const userInfo = await StorageController.getUserInfo();
-
-    if (!userInfo) {
-      return alert("Usuário não encontrado");
-    }
+    if (!userInfo) return alert("Usuário não encontrado");
     setUserId(userInfo.id);
   }
 
@@ -36,7 +38,6 @@ export function User() {
   async function getUsers() {
     setIsLoading(true);
     const user: IUser[] = await userRequest.listUser();
-
     setData(user);
     setFilteredData(user);
     setIsLoading(false);
@@ -46,7 +47,6 @@ export function User() {
     setIsLoading(true);
     setFilteredData([]);
     const filteredUser: IUser[] = await userRequest.listUserByName(name);
-
     setFilteredData(filteredUser);
     setIsLoading(false);
   }
@@ -56,14 +56,10 @@ export function User() {
   }, []);
 
   async function handleDeleteUser(id: string) {
-    try {
-      setIsLoadingDelete(true);
-      if (id) await userRequest.deleteUser(id);
-      setIsLoadingDelete(false);
-      getUsers();
-    } catch (error) {
-      console.log(error);
-    }
+    setIsLoadingDelete(true);
+    if (id) await userRequest.deleteUser(id);
+    setIsLoadingDelete(false);
+    getUsers();
   }
 
   async function handleDeleteUserConfirmation(id: string) {
@@ -75,6 +71,14 @@ export function User() {
       },
       { text: "OK", onPress: () => handleDeleteUser(id) },
     ]);
+  }
+
+  async function handleChangeUserPermission(id: string, cardRole: string) {
+    const payload: IUserUpdatePermission = { role };
+    if (cardRole == RoleEnum.SIMPLE) payload.role = RoleEnum.ADMIN;
+    if (cardRole == RoleEnum.ADMIN) payload.role = RoleEnum.SIMPLE;
+    await userRequest.upatadeUserPermission(payload, id);
+    getUsers();
   }
 
   return (
@@ -95,11 +99,14 @@ export function User() {
         )}
         {filteredData?.map(user => {
           const isMyself = userId == user.id;
+          const isAdmin = user.role == RoleEnum.ADMIN;
+          const isSimple = user.role == RoleEnum.SIMPLE;
           if (!isMyself) {
             return (
               <UserCard key={user.id} style={{ marginVertical: 10 }}>
                 <Text weight="500" color="#000000" size={12}>
-                  {user.role} | {user.name} {user.lastName}
+                  {user.role == "ADMIN" ? "Administrador" : "Simples"} |{" "}
+                  {user.name} {user.lastName}
                 </Text>
                 <UserCardActions>
                   <IconArea
@@ -111,16 +118,31 @@ export function User() {
                     </Text>
                   </IconArea>
 
-                  <IconArea>
+                  <IconArea
+                    onPress={() =>
+                      handleChangeUserPermission(user.id, user.role)
+                    }
+                    disabled={isSimple}
+                  >
                     <Icon icon="minus" />
-                    <Text weight="400" color="#000000" size={14}>
+                    <Text
+                      weight="400"
+                      color="#000000"
+                      size={14}
+                      disabled={isSimple}
+                    >
                       Rebaixar
                     </Text>
                   </IconArea>
 
-                  <IconArea>
+                  <IconArea
+                    disabled={isAdmin}
+                    onPress={() =>
+                      handleChangeUserPermission(user.id, user.role)
+                    }
+                  >
                     <Icon icon="plus" />
-                    <Text weight="400" color="#000000" size={14}>
+                    <Text weight="400" size={14} disabled={isAdmin}>
                       Promover
                     </Text>
                   </IconArea>
