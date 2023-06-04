@@ -18,7 +18,7 @@ import {
   UsersContainer,
 } from "./styles";
 
-export function User() {
+export function Users() {
   const [data, setData] = useState<IUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState("");

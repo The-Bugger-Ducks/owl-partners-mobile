@@ -5,7 +5,7 @@ type RootStackParamList = {
   SignUp: undefined;
   Meeting: { id: string };
   Partnership: { id: string };
-  User: undefined;
+  Users: undefined;
   Partnerships: undefined;
   Home: undefined;
   HomeStack: undefined;

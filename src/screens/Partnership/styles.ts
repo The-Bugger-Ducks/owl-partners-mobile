@@ -38,3 +38,13 @@ export const PartnerInfoView = styled.View`
   padding: 24px 24px;
   gap: 10px;
 `;
+
+export const AlertDisabledPartnershipContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  margin: 0px 24px;
+  background-color: #ffffff;
+  border-radius: 8px;
+`;

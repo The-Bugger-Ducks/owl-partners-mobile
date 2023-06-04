@@ -47,7 +47,7 @@ export function Home() {
             Agendar reunião
           </Button>
           <Button
-            onPress={() => navigation.navigate("User")}
+            onPress={() => navigation.navigate("Users")}
             style={{ marginVertical: 8 }}
           >
             Gerenciar usuários
@@ -134,7 +134,10 @@ export function Home() {
 
         <AddMeetingModal
           visible={isAddMeetingModalOpen}
-          onClose={() => setIsAddMeetingModalOpen(false)}
+          onClose={() => {
+            getMeetings();
+            setIsAddMeetingModalOpen(false);
+          }}
         />
       </MeetingContainer>
     </Container>

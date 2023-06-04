@@ -21,10 +21,12 @@ export const TextInput = styled.TextInput<{ hasOutIcon: boolean }>`
 export const InputContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
 `;
 
 export const IconButton = styled.TouchableOpacity`
   width: 48px;
+  margin-top: 12px;
   align-items: center;
   justify-content: center;
 `;

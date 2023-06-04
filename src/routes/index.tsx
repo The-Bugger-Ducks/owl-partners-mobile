@@ -9,9 +9,9 @@ import { RootStackParamList } from "@custom-types/rootStackParamList";
 import { SignIn } from "@screens/Auth/SignIn";
 
 import { BottomTabs } from "@routes/BottomTabs";
-import { Partnership } from "@screens/Partnership";
-import { User } from "@screens/User";
 import { SignUp } from "@screens/Auth/SignUp";
+import { Partnership } from "@screens/Partnership";
+import { Users } from "@screens/Users";
 
 import { Meeting } from "@screens/Meeting";
 import { CustomHeaderTitle } from "./CustomHeaderTitle";
@@ -38,7 +38,7 @@ export function AppRoutes() {
         >
           <Stack.Screen name="Partnership" component={Partnership} />
           <Stack.Screen name="Meeting" component={Meeting} />
-          <Stack.Screen name="User" component={User} />
+          <Stack.Screen name="Users" component={Users} />
           <Stack.Screen name="SignUp" component={SignUp} />
         </Stack.Group>
       </Stack.Navigator>

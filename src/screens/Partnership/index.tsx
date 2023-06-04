@@ -1,4 +1,4 @@
-import { Button, Header, Loading, Tabs, Text } from "@components";
+import { Button, Header, Icon, Loading, Tabs, Text } from "@components";
 import { RootStackParamList } from "@custom-types/rootStackParamList";
 import { IPartnership } from "@interfaces/partner.interface";
 import { RouteProp, useRoute } from "@react-navigation/native";
@@ -11,6 +11,7 @@ import { AnnotationsList } from "./AnnotationsList";
 import { EditPartnershipModal } from "./EditPartnershipModal";
 import { MeetingsList } from "./MeetingsList";
 import {
+  AlertDisabledPartnershipContainer,
   ButtonsContainer,
   ContactView,
   Container,
@@ -56,19 +57,6 @@ export function Partnership() {
     <Container>
       <Header />
       <ScrollView>
-        {!data?.disabled && isAdmin && (
-          <ButtonsContainer>
-            <Button type="unfilled" onPress={handleDeletePartnership}>
-              Deletar parceria
-            </Button>
-            <Button
-              onPress={() => setVisibleEditModal(true)}
-              style={{ marginVertical: 8 }}
-            >
-              Editar informações
-            </Button>
-          </ButtonsContainer>
-        )}
         {isLoading ? (
           <View style={{ height: 80 }}>
             <Loading />
@@ -123,21 +111,6 @@ export function Partnership() {
               </Text>
             </ContactView>
 
-            {data?.disabled && (
-              <Text
-                size={12}
-                weight="500"
-                style={{
-                  padding: 24,
-                  margin: 24,
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: 8,
-                }}
-              >
-                Essa parceria foi deletada e, portanto, não pode ser modificada.
-              </Text>
-            )}
-
             {data && (
               <EditPartnershipModal
                 visible={visibleEditModal}
@@ -147,6 +120,29 @@ export function Partnership() {
               />
             )}
           </PartnerInfoView>
+        )}
+
+        {data?.disabled && (
+          <AlertDisabledPartnershipContainer>
+            <Icon icon="loading" />
+            <Text size={12} weight="500" style={{ width: "90%" }}>
+              Essa parceria foi deletada e, portanto, não pode ser modificada.
+            </Text>
+          </AlertDisabledPartnershipContainer>
+        )}
+
+        {!data?.disabled && isAdmin && (
+          <ButtonsContainer>
+            <Button type="unfilled" onPress={handleDeletePartnership}>
+              Deletar parceria
+            </Button>
+            <Button
+              onPress={() => setVisibleEditModal(true)}
+              style={{ marginVertical: 8 }}
+            >
+              Editar informações
+            </Button>
+          </ButtonsContainer>
         )}
 
         <HistoryContainer>

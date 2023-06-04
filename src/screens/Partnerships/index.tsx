@@ -48,6 +48,7 @@ export function Partnerships() {
   }
 
   async function filterPartnership(name: string, status: PartnerStatus | "") {
+    setIsLoading(true);
     setSearchPartner(name);
     const isPartnershipDisabledTab = tab === 1;
     const filteredPartnerships = await partnershipRequests.getPartnerships(
@@ -56,6 +57,7 @@ export function Partnerships() {
       status,
     );
     setData(filteredPartnerships ?? []);
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -68,8 +70,10 @@ export function Partnerships() {
   }
 
   function handleFilterPartner(status: PartnerStatus | null) {
+    setIsLoading(true);
     setFilterStatusPartner(status ?? "");
     filterPartnership(searchPartner, status ?? "");
+    setIsLoading(false);
   }
 
   return (
