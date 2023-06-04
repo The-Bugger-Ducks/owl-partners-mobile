@@ -9,19 +9,28 @@ import { AddPartnershipModal } from "./AddPartnershipModal";
 import {
   ButtonView,
   Container,
+  FilterContainer,
   LoadingContainer,
   PartnerView,
   PartnershipsList,
   TabsContainer,
 } from "./styles";
+import { PartnerStatus } from "@interfaces/partner.interface";
+import { FilterPartnershipModal } from "./FilterPartnershipModal";
 
 export function Partnerships() {
   const [visibleAddPartnershipModal, setVisibleAddPartnershipModal] =
     useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<IPartnership[]>([]);
   const [filteredData, setFilteredData] = useState<IPartnership[]>([]);
   const [tab, setTab] = useState(0);
+  const [searchPartner, setSearchPartner] = useState("");
+  const [filterStatusPartner, setFilterStatusPartner] = useState<
+    PartnerStatus | ""
+  >("");
+  const [filterPartnerStatusVisible, setFilterPartnerStatusVisible] =
+    useState(false);
 
   const navigation = useNavigation<PropsStack>();
 
@@ -33,22 +42,29 @@ export function Partnerships() {
     setIsLoading(false);
   }
 
-  async function filterPartnership(name: string) {
+  async function filterPartnership(name: string, status: PartnerStatus | "") {
+    setSearchPartner(name);
     const isPartnershipDisabledTab = tab === 1;
     const filteredPartnerships = await partnershipRequests.getPartnerships(
       isPartnershipDisabledTab,
       name,
+      status,
     );
     setFilteredData(filteredPartnerships ?? []);
   }
 
   useEffect(() => {
-    getPartnerships();
+    filterPartnership(searchPartner, filterStatusPartner);
   }, [tab]);
 
   function handleCloseEditModal() {
     getPartnerships();
     setVisibleAddPartnershipModal(false);
+  }
+
+  function handleFilterPartner(status: PartnerStatus | null) {
+    setFilterStatusPartner(status ?? "");
+    filterPartnership(searchPartner, status ?? "");
   }
 
   return (
@@ -69,11 +85,21 @@ export function Partnerships() {
           onChangeTab={tab => setTab(tab)}
         />
 
-        <Input
-          label="Encontrar parceria"
-          placeholder="The Bugger Ducks..."
-          onChangeText={text => filterPartnership(text)}
-        />
+        <FilterContainer>
+          <Input
+            label="Encontrar parceria"
+            placeholder="The Bugger Ducks..."
+            onChangeText={text => filterPartnership(text, filterStatusPartner)}
+            hasOutIcon
+            onPressIcon={() => setFilterPartnerStatusVisible(true)}
+            icon="filter"
+          />
+          <FilterPartnershipModal
+            visible={filterPartnerStatusVisible}
+            onClose={() => setFilterPartnerStatusVisible(false)}
+            onFilter={handleFilterPartner}
+          />
+        </FilterContainer>
 
         <PartnershipsList>
           <Text style={{ marginBottom: 16 }}>Parcerias encontradas</Text>

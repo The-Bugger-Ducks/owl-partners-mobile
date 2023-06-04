@@ -1,7 +1,8 @@
 import { TextInputProps } from "react-native";
 import { Text } from "../Text";
 import { Container, IconButton, InputContainer, TextInput } from "./styles";
-import { Icon } from "../Icon";
+import { Icon } from "@components";
+import { iconsName } from "../Icon/icons";
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -11,6 +12,7 @@ interface InputProps extends TextInputProps {
   errorText?: string;
   hasOutIcon?: boolean;
   onPressIcon?: () => void;
+  icon?: iconsName;
 }
 
 export function Input({
@@ -21,6 +23,7 @@ export function Input({
   errorText,
   hasOutIcon = false,
   onPressIcon,
+  icon,
   ...rest
 }: InputProps) {
   return (
@@ -40,7 +43,7 @@ export function Input({
         />
         {hasOutIcon && (
           <IconButton onPress={() => onPressIcon && onPressIcon()}>
-            <Icon icon="plus" />
+            {icon ? <Icon icon={icon} /> : <Icon icon="plus" />}
           </IconButton>
         )}
       </InputContainer>

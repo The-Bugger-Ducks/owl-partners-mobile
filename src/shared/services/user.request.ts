@@ -109,8 +109,8 @@ class UserRequest {
 
       return updateUserPermission;
     } catch (error) {
-      alertError(error, "Não foi possível editar a permissão :(");   
-    }   
+      alertError(error, "Não foi possível editar a permissão :(");
+    }
   }
 }
 

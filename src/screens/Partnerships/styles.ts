@@ -18,6 +18,11 @@ export const TabsContainer = styled.View`
   flex: 1;
 `;
 
+export const FilterContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-evenly;
+`;
+
 export const PartnershipsList = styled.ScrollView`
   margin: 16px 0px 32px;
 `;
