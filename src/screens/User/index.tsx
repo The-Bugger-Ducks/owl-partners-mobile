@@ -4,9 +4,17 @@ import {
   Icon,
   Input,
   Loading,
+  PlusCircle,
   Text,
 } from "@components";
-import { IUser, IUserRegister } from "@interfaces/user.interface";
+import {
+  IUser,
+  IUserRegister,
+  IUserUpdate,
+  IUserUpdatePermission,
+  RoleEnum,
+} from "@interfaces/user.interface";
+
 import userRequest from "@requests/user.request";
 import { useEffect, useState } from "react";
 import {
@@ -26,6 +34,7 @@ export function User() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [userId, setUserId] = useState("");
+  const [role, setNewRole] = useState<RoleEnum>();
 
   async function getUserInfomation() {
     const userInfo = await StorageController.getUserInfo();
@@ -84,6 +93,22 @@ export function User() {
     ]);
   }
 
+  async function handleChangeUserPermission(id: string, cardRole: string) {
+    const payload: IUserUpdatePermission = {
+      role,
+    };
+    if (cardRole == RoleEnum.SIMPLE) {
+      payload.role = RoleEnum.ADMIN;
+    }
+
+    if (cardRole == RoleEnum.ADMIN) {
+      payload.role = RoleEnum.SIMPLE;
+    }
+
+    await userRequest.upatadeUserPermission(payload, id);
+    getUsers();
+  }
+
   return (
     <Container>
       <Header />
@@ -102,11 +127,13 @@ export function User() {
         )}
         {filteredData?.map(user => {
           const isMyself = userId == user.id;
+          const isAdmin = user.role == RoleEnum.ADMIN;
+          const isSimple = user.role == RoleEnum.SIMPLE;
           if (!isMyself) {
             return (
               <UserCard key={user.id} style={{ marginVertical: 10 }}>
                 <Text weight="500" color="#000000" size={12}>
-                  {user.role} | {user.name} {user.lastName}
+                  {user.role == "ADMIN" ? "Administrador" : "Simples"} | {user.name} {user.lastName}
                 </Text>
                 <UserCardActions>
                   <IconArea
@@ -118,16 +145,32 @@ export function User() {
                     </Text>
                   </IconArea>
 
-                  <IconArea>
+
+                  <IconArea
+                    onPress={() =>
+                      handleChangeUserPermission(user.id, user.role)
+                    }
+                    disabled={isSimple}
+                  >
                     <Icon icon="minus" />
-                    <Text weight="400" color="#000000" size={14}>
+                    <Text
+                      weight="400"
+                      color="#000000"
+                      size={14}
+                      disabled={isSimple}
+                    >
                       Rebaixar
                     </Text>
                   </IconArea>
 
-                  <IconArea>
+                  <IconArea
+                    disabled={isAdmin}
+                    onPress={() =>
+                      handleChangeUserPermission(user.id, user.role)
+                    }
+                  >
                     <Icon icon="plus" />
-                    <Text weight="400" color="#000000" size={14}>
+                    <Text weight="400" size={14} disabled={isAdmin}>
                       Promover
                     </Text>
                   </IconArea>

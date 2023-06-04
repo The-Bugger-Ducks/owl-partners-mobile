@@ -2,6 +2,8 @@ import {
   IUserAuthenticated,
   IUserRegister,
   IUserUpdate,
+  IUserUpdatePermission,
+  RoleEnum,
 } from "@interfaces/user.interface";
 import { alertError } from "@utils/alertError";
 import { USER_ENDPOINTS } from "../constants/endpoints";
@@ -96,6 +98,19 @@ class UserRequest {
     } catch (error) {
       alertError(error, "Não foi possível editar o usuário :(");
     }
+  }
+
+  async upatadeUserPermission(payload: IUserUpdatePermission, id: string) {
+    try {
+      const updateUserPermission = await api.put(
+        USER_ENDPOINTS.UPDATE + id,
+        payload,
+      );
+
+      return updateUserPermission;
+    } catch (error) {
+      alertError(error, "Não foi possível editar a permissão :(");   
+    }   
   }
 }
 

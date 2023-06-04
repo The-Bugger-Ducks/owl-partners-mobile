@@ -8,7 +8,7 @@ import {
   Modal,
   Text,
 } from "@components";
-import { IUserRegister } from "@interfaces/user.interface";
+import { IUserRegister, RoleEnum } from "@interfaces/user.interface";
 import userRequest from "@requests/user.request";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -26,7 +26,7 @@ import StorageController from "@utils/handlers/StorageController";
 export function SignUp() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [role, setRole] = useState("SIMPLE");
+  const [role, setRole] = useState<RoleEnum>(RoleEnum.SIMPLE);
   const [lastName, setLastName] = useState("");
 
   const navigation = useNavigation<PropsStack>();
