@@ -3,6 +3,7 @@ import { PropsStack } from "@custom-types/rootStackParamList";
 import { IPartnership, PartnerStatus } from "@interfaces/partner.interface";
 import { useNavigation } from "@react-navigation/native";
 import partnershipRequests from "@requests/partnership.requests";
+import { checkUserAdmin } from "@utils/checkUserAdmin";
 import { useThrottle } from "@utils/useThrottle";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
@@ -33,6 +34,9 @@ export function Partnerships() {
   const [partnershipNameFilter, setPartnershipNameFilter] = useState("");
 
   useThrottle(partnershipNameFilter, filterPartnership);
+
+  const [isAdmin, setIsAdmin] = useState(false);
+  checkUserAdmin().then((userIsAdmin: boolean) => setIsAdmin(userIsAdmin));
 
   const navigation = useNavigation<PropsStack>();
 
@@ -70,15 +74,18 @@ export function Partnerships() {
 
   return (
     <Container>
-      <Header isHero={true} />
-      <ButtonView>
-        <Button
-          type="unfilled"
-          onPress={() => setVisibleAddPartnershipModal(true)}
-        >
-          Adicionar nova parceria
-        </Button>
-      </ButtonView>
+      <Header />
+
+      {isAdmin && (
+        <ButtonView>
+          <Button
+            type="unfilled"
+            onPress={() => setVisibleAddPartnershipModal(true)}
+          >
+            Adicionar nova parceria
+          </Button>
+        </ButtonView>
+      )}
 
       <TabsContainer>
         <Tabs

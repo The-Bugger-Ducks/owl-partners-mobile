@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-export function useThrottle(value: string, func: any, delay: number = 500) {
+export function useThrottle(value: string, func: any, delay = 500) {
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 

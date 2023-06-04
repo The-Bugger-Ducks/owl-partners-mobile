@@ -1,8 +1,8 @@
 import { TextInputProps } from "react-native";
+import { Icon } from "../Icon";
+import { iconsName } from "../Icon/icons";
 import { Text } from "../Text";
 import { Container, IconButton, InputContainer, TextInput } from "./styles";
-import { Icon } from "@components";
-import { iconsName } from "../Icon/icons";
 
 interface InputProps extends TextInputProps {
   label?: string;

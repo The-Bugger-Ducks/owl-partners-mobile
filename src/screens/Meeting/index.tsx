@@ -1,18 +1,22 @@
-import { Button, Header, Input, Loading, Modal, Text } from "@components";
+import { Button, Header, Icon, Input, Loading, Modal, Text } from "@components";
 import {
   PropsStack,
   RootStackParamList,
 } from "@custom-types/rootStackParamList";
 import { IMeeting } from "@interfaces/meeting.interface";
+import { RoleEnum } from "@interfaces/user.interface";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
+import { checkUserAdmin } from "@utils/checkUserAdmin";
 import { formatDate } from "@utils/formatDate";
 import { formatDateISO } from "@utils/formatDateISO";
 import { formatTime } from "@utils/formatTime";
+import StorageController from "@utils/handlers/StorageController";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { AnnotationsList } from "./AnnotationsList";
 import {
+  AlertDisabledPartnershipContainer,
   AnnotationsListContainer,
   ButtonsContainer,
   Container,
@@ -20,18 +24,19 @@ import {
   InfoContainer,
   ModalContent,
 } from "./styles";
-import StorageController from "@utils/handlers/StorageController";
 
 export function Meeting() {
   const [data, setData] = useState<IMeeting>();
   const [isLoading, setIsLoading] = useState(true);
   const [updatedMeetingDate, setUpdatedMeetingDate] = useState("");
   const [updatedMeetingHour, setUpdatedMeetingHour] = useState("");
-
   const [updatedMeetingTheme, setUpdatedMeetingTheme] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const navigation = useNavigation<PropsStack>();
+
+  const [isAdmin, setIsAdmin] = useState(false);
+  checkUserAdmin().then((userIsAdmin: boolean) => setIsAdmin(userIsAdmin));
 
   const route = useRoute<RouteProp<RootStackParamList, "Meeting">>();
   const { id } = route.params;
@@ -46,7 +51,14 @@ export function Meeting() {
     setIsLoading(false);
   }
 
+  async function getUser() {
+    const user = await StorageController.getUserInfo();
+    if (!user) return alert("Usuário não encontrado");
+    setIsAdmin(user.role === RoleEnum.ADMIN);
+  }
+
   useEffect(() => {
+    getUser();
     getData();
   }, [id]);
 
@@ -71,7 +83,6 @@ export function Meeting() {
 
   return (
     <Container>
-      <View style={{ height: 40 }} />
       <Header />
 
       {isLoading ? (
@@ -80,9 +91,8 @@ export function Meeting() {
         </View>
       ) : (
         <InfoContainer>
-          <>
-            <Text>Informações da reunião</Text>
-          </>
+          <Text>Informações da reunião</Text>
+
           {data && (
             <InfoCardContainer>
               <Text color="#EF4444" size={14} weight="500" numberOfLines={1}>
@@ -101,35 +111,35 @@ export function Meeting() {
       )}
 
       {data?.Partner.disabled ? (
-        <Text
-          size={12}
-          weight="500"
-          style={{
-            padding: 24,
-            margin: 24,
-            backgroundColor: "#FFFFFF",
-            borderRadius: 8,
-          }}
-        >
-          Essa reunião pertence a uma parceria deletada e, portanto, não pode
-          ser modificada
-        </Text>
+        <AlertDisabledPartnershipContainer>
+          <Icon icon="loading" />
+          <Text size={12} weight="500">
+            Essa reunião pertence a uma parceria deletada e, portanto, não pode
+            ser modificada
+          </Text>
+        </AlertDisabledPartnershipContainer>
       ) : (
-        <ButtonsContainer>
-          <Button type="unfilled" onPress={handleDeleteMeeting}>
-            {isLoadingDelete ? <Loading /> : "Deletar reunião"}
-          </Button>
-          <Button
-            onPress={() => setIsEditModalOpen(true)}
-            style={{ marginVertical: 8 }}
-          >
-            Editar reunião
-          </Button>
-        </ButtonsContainer>
+        isAdmin && (
+          <ButtonsContainer>
+            <Button type="unfilled" onPress={handleDeleteMeeting}>
+              {isLoadingDelete ? <Loading /> : "Deletar reunião"}
+            </Button>
+            <Button
+              onPress={() => setIsEditModalOpen(true)}
+              style={{ marginVertical: 8 }}
+            >
+              Editar reunião
+            </Button>
+          </ButtonsContainer>
+        )
       )}
 
       <AnnotationsListContainer>
-        <AnnotationsList data={data?.meetingComments} meetingId={id} />
+        <AnnotationsList
+          data={data?.meetingComments}
+          meetingId={id}
+          isAdmin={isAdmin}
+        />
       </AnnotationsListContainer>
 
       <Modal

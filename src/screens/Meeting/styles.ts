@@ -5,8 +5,8 @@ import { isAndroid } from "@constants";
 
 export const Container = styled.SafeAreaView`
   margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : "0"};
+  padding-top: 32px;
   flex: 1;
-  background: #f4f5f7;
 `;
 
 export const ButtonsContainer = styled.View`
@@ -49,5 +49,16 @@ export const InfoCardContainer = styled.View`
   border-radius: 8px;
   padding: 24px;
   gap: 8px;
+  margin-top: 8px;
   justify-content: center;
+`;
+
+export const AlertDisabledPartnershipContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  margin: 0px 24px;
+  background-color: #ffffff;
+  border-radius: 8px;
 `;

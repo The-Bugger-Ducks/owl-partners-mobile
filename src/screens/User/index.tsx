@@ -101,7 +101,7 @@ export function User() {
           if (!isMyself) {
             return (
               <UserCard key={user.id} style={{ marginVertical: 10 }}>
-                <Text weight="500" color="#000000" size={12}>
+                <Text weight="500" color="#000000" size={12} numberOfLines={1}>
                   {user.role == "ADMIN" ? "Administrador" : "Simples"} |{" "}
                   {user.name} {user.lastName}
                 </Text>

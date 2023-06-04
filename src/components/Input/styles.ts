@@ -3,7 +3,6 @@ import styled, { css } from "styled-components/native";
 export const Container = styled.View``;
 
 export const TextInput = styled.TextInput<{ hasOutIcon: boolean }>`
-  background: #f4f5f7;
   padding: 0px 16px;
   border-radius: 8px;
   border: 1px solid #cccccc;

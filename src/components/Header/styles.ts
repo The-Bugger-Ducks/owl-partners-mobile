@@ -1,3 +1,4 @@
+import { css } from "styled-components";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
@@ -9,6 +10,14 @@ export const Container = styled.View`
 
 export const TextContainer = styled.View<{ textAlign: "center" | "left" }>`
   text-align: ${({ textAlign }) => textAlign};
+  flex: 1;
+
+  ${({ textAlign }) =>
+    textAlign === "center" &&
+    css`
+      display: flex;
+      align-items: center;
+    `}
 `;
 
 export const ImageLogo = styled.Image`

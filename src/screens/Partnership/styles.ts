@@ -18,24 +18,11 @@ export const HistoryContainer = styled.View`
   flex: 1;
 `;
 
-export const TextInput = styled.TextInput`
-  background: #f4f5f7;
-  padding: 0px 16px;
-  border-radius: 8px;
-  border: 1px solid #cccccc;
-  align-items: center;
-  justify-content: center;
-  width: 345px;
-  height: 56px;
-`;
-
 export const InformationView = styled.View`
   background: #ffffff;
   border-radius: 8px;
   padding: 24px;
   gap: 8px;
-  width: 345px;
-  height: 160px;
   justify-content: center;
 `;
 
@@ -44,8 +31,6 @@ export const ContactView = styled.View`
   border-radius: 8px;
   padding: 24px;
   gap: 8px;
-  width: 345px;
-  height: 123px;
   justify-content: center;
 `;
 
