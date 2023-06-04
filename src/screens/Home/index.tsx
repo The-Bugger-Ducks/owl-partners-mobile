@@ -34,6 +34,7 @@ export function Home() {
   async function getMeetings() {
     setIsLoading(true);
     const meeting: IMeetingsHome = await meetingRequest.getMeetings();
+
     setData(meeting);
     setIsLoading(false);
   }

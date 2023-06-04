@@ -1,4 +1,4 @@
-import { StatusBar,SafeAreaView } from "react-native";
+import { StatusBar, SafeAreaView } from "react-native";
 import styled from "styled-components/native";
 
 import { isAndroid } from "@constants";
@@ -16,6 +16,11 @@ export const ButtonView = styled.View`
 export const TabsContainer = styled.View`
   padding: 16px 24px 0px;
   flex: 1;
+`;
+
+export const FilterContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-evenly;
 `;
 
 export const PartnershipsList = styled.ScrollView`

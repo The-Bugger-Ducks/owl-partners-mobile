@@ -38,17 +38,19 @@ class PartnershipRequests {
     }
   }
 
-  async getPartnerships(disabled?: boolean, name?: string) {
+  async getPartnerships(disabled = false, name = "", status = "") {
     try {
-      const { data } = name
-        ? await api.get<IPartnership[]>(
-            PARTNERSHIP_ENDPOINTS.LIST +
-              `?disabled=${disabled}` +
-              `&name=${name}`,
-          )
-        : await api.get<IPartnership[]>(
-            PARTNERSHIP_ENDPOINTS.LIST + `?disabled=${disabled}`,
-          );
+      let url = PARTNERSHIP_ENDPOINTS.LIST + `?disabled=${disabled}`;
+
+      if (name) {
+        url += `&name=${name}`;
+      }
+
+      if (status) {
+        url += `&status=${status}`;
+      }
+
+      const { data } = await api.get<IPartnership[]>(url);
 
       return formatPartnerStatusByList(data);
     } catch (error) {
