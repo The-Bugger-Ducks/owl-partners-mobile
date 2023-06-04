@@ -18,12 +18,9 @@ import {
 } from "./styles";
 
 export function User() {
-  const [data, setData] = useState<IUser[]>();
-  const [filteredData, setFilteredData] = useState<IUser[]>([]);
+  const [data, setData] = useState<IUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [userId, setUserId] = useState("");
-  const [role, setNewRole] = useState<RoleEnum>();
 
   async function getUserInfomation() {
     const userInfo = await StorageController.getUserInfo();
@@ -39,15 +36,14 @@ export function User() {
     setIsLoading(true);
     const user: IUser[] = await userRequest.listUser();
     setData(user);
-    setFilteredData(user);
     setIsLoading(false);
   }
 
   async function getUserByName(name: string) {
     setIsLoading(true);
-    setFilteredData([]);
+    setData([]);
     const filteredUser: IUser[] = await userRequest.listUserByName(name);
-    setFilteredData(filteredUser);
+    setData(filteredUser);
     setIsLoading(false);
   }
 
@@ -56,9 +52,7 @@ export function User() {
   }, []);
 
   async function handleDeleteUser(id: string) {
-    setIsLoadingDelete(true);
     if (id) await userRequest.deleteUser(id);
-    setIsLoadingDelete(false);
     getUsers();
   }
 
@@ -74,9 +68,8 @@ export function User() {
   }
 
   async function handleChangeUserPermission(id: string, cardRole: string) {
-    const payload: IUserUpdatePermission = { role };
-    if (cardRole == RoleEnum.SIMPLE) payload.role = RoleEnum.ADMIN;
-    if (cardRole == RoleEnum.ADMIN) payload.role = RoleEnum.SIMPLE;
+    const payload: IUserUpdatePermission = { role: RoleEnum.SIMPLE };
+    if (cardRole === RoleEnum.SIMPLE) payload.role = RoleEnum.ADMIN;
     await userRequest.upatadeUserPermission(payload, id);
     getUsers();
   }
@@ -97,7 +90,7 @@ export function User() {
             <Loading />
           </LoadingContainer>
         )}
-        {filteredData?.map(user => {
+        {data?.map(user => {
           const isMyself = userId == user.id;
           const isAdmin = user.role == RoleEnum.ADMIN;
           const isSimple = user.role == RoleEnum.SIMPLE;
