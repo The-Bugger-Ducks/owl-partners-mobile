@@ -10,10 +10,12 @@ import { ScrollView, View } from "react-native";
 
 interface AnnotationsListyProps {
   isPartnershipDisabled: boolean;
+  isAdmin: boolean;
 }
 
 export function AnnotationsList({
   isPartnershipDisabled,
+  isAdmin,
 }: AnnotationsListyProps) {
   const [newComment, setNewComment] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -62,7 +64,7 @@ export function AnnotationsList({
 
   return (
     <ScrollView scrollEnabled>
-      {!isPartnershipDisabled && (
+      {!isPartnershipDisabled && isAdmin && (
         <Input
           label={"Inserir atualização"}
           placeholder={"Nova atualização sobre a parceria..."}
@@ -113,7 +115,7 @@ export function AnnotationsList({
                 setEditedComment(card.comment);
                 setIsEditCommentModalOpen(true);
               }}
-              canEdit={!isPartnershipDisabled}
+              canEdit={!isPartnershipDisabled && isAdmin}
             />
           );
         })

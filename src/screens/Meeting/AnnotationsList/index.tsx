@@ -10,9 +10,14 @@ import { ScrollView, View } from "react-native";
 interface AnnotationsListProps {
   data?: IComment[];
   meetingId: string;
+  isAdmin?: boolean;
 }
 
-export function AnnotationsList({ data, meetingId }: AnnotationsListProps) {
+export function AnnotationsList({
+  data,
+  meetingId,
+  isAdmin,
+}: AnnotationsListProps) {
   const [newComment, setNewComment] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [annotations, setAnnotations] = useState<IComment[]>(data ?? []);
@@ -60,16 +65,23 @@ export function AnnotationsList({ data, meetingId }: AnnotationsListProps) {
 
   return (
     <ScrollView scrollEnabled>
-      <Input
-        label={"Inserir anotação"}
-        placeholder={"Nova anotação em reunião..."}
-        value={newComment}
-        onChangeText={text => setNewComment(text)}
-        hasOutIcon
-        onPressIcon={() => newComment.length > 0 && handleAddComment()}
-      />
+      {isAdmin && (
+        <Input
+          label={"Inserir anotação"}
+          placeholder={"Nova anotação em reunião..."}
+          value={newComment}
+          onChangeText={text => setNewComment(text)}
+          hasOutIcon
+          onPressIcon={() => newComment.length > 0 && handleAddComment()}
+          style={{ marginBottom: 16 }}
+        />
+      )}
 
-      <Text size={14} color={"#666666"} style={{ marginVertical: 16 }}>
+      <Text
+        size={isAdmin ? 14 : 16}
+        color={isAdmin ? "#666" : "#333"}
+        style={{ marginBottom: 16 }}
+      >
         Lista de anotações
       </Text>
 
@@ -93,7 +105,7 @@ export function AnnotationsList({ data, meetingId }: AnnotationsListProps) {
             <Card
               key={card.id}
               id={card.id}
-              canEdit={true}
+              canEdit={isAdmin ?? false}
               type={"annotation"}
               isEdited={isEdited}
               date={formatDate(isEdited ? card.updatedAt : card.createdAt)}

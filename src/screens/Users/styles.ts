@@ -17,8 +17,6 @@ export const UsersContainer = styled.ScrollView`
 
 export const UserCard = styled.View`
   padding: 24px 24px;
-  width: 345px;
-  height: 97px;
   gap: 8px;
   border-radius: 8px;
   background: #ffffff;

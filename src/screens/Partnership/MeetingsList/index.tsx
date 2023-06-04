@@ -54,13 +54,7 @@ export function MeetingsList({
           <Text>Proximas reuniões</Text>
           <View style={{ marginVertical: 16 }}>
             {data?.upcomingMeetings.map(
-              ({
-                id,
-                title,
-                description,
-                Partner: { disabled },
-                meetingDateTime,
-              }) => {
+              ({ id, title, description, meetingDateTime }) => {
                 return (
                   <Card
                     id={id}

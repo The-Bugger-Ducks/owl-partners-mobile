@@ -6,6 +6,7 @@ import {
 } from "@interfaces/user.interface";
 import userRequest from "@requests/user.request";
 import StorageController from "@utils/handlers/StorageController";
+import { useThrottle } from "@utils/useThrottle";
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import {
@@ -17,10 +18,13 @@ import {
   UsersContainer,
 } from "./styles";
 
-export function User() {
+export function Users() {
   const [data, setData] = useState<IUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState("");
+  const [userNameFilter, setUserNameFilter] = useState("");
+
+  useThrottle(userNameFilter, getUserByName);
 
   async function getUserInfomation() {
     const userInfo = await StorageController.getUserInfo();
@@ -34,8 +38,8 @@ export function User() {
 
   async function getUsers() {
     setIsLoading(true);
-    const user: IUser[] = await userRequest.listUser();
-    setData(user);
+    const users: IUser[] = await userRequest.listUser();
+    setData(users);
     setIsLoading(false);
   }
 
@@ -81,7 +85,7 @@ export function User() {
         <Input
           label="Encontrar usuário"
           placeholder="Fulano de Tal..."
-          onChangeText={text => getUserByName(text)}
+          onChangeText={text => setUserNameFilter(text)}
           style={{ marginBottom: 16 }}
         />
         <Text>Usuários encontrados</Text>
@@ -97,7 +101,7 @@ export function User() {
           if (!isMyself) {
             return (
               <UserCard key={user.id} style={{ marginVertical: 10 }}>
-                <Text weight="500" color="#000000" size={12}>
+                <Text weight="500" color="#000000" size={12} numberOfLines={1}>
                   {user.role == "ADMIN" ? "Administrador" : "Simples"} |{" "}
                   {user.name} {user.lastName}
                 </Text>

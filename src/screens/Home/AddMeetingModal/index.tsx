@@ -1,13 +1,14 @@
 import { Input, Modal, Text } from "@components";
 import { IPartnership } from "@interfaces/partner.interface";
 import { Picker } from "@react-native-picker/picker";
+import { useFocusEffect } from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
 import partnershipRequests from "@requests/partnership.requests";
 import { formatDateISO } from "@utils/formatDateISO";
-import { useEffect, useState } from "react";
+import { formatInput } from "@utils/formatInput";
+import { useCallback, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { PartnershipDropDownArea } from "./styles";
-import { formatInput } from "@utils/formatInput";
 
 interface AddMeetingModalProps {
   visible: boolean;
@@ -30,12 +31,21 @@ export function AddMeetingModal({ visible, onClose }: AddMeetingModalProps) {
     setPartnerships(data ?? []);
   }
 
-  useEffect(() => {
-    getPartnerships();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getPartnerships();
+    }, []),
+  );
 
   async function handleSubmit() {
     setIsLoading(true);
+
+    if (!partnership || !date || !hour || !theme) {
+      alert("Preencha todos os campos!");
+      setIsLoading(false);
+      return;
+    }
+
     await meetingRequest.createMeeting(
       partnership,
       formatDateISO(date, hour),
@@ -108,10 +118,7 @@ export function AddMeetingModal({ visible, onClose }: AddMeetingModalProps) {
               value={hour}
               onChangeText={text => setHour(formatInput(text, "hour"))}
             />
-            <Input
-              label="Tema (opcional)"
-              onChangeText={text => setTheme(text)}
-            />
+            <Input label="Tema" onChangeText={text => setTheme(text)} />
           </View>
         </ScrollView>
       }
