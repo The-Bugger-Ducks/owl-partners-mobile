@@ -3,6 +3,7 @@
 import checkIcon from "../../shared/assets/icons/check.svg";
 import checkboxOffIcon from "../../shared/assets/icons/checkbox-off.svg";
 import checkboxOnIcon from "../../shared/assets/icons/checkbox-on.svg";
+import circleIcon from "../../shared/assets/icons/circle.svg";
 import closeIcon from "../../shared/assets/icons/close.svg";
 import editIcon from "../../shared/assets/icons/edit.svg";
 import eyeHiddenIcon from "../../shared/assets/icons/eye-hidden.svg";
@@ -33,6 +34,7 @@ export type iconsName =
   | "check"
   | "checkbox-off"
   | "checkbox-on"
+  | "circle"
   | "close"
   | "edit"
   | "eye-hidden"
@@ -68,6 +70,7 @@ export const iconList: Icon[] = [
   { image: checkIcon, name: "check" },
   { image: checkboxOffIcon, name: "checkbox-off" },
   { image: checkboxOnIcon, name: "checkbox-on" },
+  { image: circleIcon, name: "circle" },
   { image: closeIcon, name: "close" },
   { image: editIcon, name: "edit" },
   { image: eyeHiddenIcon, name: "eye-hidden" },

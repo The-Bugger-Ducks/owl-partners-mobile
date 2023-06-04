@@ -39,13 +39,18 @@ export function FilterPartnershipModal({ visible, onClose, onFilter }: Props) {
                 setOptionSelected(status.value as PartnerStatus);
               }}
             >
+              {optionSelected === status.value ? (
+                <Icon icon="check" />
+              ) : (
+                <Icon icon="circle" />
+              )}
+
               <Text
                 weight={optionSelected === status.value ? "500" : "400"}
                 size={13}
               >
                 {status.description}
               </Text>
-              {optionSelected === status.value && <Icon icon="check" />}
             </OptionButton>
           ))}
         </Container>
