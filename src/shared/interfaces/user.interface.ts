@@ -37,6 +37,10 @@ export interface IUserUpdate {
   password?: string;
 }
 
+export interface IUserUpdatePermission {
+  role?: RoleEnum;
+}
+
 export interface IUserEdit {
   id: string;
   name: string;

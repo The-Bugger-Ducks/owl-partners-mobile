@@ -3,7 +3,6 @@ import styled, { css } from "styled-components/native";
 export const Container = styled.View``;
 
 export const TextInput = styled.TextInput<{ hasOutIcon: boolean }>`
-  background: #f4f5f7;
   padding: 0px 16px;
   border-radius: 8px;
   border: 1px solid #cccccc;
@@ -22,10 +21,12 @@ export const TextInput = styled.TextInput<{ hasOutIcon: boolean }>`
 export const InputContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
 `;
 
 export const IconButton = styled.TouchableOpacity`
   width: 48px;
+  margin-top: 12px;
   align-items: center;
   justify-content: center;
 `;

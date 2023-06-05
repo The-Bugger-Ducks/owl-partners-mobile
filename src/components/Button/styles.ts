@@ -1,10 +1,11 @@
 import styled, { css } from "styled-components/native";
 
 export const Container = styled.TouchableOpacity<{
-  type: "filled" | "unfilled";
+  type: "filled" | "unfilled" | "text";
   marginVertical?: string;
 }>`
-  background: ${({ disabled }) => (disabled ? "#999" : "#EF4444")};
+  background: ${({ type, disabled }) =>
+    type === "text" ? "transparent" : disabled ? "#999" : "#EF4444"};
   border-radius: 48px;
   padding: 12px 24px;
   align-items: center;

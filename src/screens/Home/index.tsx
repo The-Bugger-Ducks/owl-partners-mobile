@@ -1,33 +1,23 @@
 import { Button, Card, Header, Loading, Text } from "@components";
-import {
-  PropsStack,
-  RootStackParamList,
-} from "@custom-types/rootStackParamList";
+import { PropsStack } from "@custom-types/rootStackParamList";
 import { IMeetingsHome } from "@interfaces/meeting.interface";
-import {
-  RouteProp,
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import meetingRequest from "@requests/meeting.request";
+import { checkUserAdmin } from "@utils/checkUserAdmin";
 import { formatDate } from "@utils/formatDate";
 import { formatTime } from "@utils/formatTime";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { View } from "react-native";
 import { AddMeetingModal } from "./AddMeetingModal";
 import { ButtonsContainer, Container, MeetingContainer } from "./styles";
 
-import StorageController from "@utils/handlers/StorageController";
-import { IPartnership } from "@interfaces/partner.interface";
-
-
 export function Home() {
   const [data, setData] = useState<IMeetingsHome>();
   const [isLoading, setIsLoading] = useState(true);
-  const [role, setRole] = useState("");
   const [isAddMeetingModalOpen, setIsAddMeetingModalOpen] = useState(false);
-  const [isUserModalOpen, setisUserModalOpen] = useState(false);
+
+  const [isAdmin, setIsAdmin] = useState(false);
+  checkUserAdmin().then((userIsAdmin: boolean) => setIsAdmin(userIsAdmin));
 
   const navigation = useNavigation<PropsStack>();
 
@@ -44,36 +34,26 @@ export function Home() {
     }, []),
   );
 
-  async function getUser() {
-    const user = await StorageController.getUserInfo();
-    if (!user) {
-      return alert("Usuário não encontrado");
-    }
-    setRole(user.role);
-  }
-
-  useEffect(() => {
-    getUser();
-  }, []);
-
   return (
     <Container>
       <Header isHero={true} />
 
-      <ButtonsContainer>
-        <Button type="unfilled" onPress={() => setIsAddMeetingModalOpen(true)}>
-          Agendar reunião
-        </Button>
-
-        {role == "ADMIN" ? (
+      {isAdmin && (
+        <ButtonsContainer>
           <Button
-            onPress={() => navigation.navigate("User")}
+            type="unfilled"
+            onPress={() => setIsAddMeetingModalOpen(true)}
+          >
+            Agendar reunião
+          </Button>
+          <Button
+            onPress={() => navigation.navigate("Users")}
             style={{ marginVertical: 8 }}
           >
             Gerenciar usuários
           </Button>
-        ) : null}
-      </ButtonsContainer>
+        </ButtonsContainer>
+      )}
 
       <MeetingContainer>
         <>
@@ -154,7 +134,10 @@ export function Home() {
 
         <AddMeetingModal
           visible={isAddMeetingModalOpen}
-          onClose={() => setIsAddMeetingModalOpen(false)}
+          onClose={() => {
+            getMeetings();
+            setIsAddMeetingModalOpen(false);
+          }}
         />
       </MeetingContainer>
     </Container>

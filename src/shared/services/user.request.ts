@@ -2,6 +2,8 @@ import {
   IUserAuthenticated,
   IUserRegister,
   IUserUpdate,
+  IUserUpdatePermission,
+  RoleEnum,
 } from "@interfaces/user.interface";
 import { alertError } from "@utils/alertError";
 import { USER_ENDPOINTS } from "../constants/endpoints";
@@ -58,10 +60,12 @@ class UserRequest {
         throw new Error("User is empty");
       }
 
-      const { data } = await api.get(USER_ENDPOINTS.LIST_USERS + name);
+      const { data } = await api.get(
+        USER_ENDPOINTS.LIST_USERS + "?name=" + name,
+      );
       return data ?? [];
     } catch (error) {
-      //alertError(error, "Não foi possível achar os usuários :(");
+      alertError(error, "Não foi possível achar os usuários :(");
       return [];
     }
   }
@@ -93,6 +97,19 @@ class UserRequest {
       return UpdatedUser;
     } catch (error) {
       alertError(error, "Não foi possível editar o usuário :(");
+    }
+  }
+
+  async upatadeUserPermission(payload: IUserUpdatePermission, id: string) {
+    try {
+      const updateUserPermission = await api.put(
+        USER_ENDPOINTS.UPDATE + id,
+        payload,
+      );
+
+      return updateUserPermission;
+    } catch (error) {
+      alertError(error, "Não foi possível editar a permissão :(");
     }
   }
 }

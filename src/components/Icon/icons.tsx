@@ -3,13 +3,16 @@
 import checkIcon from "../../shared/assets/icons/check.svg";
 import checkboxOffIcon from "../../shared/assets/icons/checkbox-off.svg";
 import checkboxOnIcon from "../../shared/assets/icons/checkbox-on.svg";
+import circleIcon from "../../shared/assets/icons/circle.svg";
 import closeIcon from "../../shared/assets/icons/close.svg";
 import editIcon from "../../shared/assets/icons/edit.svg";
 import eyeHiddenIcon from "../../shared/assets/icons/eye-hidden.svg";
 import eyeIcon from "../../shared/assets/icons/eye.svg";
+import filteIcon from "../../shared/assets/icons/filter.svg";
 import homeIcon from "../../shared/assets/icons/home.svg";
 import imageIcon from "../../shared/assets/icons/image.svg";
 import infoIcon from "../../shared/assets/icons/info.svg";
+import listLayoutIcon from "../../shared/assets/icons/list-layout.svg";
 import loadingIcon from "../../shared/assets/icons/loading.svg";
 import logOffIcon from "../../shared/assets/icons/log-off.svg";
 import menuIcon from "../../shared/assets/icons/menu.svg";
@@ -31,13 +34,16 @@ export type iconsName =
   | "check"
   | "checkbox-off"
   | "checkbox-on"
+  | "circle"
   | "close"
   | "edit"
   | "eye-hidden"
   | "eye"
+  | "filter"
   | "home"
   | "image"
   | "info"
+  | "list-layout"
   | "loading"
   | "log-off"
   | "menu"
@@ -64,13 +70,16 @@ export const iconList: Icon[] = [
   { image: checkIcon, name: "check" },
   { image: checkboxOffIcon, name: "checkbox-off" },
   { image: checkboxOnIcon, name: "checkbox-on" },
+  { image: circleIcon, name: "circle" },
   { image: closeIcon, name: "close" },
   { image: editIcon, name: "edit" },
   { image: eyeHiddenIcon, name: "eye-hidden" },
   { image: eyeIcon, name: "eye" },
+  { image: filteIcon, name: "filter" },
   { image: homeIcon, name: "home" },
   { image: imageIcon, name: "image" },
   { image: infoIcon, name: "info" },
+  { image: listLayoutIcon, name: "list-layout" },
   { image: loadingIcon, name: "loading" },
   { image: logOffIcon, name: "log-off" },
   { image: menuIcon, name: "menu" },

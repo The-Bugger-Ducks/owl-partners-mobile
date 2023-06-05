@@ -6,7 +6,7 @@ import { Container } from "./styles";
 interface ButtonProps extends TouchableOpacityProps {
   children: ReactNode;
   disabled?: boolean;
-  type?: "filled" | "unfilled";
+  type?: "filled" | "unfilled" | "text";
 }
 
 export function Button({
@@ -15,8 +15,8 @@ export function Button({
   type = "filled",
   ...rest
 }: ButtonProps) {
-  const textColor =
-    type === "unfilled" ? (disabled ? "#999" : "#EF4444") : "#FFFFFF";
+  let textColor = "#FFFFFF";
+  if (type !== "filled") textColor = disabled ? "#999" : "#EF4444";
 
   return (
     <Container disabled={disabled} type={type} {...rest}>

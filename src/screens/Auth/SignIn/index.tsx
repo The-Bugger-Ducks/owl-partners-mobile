@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  Button,
-  Eye,
-  EyeHidden,
-  Header,
-  Info,
-  Loading,
-  Text,
-} from "@components";
+import { Button, Header, Icon, Info, Loading, Text } from "@components";
 import { validEmailPattern } from "@constants";
 import { PropsStack } from "@custom-types/rootStackParamList";
 import { IUserLogin } from "@interfaces/user.interface";
@@ -136,7 +128,11 @@ export function SignIn() {
                   <IconButton
                     onPress={() => setVisiblePassword(!visiblePassword)}
                   >
-                    {visiblePassword ? <EyeHidden /> : <Eye />}
+                    {visiblePassword ? (
+                      <Icon icon="eye-hidden" />
+                    ) : (
+                      <Icon icon="eye" />
+                    )}
                   </IconButton>
                 </PasswordInputContainer>
                 {(error || errorMessage) && (
@@ -154,14 +150,14 @@ export function SignIn() {
 
         <ButtonsArea style={{ gap: 15 }}>
           <Button
-            type="filled"
+            type={!isDirty || !isValid || isLoading ? "unfilled" : "filled"}
             disabled={!isDirty || !isValid || isLoading}
             onPress={handleSubmit(onSubmit)}
           >
             Fazer Login
           </Button>
 
-          <Button type="unfilled" onPress={() => navigation.navigate("SignUp")}>
+          <Button type="text" onPress={() => navigation.navigate("SignUp")}>
             Cadastrar conta
           </Button>
         </ButtonsArea>

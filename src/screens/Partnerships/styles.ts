@@ -1,9 +1,9 @@
-import { StatusBar } from "react-native";
+import { StatusBar, SafeAreaView } from "react-native";
 import styled from "styled-components/native";
 
 import { isAndroid } from "@constants";
 
-export const Container = styled.SafeAreaView`
+export const Container = styled.KeyboardAvoidingView`
   margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : "0"};
   flex: 1;
   background: #f4f5f7;
@@ -18,8 +18,13 @@ export const TabsContainer = styled.View`
   flex: 1;
 `;
 
+export const FilterContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-evenly;
+`;
+
 export const PartnershipsList = styled.ScrollView`
-  margin: 16px 0px 32px;
+  margin: 16px 0px 0px;
 `;
 
 export const TextInput = styled.TextInput`
